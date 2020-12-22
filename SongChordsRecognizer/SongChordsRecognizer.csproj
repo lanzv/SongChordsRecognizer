@@ -6,8 +6,4 @@
     <RootNamespace>SongChordsRecognizer</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="docs\demo\" />
-  </ItemGroup>
-
 </Project>

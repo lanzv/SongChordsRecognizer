@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Audio-Recordings-To-Sheet-Music": {
+    "SongChordsRecognizer": {
       "commandName": "Project",
       "commandLineArgs": "\"Let it be.wav\" Parzen WO 15"
     }
