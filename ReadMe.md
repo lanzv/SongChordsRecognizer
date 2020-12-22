@@ -18,10 +18,10 @@ start SongChordsRecognizer.exe [path of audio file] [STFT window type] [Spectrog
 ```
 *Try it Yourself with the demo in **./docs/demo** folder*.
 
- - [Path of audio file](##Supported-audio-format): String, path (relative or absolute) of audio file.
- - [STFT window types](##STFT-Window-types) : {```Rectangular```, ```Triangular```, ```Parzen```, ```Welch```, ```Nuttall```}
- - [Spectrogram filtration types](##Spectrogram-filtration-types) : {```Identity```, ```AFAM```, ```WO```, ```FNH```}
- - [One Chord / Sample length level](##Sample-Length-Level) : non negative integer
+ - [Path of audio file](#Supported-audio-format) : String, path (relative or absolute) of audio file.
+ - [STFT window types](#STFT-Window-types)  : {```Rectangular```, ```Triangular```, ```Parzen```, ```Welch```, ```Nuttall```}
+ - [Spectrogram filtration types](#Spectrogram-filtration-types) : {```Identity```, ```AFAM```, ```WO```, ```FNH```}
+ - [One Chord / Sample length level](#Sample-Length-Level) : non negative integer
 
 ![chord example](./docs/imgs/chords.jpg)
 
