@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Audio-Recordings-To-Sheet-Music": {
+      "commandName": "Project",
+      "commandLineArgs": "\"Let it be.wav\" Parzen WO 15"
+    }
+  }
+}
