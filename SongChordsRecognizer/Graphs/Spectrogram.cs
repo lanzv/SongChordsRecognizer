@@ -57,18 +57,16 @@ namespace SongChordsRecognizer.Graphs
         /// <param name="STFTwindow">Convolution window we want to apply on waveform function in STFT algorithm.</param>
         public Spectrogram(AudioSource.AudioSource source, int log2_waveform_length_for_sample, IWindow STFTwindow)
         {
-            int numberOfSourceSamples = (int)Math.Pow(2, log2_waveform_length_for_sample);
+            int SourceSamplesPerSpectrogramSample = (int)Math.Pow(2, log2_waveform_length_for_sample);
             this.source = source;
             this.Waveform = source.GetMonoWaveform();
-            this.NumberOfSamples = Waveform.Length / numberOfSourceSamples;
-            this.SampleLength = numberOfSourceSamples * source.SampleLength;
-            this.FrequencyToBinConst = numberOfSourceSamples * source.SampleLength;
-            // Generates Spectrogram data
-            SpectrogramData = new double[NumberOfSamples][];
-            for (int i = 0; i < NumberOfSamples; i++)
-            {
-                SpectrogramData[i] = FourierTransform.FourierTransform.STFT(Waveform, i * numberOfSourceSamples, log2_waveform_length_for_sample, STFTwindow).Real();
-            }
+            this.NumberOfSamples = Waveform.Length / SourceSamplesPerSpectrogramSample;
+            this.SampleLength = SourceSamplesPerSpectrogramSample * source.SampleLength;
+            this.FrequencyToBinConst = SourceSamplesPerSpectrogramSample * source.SampleLength;
+            // Generate Spectrogram data
+            SpectrogramData = FourierTransform.FourierTransform
+                .GetFrequencyIntensitiesAsync(source.GetMonoWaveform(), log2_waveform_length_for_sample, STFTwindow)
+                .GetAwaiter().GetResult();
             // log
             Console.WriteLine("[INFO] The spectrogram was successfuly generated.");
         }

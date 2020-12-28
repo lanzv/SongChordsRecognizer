@@ -23,25 +23,29 @@ namespace SongChordsRecognizer
 
             try
             {
-                // Parse arguments
-                if (args.Length != 4) { throw new Exception(ErrorMessages.ErrorMessages.Program_WrongNumberOfArguments); }
+                // PARSE ARGUMENTS
+                if (args.Length != 5) { throw new Exception(ErrorMessages.ErrorMessages.Program_WrongNumberOfArguments); }
 
                 String audioPath = args[0];
                 IWindow window = ParseSTFTWindow(args[1]);
                 ISpectrogramFiltration filtration = ParseFiltration(args[2]);
                 int sampleLengthLevel = ParseSampleLengthLevel(args[3]);
+                int bpm = ParseBPM(args[4]);
 
                 Console.WriteLine("[INFO] Arguments was parsed successfully.");
 
-                // Process audio and print chords
-                PrintChordsOfSong(audioPath, window, filtration, sampleLengthLevel);
+
+
+
+                // PROCESS AUDIO AND PRINT CHORDS
+                PrintChordsOfSong(audioPath, window, filtration, sampleLengthLevel, bpm);
 
                 Console.WriteLine("[INFO] The program ended successfully.");
             }
             catch (Exception e)
             {
                 Console.WriteLine();
-                Console.WriteLine(e.Message);
+                Console.WriteLine(e.ToString());
                 Console.WriteLine();
             }
             
@@ -119,6 +123,22 @@ namespace SongChordsRecognizer
 
 
         /// <summary>
+        /// Parse bpm argument or throw exception.
+        /// </summary>
+        /// <param name="bpm">BPM of the song. Non negative integer.</param>
+        /// <returns>Non negative integer that corresponds to bpm string.</returns>
+        static int ParseBPM(String bpm)
+        {
+            if (Int32.TryParse(bpm, out int result) && result >= 0)
+            {
+                return result;
+            }
+            throw new Exception(ErrorMessages.ErrorMessages.Program_InvalidBPM);
+        }
+
+
+
+        /// <summary>
         /// Whole process of the program in one place.
         /// audio file -> Spectrogram -> Chromagram -> Chord Classification -> Print Chords
         /// </summary>
@@ -126,28 +146,35 @@ namespace SongChordsRecognizer
         /// <param name="window">STFT window.</param>
         /// <param name="filtration">Spectrogram filtration type.</param>
         /// <param name="sampleLengthLevel">Level of sample time for one chord.</param>
-        static void PrintChordsOfSong(String audioPath, IWindow window, ISpectrogramFiltration filtration, int sampleLengthLevel)
+        static void PrintChordsOfSong(String audioPath, IWindow window, ISpectrogramFiltration filtration, int sampleLengthLevel, int bpm)
         {
             // Generate chords
+
             AudioSourceWav wav = new AudioSourceWav(audioPath);
-            // Generate Spectrogram
+
+            // SPECTROGRAM
+            // - generate
             Spectrogram spectrogram = new Spectrogram(wav, sampleLengthLevel, window);
-            // Print Spectrogram
+            // - print
             PrintGraphToTextFile spectrogramPrinter = new PrintGraphToTextFile();
             spectrogramPrinter.SetFileName("Spectrogram_first20.txt");
             spectrogram.Print(spectrogramPrinter, 0, 20);
-            // Generate Chromagram
+
+            // CHROMAGRAM
+            // - generate
             Chromagram chromagram = new Chromagram(spectrogram, filtration);
-            // Print Chromagram
+            // - print
             PrintGraphToTextFile chromagramPrinter = new PrintGraphToTextFile();
             chromagramPrinter.SetFileName("Chromagram_first20.txt");
             chromagram.Print(chromagramPrinter, 0, 20);
-            // Chord Classifing
-            List<Chord> chords = ChordClassifier.GetChords(chromagram);
+
+            // CHORD CLASSIFIER
+            List<Chord> chords = ChordClassifier.GetChords(chromagram, bpm);
+            //List<Chord> chords = ChordClassifier.GetChords(chromagram);
 
 
 
-            // Print chors
+            // ----------------- PRINT CHORDS -----------------
             Console.WriteLine();
             Console.WriteLine(new String('-', 56) + " CHORDS " + new String('-', 56));
             Console.WriteLine();
@@ -159,6 +186,7 @@ namespace SongChordsRecognizer
             Console.WriteLine();
             Console.WriteLine(new String('-', 56) + " CHORDS " + new String('-', 56));
             Console.WriteLine();
+            // -------------------------------------------------
         }
     }
 }

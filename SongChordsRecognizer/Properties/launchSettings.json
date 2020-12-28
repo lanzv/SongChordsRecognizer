@@ -2,7 +2,11 @@
   "profiles": {
     "SongChordsRecognizer": {
       "commandName": "Project",
-      "commandLineArgs": "\"Let it be.wav\" Parzen WO 15"
+      "commandLineArgs": "\"Let it be 120bpm.wav\" Parzen WO 14 120"
+    },
+    "Fascinating Rhythm": {
+      "commandName": "Project",
+      "commandLineArgs": "\"Fascinating Rhythm.wav\" Parzen WO 14 160"
     }
   }
 }

@@ -14,28 +14,29 @@ that you would like to **play on guitar and sing** with your friends?
 *Via Command Prompt:*
 
 ```batch
-start SongChordsRecognizer.exe [path of audio file] [STFT window type] [Spectrogram filtration type] [One Chord length level]
+start SongChordsRecognizer.exe [path of audio file] [STFT window type] [Spectrogram filtration type] [Sample length level] [BPM value]
 ```
 *Try it Yourself with the demo in **./docs/demo** folder*.
 
  - [Path of audio file](#Supported-audio-format) : String, path (relative or absolute) of audio file.
  - [STFT window types](#STFT-Window-types)  : {```Rectangular```, ```Triangular```, ```Parzen```, ```Welch```, ```Nuttall```}
  - [Spectrogram filtration types](#Spectrogram-filtration-types) : {```Identity```, ```AFAM```, ```WO```, ```FNH```}
- - [One Chord / Sample length level](#Sample-Length-Level) : non negative integer
+ - [Sample length level](#Sample-Length-Level) : non negative integer
+ - [BPM value](#BPM-value) : non negative integer
 
 ![chord example](./docs/imgs/chords.jpg)
 
 #### examples:
 ```batch
-start SongChordsRecognizer.exe "Summertime.wav" "Triangular" "Identity" 15
+start SongChordsRecognizer.exe "Summertime.wav" "Triangular" "Identity" 14 99
 ```
 
 ```batch
-start SongChordsRecognizer.exe "Summer.wav" "Parzen" "AFAM" 14
+start SongChordsRecognizer.exe "Summer.wav" "Parzen" "AFAM" 14 129
 ```
 
 ```batch
-start SongChordsRecognizer.exe "Summer samba.wav" "Welch" "WO" 16
+start SongChordsRecognizer.exe "Summer samba.wav" "Welch" "WO" 14 121
 ```
 
 
@@ -56,7 +57,7 @@ Filtered spectrogram peaks, which correspond to tone pitches, are averaged over 
 Averaged result forms the chromagram.
 
 #### ***Chord Classification***
-This section classifies chords that correspond to the harmony played in the given chromagram. 
+This section classifies chords that correspond to the harmony played in the given chromagram sample (or more chromagram samples summed together if more samples correspond to the specific beat). 
 At first, all triad chords are considered ( diminished, minor, major and augmented for each chroma ).
 The most likely triad chord is the one with the highest value of the multiple of the normalized intensity of the root, third and fifth tones.
 The value is also multiplied by 2 if the triad fifth is perfect fifth to increase chances for more "normal" chords". 
@@ -132,15 +133,17 @@ By default epsilon=0.4 and n_harmonics=10.
 *( [Gomez 2006] Tonal description of polyphonic audio for music content processing. )*
 
 ## Sample Length Level
+***We strongly recommend using a value of 14 or 15.***
 
-This argument specifies length of STFT part in Fourier Transform. One spectrogram sample -> One chromagram sample -> One chord duration ... all these are based on STFT. 
-Thus, this argument also specifies the length of chord duration, spectrogram sample and chromagram sample.
+This argument specifies length of STFT part in Fourier Transform. One spectrogram sample -> One chromagram sample ... all these are based on STFT. 
+Thus, this argument also specifies the length of spectrogram sample and chromagram sample.
+Chords are generated for each beat (according to the [BPM value](#bpm-value)) from chromagram samples corresponding to the same time. 
 
-Length in seconds of one sample (STFT, Spectrogram, Chromagram or also Chord) is computed according to the following formula:
+Length in seconds of one sample (STFT, Spectrogram or Chromagram) is computed according to the following formula:
 
 **length_in_seconds** = (2^(SampleLengthLevel)) / (SampleRate)
 
-|SampleLengthLevel|SampleRate|sample/chord length in seconds|
+|SampleLengthLevel|SampleRate|sample length in seconds|
 |---|---|---|
 | 10  | 44100  | 0.02322  |
 | 11  | 44100  | 0.04644  |
@@ -153,9 +156,7 @@ Length in seconds of one sample (STFT, Spectrogram, Chromagram or also Chord) is
 | 18  | 88200  | 2.97215  |
 
 
+## BPM value
+Beats per minute, how many beats are included in one minute. The range of this value is between 20 (Larghissimo) and 220 (Prestissimo).
 
-
-
-
-
-
+Each song has different bpm value. You have to find out this value separately.

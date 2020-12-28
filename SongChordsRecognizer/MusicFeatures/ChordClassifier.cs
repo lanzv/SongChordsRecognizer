@@ -30,6 +30,28 @@ namespace SongChordsRecognizer.MusicFeatures
 
 
         /// <summary>
+        /// The function generates chord for each beat.
+        /// </summary>
+        /// <param name="chromagram">Chromagram graph.</param>
+        /// <param name="bpm">The value of song's bpm.</param>
+        /// <returns>The list of chords generated from chomagram.</returns>
+        public static List<Chord> GetChords(Chromagram chromagram, int bpm)
+        {
+            double samplesPerBeat = ((60.0 / (double)bpm) / chromagram.SampleLength);
+
+            List<Chord> chords = new List<Chord>();
+            double[][] chromagramData = chromagram.GetData();
+
+            for (int i = 0; i < chromagramData.Length/samplesPerBeat; i++)
+            {
+                chords.Add(ClassifyChord(chromagramData.SumSamples((int)(i*samplesPerBeat), (int)samplesPerBeat)));
+            }
+            return chords;
+        }
+
+
+
+        /// <summary>
         /// The private static function that estimate the best match of chord
         /// that corresponds to the passed chromagram sample. 
         /// Function compares triad chords and seventh chords. If probability of 

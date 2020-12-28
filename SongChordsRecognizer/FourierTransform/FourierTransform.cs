@@ -1,10 +1,48 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Numerics;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SongChordsRecognizer.FourierTransform
 {
     static class FourierTransform
     {
+        /// <summary>
+        /// Generate all STFT values for waveform 'g' asynchronously. 
+        /// </summary>
+        /// <param name="g">Waveform of some music sample.</param>
+        /// <param name="log2_fft_length">Number of STFT samples for this specific part of audio waveform is equal to N = 2^{nth_power_of_two}</param>
+        /// <param name="window">Window that is applied on tthis specific part of audio waveform.</param>
+        /// <returns>All STFT values of 'g' waveform.</returns>
+        public static async Task<double[][]> GetFrequencyIntensitiesAsync(double[] g, int log2_fft_length, IWindow window)
+        {
+            int fft_length = (int)Math.Pow(2, log2_fft_length);
+            int numberOfSamples = g.Length / fft_length;
+            double[][] intensities = new double[numberOfSamples][];
+
+            // Run Tasks to compute STFT
+            Task<double[]>[] tasks = new Task<double[]>[numberOfSamples];
+            for(int i = 0; i < numberOfSamples; i++)
+            {
+                int index = i;
+                tasks[index] = Task<double[]>.Factory.StartNew(
+                    () => STFT(g, index * fft_length, log2_fft_length, window).Real()
+                    ); 
+            }
+
+            // Collect results from tasks
+            for (int i = 0; i < numberOfSamples; i++)
+            {
+                int index = i;
+                intensities[index] = await tasks[index];
+            }
+
+            return intensities;
+        }
+
+
+
         /// <summary>
         /// Short Time Fourier Transform.
         /// Uses FFT to compute frequency intensities from part of function 'g' multiplied by 'window' function.
@@ -13,7 +51,7 @@ namespace SongChordsRecognizer.FourierTransform
         /// <param name="offset">Starting index of 'g' of this specific part of audio waveform.</param>
         /// <param name="log2_fft_length">Number of STFT samples for this specific part of audio waveform is equal to N = 2^{nth_power_of_two}</param>
         /// <param name="window">Window that is applied on tthis specific part of audio waveform.</param>
-        /// <returns></returns>
+        /// <returns>STFT part for specified parameters.</returns>
         public static Complex[] STFT(double[] g, int offset, int log2_fft_length, IWindow window)
         {
             double[] covolutioned_g = window.Apply(g, offset, (int)Math.Pow(2, log2_fft_length));
