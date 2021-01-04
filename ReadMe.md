@@ -16,7 +16,7 @@ that you would like to **play on guitar and sing** with your friends?
 ```batch
 start SongChordsRecognizer.exe [path of audio file] [STFT window type] [Spectrogram filtration type] [Sample length level] [BPM value]
 ```
-*Try it Yourself with the demo in **./docs/demo** folder*.
+*Try it Yourself with the demo for Windows in **./docs/demo** folder*.
 
  - [Path of audio file](#Supported-audio-format) : String, path (relative or absolute) of audio file.
  - [STFT window types](#STFT-Window-types)  : {```Rectangular```, ```Triangular```, ```Parzen```, ```Welch```, ```Nuttall```}
