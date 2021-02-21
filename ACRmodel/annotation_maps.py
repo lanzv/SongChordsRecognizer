@@ -1,17 +1,27 @@
 
 keys_map = {
-    "C" : 0,        "C:minor" : 0,      "S" : 0,                "N" : 0,
-    "C#" : 1,       "Db" : 1,           "C#:minor" : 1,         "Db:minor" : 1,
-    "D" : 2,        "D:minor" : 2,
-    "D#" : 3,       "Eb" : 3,           "D#:minor" : 3,         "Eb:minor" : 3,
-    "E" : 4,        "E:minor" : 4,
-    "F" : 5,        "F:minor" : 5,
+    "C" : 0,        "S" : 0,                "N" : 0,
+    "C#" : 1,       "Db" : 1,
+    "D" : 2,
+    "D#" : 3,       "Eb" : 3,
+    "E" : 4,
+    "F" : 5,
     "F#": 6,        "Gb" : 6,
-    "G" : 7,        "G:minor" : 7,
-    "G#": 8,        "Ab" : 8,            "G#:minor" : 8,         "Ab:minor" : 8,
-    "A" : 9,        "A:minor" : 9,
-    "A#" :10,       "Bb" : 10,           "A#:minor" : 10,        "Bb:minor" : 10,
-    "B":11,         "Cb" : 11,           "B:minor" : 11,         "Cb:minor" : 11
+    "G" : 7,
+    "G#": 8,        "Ab" : 8,
+    "A" : 9,
+    "A#" :10,       "Bb" : 10,
+    "B":11,         "Cb" : 11
+}
+
+key_modes_map = {
+    "ionian": 0,        "major" : 0,        "" : 0,
+    "dorian" : 1,
+    "phrygian" : 2,
+    "lydian" : 3,
+    "mixolydian" : 4,
+    "aeolian" : 5,      "minor" : 5,
+    "locrian" : 6
 }
 
 chords_map = {
