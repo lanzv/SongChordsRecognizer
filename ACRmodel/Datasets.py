@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from librosa.core import audio
 from Annotations import ChordSequence, KeySequence
 from annotation_maps import chords_map, keys_map
 from Audio import Audio
@@ -10,8 +9,6 @@ import lzma
 import librosa
 import numpy as np
 import re
-import sys
-import soundfile
 
 class IsophonicsDataset():
     """Isophonics Dataset.
@@ -143,6 +140,7 @@ class IsophonicsDataset():
             list of logarithmized song mel spectrograms
         """
         # Get number of half tones to transpose
+        key = key.split(":")[0]
         if norm_to_C:
             n_steps = -keys_map[key] if keys_map[key] < 7 else 12-keys_map[key]
         else:
@@ -176,6 +174,7 @@ class IsophonicsDataset():
             index of chord passed on input (or its normalization alternative), N has 0, other chord are integer in range of 1 and 24
         """
         # Get number of half tones to transpose
+        key = key.split(":")[0]
         if norm_to_C:
             n_steps = -keys_map[key] if keys_map[key] < 7 else 12-keys_map[key]
         else:
@@ -184,7 +183,7 @@ class IsophonicsDataset():
         chord = re.sub('6|7|9|11|13|maj|\/[0-9]|\/\#[0-9]|\/b[0-9]|\(.*\)', '', chord)
         chord = re.sub(':$', '', chord)
         # Get chord index
-        if chord in chords_map:
+        if chord in chords_map and not chord == "N":
             if chords_map[chord] + 2*n_steps <= 0:
                 return chords_map[chord] + 2*n_steps + 24
             elif chords_map[chord] + 2*n_steps > 24:

@@ -16,7 +16,7 @@ parser.add_argument("--seed", default=42, type=int, help="Random seed")
 def main(args):
     # Prepare Data
     data = IsophonicsDataset(args.audio_directory, args.annotations_directory)
-    data.save_preprocessed_dataset(dest="./new_dataset.ds",window_size=5, flattened_window=False, ms_intervals=500, to_skip=1)
+    data.save_preprocessed_dataset(dest="./new_dataset.ds",window_size=32, flattened_window=False, ms_intervals=10, to_skip=100, norm_to_C=True)
     sys.exit()
 
 

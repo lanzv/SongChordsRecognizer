@@ -64,6 +64,7 @@ class KeySequence():
         for key in self.KEYS:
             if not (key == "N" or key == "S"):
                 return key
+        return "N"
 
     @staticmethod
     def parse_lab(lab_path):
