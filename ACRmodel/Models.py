@@ -99,7 +99,7 @@ class CNN():
 
         # Set and display confusion matrix
         disp = ConfusionMatrixDisplay(
-            onfusion_matrix=confusion_matrix(targets, predictions, labels=labels, normalize='all'), 
+            confusion_matrix=confusion_matrix(targets, predictions, labels=labels, normalize='all'), 
             display_labels=display_labels
             )
         disp.plot(xticks_rotation='vertical', include_values=False)
