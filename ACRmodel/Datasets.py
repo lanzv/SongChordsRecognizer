@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-from ChordsData import ChordsData
+from librosa.core import audio
+from Annotations import Chords, Keys
+from annotation_maps import chords_map, keys_map
 from Audio import Audio
 import os
 from glob import glob
@@ -9,6 +11,7 @@ import librosa
 import numpy as np
 import re
 import sys
+import soundfile
 
 class IsophonicsDataset():
     """Isophonics Dataset.
@@ -23,23 +26,28 @@ class IsophonicsDataset():
     def __init__(self, audio_directory, annotations_directory):
         
         self.DATA = []
-        self.LABELS = []
+        self.CHORDS = []
+        self.KEYS =  []
 
         audio_paths = sorted(glob(os.path.join(audio_directory, '*.wav')))
-        annotations_paths = sorted(glob(os.path.join(annotations_directory, '*.lab')))
+        chord_annotations_paths = sorted(glob(os.path.join(annotations_directory+'/CHORDS', '*.lab')))
+        key_annotations_paths = sorted(glob(os.path.join(annotations_directory+'/KEYS', '*.lab')))
 
-        if not len(audio_paths) == len(annotations_paths):
-            raise Exception("The number of WAV files doesn't equal the number of LAB files.")
+        if not (len(audio_paths) == len(chord_annotations_paths) and len(audio_paths) == len(key_annotations_paths)):
+            raise Exception("The number of WAV files doesn't equal the number of annotation files.")
 
-        for audio_path, lab_path in zip(audio_paths, annotations_paths):
+        for audio_path, chord_lab_path, key_lab_path in zip(audio_paths, chord_annotations_paths, key_annotations_paths):
             self.DATA.append(Audio(audio_path, self.SAMPLE_RATE))
-            self.LABELS.append(ChordsData(lab_path))
+            self.CHORDS.append(Chords(chord_lab_path))
+            self.KEYS.append(Keys(key_lab_path))
 
         print("[INFO] The Dataset was successfully initialized.")
 
+    
+
 
        
-    def get_preprocessed_dataset(self, window_size=5, flattened_window=True, ms_intervals=100, to_skip=5):
+    def get_preprocessed_dataset(self, window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False):
         """
         Preprocess IsophonicsDataset dataset.
         Create features from self.DATA and its corresponding targets from self.LABELS.
@@ -54,11 +62,12 @@ class IsophonicsDataset():
             miliseconds between generated spectrogram
         to_skip : int
             how many spectrogram we want to skip when creating new feature set
+        norm_to_C : bool
+            True if we want to transpose all songs to C key
         Returns
         -------
         prep_data : np array
             flattened window of logarithmized mel spectrograms arround specific time point
-
         prep_targets : np array
             integers of chord labels for specific time point
         """
@@ -67,12 +76,11 @@ class IsophonicsDataset():
         hop_length = int(self.SAMPLE_RATE/(1000/ms_intervals))
         k = 0
         # Iterate over all audio files
-        for audio, label in zip(self.DATA, self.LABELS):
+        for audio, chords, keys in zip(self.DATA, self.CHORDS, self.KEYS):
             print(k)
             k = k+1
             # Get log mel spectrogram
-            mel_spectrogram = librosa.feature.melspectrogram(audio.WAVEFORM, audio.SAMPLE_RATE, n_fft=self.NFFT, hop_length=hop_length)
-            log_spectrogram = librosa.amplitude_to_db(mel_spectrogram)
+            log_spectrogram = IsophonicsDataset.preprocess_audio(audio.WAVEFORM, audio.SAMPLE_RATE, self.NFFT, hop_length, norm_to_C, keys.KEYS[0])
             mel_length, num_samples = log_spectrogram.shape
 
             # Collect data for each spectrogram sample
@@ -99,16 +107,53 @@ class IsophonicsDataset():
 
                 # Get label
                 second = float(i)/(float(self.SAMPLE_RATE) / float(hop_length))
-                while j < len(label.START) and second > label.START[j] :
+                while j < len(chords.START) and second > chords.START[j] :
                     j = j + 1
-                if j == len(label.START):
+                if j == len(chords.START):
                     prep_targets.append(IsophonicsDataset.get_integered_chord("N"))
                 else:
-                    prep_targets.append(IsophonicsDataset.get_integered_chord(label.CHORD[j]))
+                    prep_targets.append(IsophonicsDataset.get_integered_chord(chords.CHORD[j]))
 
         print("[INFO] The Dataset was successfully preprocessed.")
         return np.array(prep_data), np.array(prep_targets)
 
+
+    @staticmethod
+    def preprocess_audio(waveform, sample_rate, nfft, hop_length, norm_to_C=False, key='C'):
+        """
+        Preprocess audio waveform, shift pitches to C key and generate mel and log spectrograms.
+        
+        Parameters
+        ----------
+        waveform : list of floats
+            data of audio waveform
+        sample_rate : int
+            audio sample rate
+        nfft : int
+            length of FFT, power of 2
+        hop_length : int
+            number of target rate, sample_rate/hop_length = interval between two spectrograms in miliseconds
+        norm_to_C : bool
+            True, if we want to normalize all songs to C key
+        key : string
+            label of audio music key
+        Returns
+        -------
+        log_spectrogram : list of float lists 
+            list of logarithmized song mel spectrograms
+        """
+        # Get number of half tones to transpose
+        if norm_to_C:
+            n_steps = -keys_map[key] if keys_map[key] < 7 else 12-keys_map[key]
+        else:
+            n_steps = 0
+        # transpose song to C    
+        waveform_shifted = librosa.effects.pitch_shift(waveform, sample_rate, n_steps=n_steps)
+        # Get spectrogram
+        mel_spectrogram = librosa.feature.melspectrogram(waveform_shifted, sample_rate, nfft, hop_length=hop_length)
+        log_spectrogram = librosa.amplitude_to_db(mel_spectrogram)
+
+        return log_spectrogram
 
 
 
@@ -128,35 +173,8 @@ class IsophonicsDataset():
         """
         chord = re.sub('6|7|9|11|13|maj|\/[0-9]|\/\#[0-9]|\/b[0-9]|\(.*\)', '', chord)
         chord = re.sub(':$', '', chord)
-        chords = {
-            "N" : 0, 
-            "C" : 1,
-            "C:min" : 2, 
-            "C#" : 3,       "Db" : 3, 
-            "C#:min" : 4,   "Db:min" : 4, 
-            "D" : 5,        
-            "D:min": 6,
-            "D#" : 7,       "Eb" : 7,
-            "D#:min": 8,    "Eb:min" : 8, 
-            "E" : 9,
-            "E:min": 10, 
-            "F" : 11, 
-            "F:min": 12, 
-            "F#": 13,       "Gb" : 13,
-            "F#:min": 14,   "Gb:min" : 14,
-            "G" : 15, 
-            "G:min" : 16, 
-            "G#": 17,       "Ab" : 17,
-            "G#:min" : 18,  "Ab:min" : 18,
-            "A" : 19,       
-            "A:min" : 20, 
-            "A#" :21,       "Bb" : 21,
-            "A#:min":22,    "Bb:min" : 22,
-            "B":23,         "Cb" : 23,
-            "B:min":24,     "Cb:min" : 24
-        }
-        if chord in chords:
-            return chords[chord]
+        if chord in chords_map:
+            return chords_map[chord]
         else:
             return 0
 

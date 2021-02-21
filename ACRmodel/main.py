@@ -8,8 +8,8 @@ import sklearn
 import sys
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--audio_directory", default="C:\\Users\\vojte\\Documents\\All documents 2010 till now\\MFF files\\3. ročník\\Bakalarka\\Datasets\\Isophonics\\AUDIO", type=str, help="Path to directory with audio files.")
-parser.add_argument("--annotations_directory", default="C:\\Users\\vojte\\Documents\\All documents 2010 till now\\MFF files\\3. ročník\\Bakalarka\\Datasets\\Isophonics\\ANNOTATIONS", type=str, help="Path to directory with chord annotations.")
+parser.add_argument("--audio_directory", default="./Datasets/Isophonics/AUDIO", type=str, help="Path to directory with audio files.")
+parser.add_argument("--annotations_directory", default="./Datasets/Isophonics/ANNOTATIONS", type=str, help="Path to directory with chord annotations.")
 parser.add_argument("--test_size", default=0.3, type=lambda x:int(x) if x.isdigit() else float(x), help="Test set size")
 parser.add_argument("--seed", default=42, type=int, help="Random seed")
 
