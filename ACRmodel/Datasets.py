@@ -80,7 +80,7 @@ class IsophonicsDataset():
             print(k)
             k = k+1
             # Get log mel spectrogram
-            log_spectrogram = IsophonicsDataset.preprocess_audio(audio.WAVEFORM, audio.SAMPLE_RATE, self.NFFT, hop_length, norm_to_C, keys.KEYS[0])
+            log_spectrogram = IsophonicsDataset.preprocess_audio(audio.WAVEFORM, audio.SAMPLE_RATE, self.NFFT, hop_length, norm_to_C, keys.get_first_key())
             mel_length, num_samples = log_spectrogram.shape
 
             # Collect data for each spectrogram sample
@@ -110,9 +110,9 @@ class IsophonicsDataset():
                 while j < len(chords.START) and second > chords.START[j] :
                     j = j + 1
                 if j == len(chords.START):
-                    prep_targets.append(IsophonicsDataset.get_integered_chord("N"))
+                    prep_targets.append(IsophonicsDataset.get_integered_chord("N", norm_to_C, keys.get_first_key()))
                 else:
-                    prep_targets.append(IsophonicsDataset.get_integered_chord(chords.CHORD[j]))
+                    prep_targets.append(IsophonicsDataset.get_integered_chord(chords.CHORD[j], norm_to_C, keys.get_first_key()))
 
         print("[INFO] The Dataset was successfully preprocessed.")
         return np.array(prep_data), np.array(prep_targets)
@@ -139,7 +139,7 @@ class IsophonicsDataset():
             label of audio music key
         Returns
         -------
-        log_spectrogram : list of float lists 
+        log_spectrogram : list of float lists
             list of logarithmized song mel spectrograms
         """
         # Get number of half tones to transpose
@@ -150,7 +150,7 @@ class IsophonicsDataset():
         # transpose song to C    
         waveform_shifted = librosa.effects.pitch_shift(waveform, sample_rate, n_steps=n_steps)
         # Get spectrogram
-        mel_spectrogram = librosa.feature.melspectrogram(waveform_shifted, sample_rate, nfft, hop_length=hop_length)
+        mel_spectrogram = librosa.feature.melspectrogram(waveform_shifted, sample_rate, n_fft=nfft, hop_length=hop_length)
         log_spectrogram = librosa.amplitude_to_db(mel_spectrogram)
 
         return log_spectrogram
@@ -158,7 +158,7 @@ class IsophonicsDataset():
 
 
     @staticmethod
-    def get_integered_chord(chord):
+    def get_integered_chord(chord, norm_to_C=False, key='C'):
         """
         Map chord label in string with its index.
         
@@ -166,15 +166,31 @@ class IsophonicsDataset():
         ----------
         chord : string
             labled chord, for instance N for none chord, or G#:min7
+        norm_to_C : bool
+            True, if we want to normalize chord to C key
+        key : string
+            true label of audio music key
         Returns
         -------
         chord_index : int 
-            index of chord passed on input, N has 0, other chord are integer in range of 1 and 24
+            index of chord passed on input (or its normalization alternative), N has 0, other chord are integer in range of 1 and 24
         """
+        # Get number of half tones to transpose
+        if norm_to_C:
+            n_steps = -keys_map[key] if keys_map[key] < 7 else 12-keys_map[key]
+        else:
+            n_steps = 0
+        # Simplify chord label
         chord = re.sub('6|7|9|11|13|maj|\/[0-9]|\/\#[0-9]|\/b[0-9]|\(.*\)', '', chord)
         chord = re.sub(':$', '', chord)
+        # Get chord index
         if chord in chords_map:
-            return chords_map[chord]
+            if chords_map[chord] + 2*n_steps <= 0:
+                return chords_map[chord] + 2*n_steps + 24
+            elif chords_map[chord] + 2*n_steps > 24:
+                return chords_map[chord] + 2*n_steps - 24
+            else:
+                return chords_map[chord] + 2*n_steps
         else:
             return 0
 

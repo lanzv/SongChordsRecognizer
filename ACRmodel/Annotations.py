@@ -51,6 +51,20 @@ class KeySequence():
 
         self.START, self.END, self.KEYS = KeySequence.parse_lab(lab_path)
     
+
+    def get_first_key(self):
+        """
+        Get first audio key that is not Silence or None key. For instance, when we want to ignore modulations.
+
+        Returns
+        -------
+        key : string
+            first audio music key
+        """
+        for key in self.KEYS:
+            if not (key == "N" or key == "S"):
+                return key
+
     @staticmethod
     def parse_lab(lab_path):
         """
@@ -89,7 +103,3 @@ class KeySequence():
                             raise Exception("The key lab file has an unexpected format.")
                         labels.append(splits[3])
         return starts, ends, labels
-        
-
-
-
