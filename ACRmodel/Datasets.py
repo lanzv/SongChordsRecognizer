@@ -196,7 +196,7 @@ class IsophonicsDataset():
 
 
 
-    def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_IsophonicsDataset.ds", window_size=5, flattened_window=True, ms_intervals=100, to_skip=5):
+    def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_IsophonicsDataset.ds", window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False):
         """
         Save preprocessed data from this dataset to destination path 'dest' by default as a .ds file.
         
@@ -212,10 +212,12 @@ class IsophonicsDataset():
             miliseconds between generated spectrogram
         to_skip : int
             how many spectrogram we want to skip when creating new feature set
+        norm_to_C : bool
+            True if we want to transpose all songs to C key
         """
         # Serialize the dataset.
         with lzma.open(dest, "wb") as dataset_file:
-            pickle.dump((self.get_preprocessed_dataset(window_size, flattened_window, ms_intervals, to_skip)), dataset_file)
+            pickle.dump((self.get_preprocessed_dataset(window_size, flattened_window, ms_intervals, to_skip, norm_to_C)), dataset_file)
 
         print("[INFO] The Dataset was saved successfully.")
 
