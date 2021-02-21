@@ -2,7 +2,7 @@
 import sys
 
 
-class Chords():
+class ChordSequence():
     """Chord sequence of specific audio parsed from LAB file.
     START list of starting chord times in miliseconds
     END list of ending chord times in miliseconds
@@ -10,7 +10,7 @@ class Chords():
     """
     def __init__(self, lab_path):
 
-        self.START, self.END, self.CHORD = Chords.parse_lab(lab_path)
+        self.START, self.END, self.CHORD = ChordSequence.parse_lab(lab_path)
 
     @staticmethod
     def parse_lab(lab_path):
@@ -41,7 +41,7 @@ class Chords():
                         labels.append(splits[2])
         return starts, ends, labels
 
-class Keys():
+class KeySequence():
     """Key sequence of specific audio parsed from LAB file.
     START list of starting key times in miliseconds
     END list of ending key times in miliseconds
@@ -49,7 +49,7 @@ class Keys():
     """
     def __init__(self, lab_path):
 
-        self.START, self.END, self.KEYS = Keys.parse_lab(lab_path)
+        self.START, self.END, self.KEYS = KeySequence.parse_lab(lab_path)
     
     @staticmethod
     def parse_lab(lab_path):
@@ -80,7 +80,7 @@ class Keys():
                         # Silence
                         if not splits[2] == "Silence":
                             raise Exception("The key lab file has an unexpected format.")
-                        labels.append("N")
+                        labels.append("S")
                     if len(splits) == 4:
                         starts.append(float(splits[0]))
                         ends.append(float(splits[1]))

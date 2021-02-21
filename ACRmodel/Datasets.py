@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from librosa.core import audio
-from Annotations import Chords, Keys
+from Annotations import ChordSequence, KeySequence
 from annotation_maps import chords_map, keys_map
 from Audio import Audio
 import os
@@ -38,8 +38,8 @@ class IsophonicsDataset():
 
         for audio_path, chord_lab_path, key_lab_path in zip(audio_paths, chord_annotations_paths, key_annotations_paths):
             self.DATA.append(Audio(audio_path, self.SAMPLE_RATE))
-            self.CHORDS.append(Chords(chord_lab_path))
-            self.KEYS.append(Keys(key_lab_path))
+            self.CHORDS.append(ChordSequence(chord_lab_path))
+            self.KEYS.append(KeySequence(key_lab_path))
 
         print("[INFO] The Dataset was successfully initialized.")
 
