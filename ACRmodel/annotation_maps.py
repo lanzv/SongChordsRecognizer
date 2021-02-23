@@ -16,12 +16,12 @@ keys_map = {
 
 key_modes_map = {
     "ionian": 0,        "major" : 0,        "" : 0,
-    "dorian" : 1,
-    "phrygian" : 2,
-    "lydian" : 3,
-    "mixolydian" : 4,
-    "aeolian" : 5,      "minor" : 5,
-    "locrian" : 6
+    "dorian" : 2,
+    "phrygian" : 4,
+    "lydian" : 5,
+    "mixolydian" : 7,
+    "aeolian" : 9,      "minor" : 9,
+    "locrian" : 11
 }
 
 chords_map = {
