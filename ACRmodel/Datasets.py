@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from Annotations import ChordSequence, KeySequence
-from annotation_maps import chords_map, keys_map
+from annotation_maps import chords_map, keys_map, key_modes_map
 from Audio import Audio
 import os
 from glob import glob
@@ -118,7 +118,7 @@ class IsophonicsDataset():
     @staticmethod
     def preprocess_audio(waveform, sample_rate, nfft, hop_length, norm_to_C=False, key='C'):
         """
-        Preprocess audio waveform, shift pitches to C key and generate mel and log spectrograms.
+        Preprocess audio waveform, shift pitches to C major key (and its modes ... dorian, phrygian, aiolian, lydian, ...) and generate mel and log spectrograms.
         
         Parameters
         ----------
@@ -131,7 +131,7 @@ class IsophonicsDataset():
         hop_length : int
             number of target rate, sample_rate/hop_length = interval between two spectrograms in miliseconds
         norm_to_C : bool
-            True, if we want to normalize all songs to C key
+            True, if we want to normalize all songs to C major key (and its modes)
         key : string
             label of audio music key
         Returns
@@ -140,9 +140,16 @@ class IsophonicsDataset():
             list of logarithmized song mel spectrograms
         """
         # Get number of half tones to transpose
-        key = key.split(":")[0]
         if norm_to_C:
-            n_steps = -keys_map[key] if keys_map[key] < 7 else 12-keys_map[key]
+            splited_key = key.split(":")
+            if len(splited_key) == 1:
+                mode_shift = 0
+            elif len(splited_key) == 2:
+                mode_shift = key_modes_map[splited_key[1]]
+            else:
+                raise Exception("Some key mode format is not supported.")
+            to_shift = keys_map[splited_key[0]] - mode_shift
+            n_steps = -(to_shift%12) if to_shift%12 < 7 else 12-(to_shift%12)
         else:
             n_steps = 0
         # transpose song to C    
@@ -165,7 +172,7 @@ class IsophonicsDataset():
         chord : string
             labled chord, for instance N for none chord, or G#:min7
         norm_to_C : bool
-            True, if we want to normalize chord to C key
+            True, if we want to normalize chord to C major key (and its modes)
         key : string
             true label of audio music key
         Returns
@@ -174,9 +181,16 @@ class IsophonicsDataset():
             index of chord passed on input (or its normalization alternative), N has 0, other chord are integer in range of 1 and 24
         """
         # Get number of half tones to transpose
-        key = key.split(":")[0]
         if norm_to_C:
-            n_steps = -keys_map[key] if keys_map[key] < 7 else 12-keys_map[key]
+            splited_key = key.split(":")
+            if len(splited_key) == 1:
+                mode_shift = 0
+            elif len(splited_key) == 2:
+                mode_shift = key_modes_map[splited_key[1]]
+            else:
+                raise Exception("Some key mode format is not supported.")
+            to_shift = keys_map[splited_key[0]] - mode_shift
+            n_steps = -(to_shift%12) if to_shift%12 < 7 else 12-(to_shift%12)
         else:
             n_steps = 0
         # Simplify chord label
