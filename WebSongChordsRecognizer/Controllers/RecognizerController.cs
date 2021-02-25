@@ -8,6 +8,7 @@ using SongChordsRecognizer.MusicFeatures;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebSongChordsRecognizer.Models;
@@ -30,14 +31,19 @@ namespace WebSongChordsRecognizer.Controllers
 
         public IActionResult UploadAudio(IFormFile audio)
         {
-            String audioPath = "Let it be 120bpm.wav";
             int sampleLengthLevel = 14;
             IWindow window = new WelchWindow();
             ISpectrogramFiltration filtration = new WeightedOctaves();
             int bpm = 120;
 
+
+            using (var filestream = new FileStream("output.wav", FileMode.Create, FileAccess.Write))
+            {
+                audio.CopyTo(filestream);
+            }
+
             // Generate chords
-            AudioSourceWav wav = new AudioSourceWav(audioPath);
+            AudioSourceWav wav = new AudioSourceWav("output.wav");
 
             // SPECTROGRAM
             // - generate
