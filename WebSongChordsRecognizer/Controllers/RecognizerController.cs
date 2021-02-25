@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace WebSongChordsRecognizer.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult UploadAudio(IFormFile audio)
+        {
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()

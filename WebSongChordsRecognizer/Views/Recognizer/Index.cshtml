@@ -2,50 +2,12 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div>
+    <h4>Upload Audio File</h4>
+    <form asp-controller="Recognizer" asp-action="UploadAudio" 
+          enctype ="multipart/form-data" method="post">
+        <input type="file" name="audio" />
+        <button type="submit">Process</button>
+    </form>
 </div>
-
-<form action="BufferedSingleFileUploadPhysical/?handler=Upload"
-      enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;"
-      method="post">
-    <dl>
-        <dt>
-            <label for="FileUpload_FormFile">File</label>
-        </dt>
-        <dd>
-            <input id="FileUpload_FormFile" type="file"
-                   name="FileUpload.FormFile" />
-        </dd>
-    </dl>
-
-    <input class="btn" type="submit" value="Upload" />
-
-    <div style="margin-top:15px">
-        <output name="result"></output>
-    </div>
-</form>
-
-<script>
-  async function AJAXSubmit (oFormElement) {
-    var resultElement = oFormElement.elements.namedItem("result");
-    const formData = new FormData(oFormElement);
-
-    try {
-    const response = await fetch(oFormElement.action, {
-      method: 'POST',
-      body: formData
-    });
-
-    if (response.ok) {
-      window.location.href = '/';
-    }
-
-    resultElement.value = 'Result: ' + response.status + ' ' +
-      response.statusText;
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
-</script>
