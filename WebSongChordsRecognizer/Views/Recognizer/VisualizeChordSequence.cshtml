@@ -10,7 +10,18 @@
         <button type="submit">Return back and process new audio.</button>
     </form>
 </div>
-<div>
-    <span style="white-space: pre-wrap">@Model</span>
+<div name="chordsequence">
+    @{
+        for (int i = 0; i < Model.ChordSequence.Count; i++)
+        {
+            <div name="line" style="display: inline-flex">
+                @for(int j = 0; j < 16 && i + j < Model.ChordSequence.Count; j++)
+                {
+                    <div name="chord" style=" border-style: dotted; height: 80px; width: 60px; text-align: center; background-color: powderblue;  margin: 5px;">@Model.ChordSequence[i+j].Description</div>
+                }
+            </div>
+            i = i + 16;
+        }
+    }
 </div>
 
