@@ -13,7 +13,7 @@
             <label for="windows">STFT convolution window type:</label>
             <select value="Triangular" id="windows" name="windowArg">
                 <option value="Rectangular">Rectangular window</option>
-                <option value="Triangular">Triangular window</option>
+                <option value="Triangular" selected>Triangular window</option>
                 <option value="Parzen">Parzen window</option>
                 <option value="Welch">Welch window</option>
                 <option value="Nuttall">Nuttall window</option>
@@ -22,8 +22,8 @@
 
         <div>
             <label for="filtrations">Spectrogram filtration types:</label>
-            <select value="Triangular" id="filtrations" name="filtrationArg">
-                <option value="Identity">Identity</option>
+            <select value="Identity" id="filtrations" name="filtrationArg">
+                <option value="Identity" selected>Identity</option>
                 <option value="AFAM">Accompaniment Frequency Area Mask</option>
                 <option value="WO">Weighted Octaves</option>
                 <option value="FNH">Filter Nth Harmonics</option>
