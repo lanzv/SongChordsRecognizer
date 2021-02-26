@@ -9,7 +9,7 @@ namespace SongChordsRecognizer.Graphs
     /// Each of printers should contain function 'Print' that 
     /// print IGraph somewhere and somehow.
     /// </summary>
-    interface IGraphPrinter
+    public interface IGraphPrinter
     {
         /// <summary>
         /// An algorithm that prints graph.
@@ -27,7 +27,7 @@ namespace SongChordsRecognizer.Graphs
     /// <summary>
     /// Very simple ASCII printer that prints graph from 'data' to the file 'graph.txt'. 
     /// </summary>
-    class PrintGraphToTextFile : IGraphPrinter
+    public class PrintGraphToTextFile : IGraphPrinter
     {
         private int lengthOfGraph = 20;
         string file = "graph.txt";

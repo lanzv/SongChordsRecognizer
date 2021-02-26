@@ -13,7 +13,7 @@ namespace SongChordsRecognizer.Graphs
     /// Result data are stored in double[][] ChromagramData. You can get them
     /// by calling GetData() function.
     /// </summary>
-    class Chromagram :IGraph
+    public class Chromagram :IGraph
     {
         /// <summary>
         /// Chromagram data.

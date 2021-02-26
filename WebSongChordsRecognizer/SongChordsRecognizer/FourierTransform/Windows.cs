@@ -8,7 +8,7 @@ namespace SongChordsRecognizer.FourierTransform
     /// result of multiplication of two functions:
     /// the specific part of audio waveform and the specific window function
     /// </summary>
-    interface IWindow
+    public interface IWindow
     {
         /// <summary>
         /// Apply specific window function on whole audio waveform 'g'.

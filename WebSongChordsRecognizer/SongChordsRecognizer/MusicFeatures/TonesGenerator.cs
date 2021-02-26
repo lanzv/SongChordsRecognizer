@@ -6,7 +6,7 @@ namespace SongChordsRecognizer.MusicFeatures
     /// <summary>
     /// Static class that provides important sets connected with Tone or Chroma classes. 
     /// </summary>
-    static class TonesGenerator
+    public static class TonesGenerator
     {
         /// <summary>
         /// The list of base frequencies that their multiples

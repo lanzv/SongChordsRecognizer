@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SongChordsRecognizer.FourierTransform
 {
-    static class FourierTransform
+    public static class FourierTransform
     {
         /// <summary>
         /// Generate all STFT values for waveform 'g' asynchronously. 

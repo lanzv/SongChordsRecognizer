@@ -11,7 +11,7 @@ namespace SongChordsRecognizer.Graphs
     /// Each of Filtration should contain function 'Filter' that returns
     /// filtered spectrogram from from misleading informations.
     /// </summary>
-    interface ISpectrogramFiltration
+    public interface ISpectrogramFiltration
     {
         /// <summary>
         /// An algorithm that filters spectrogram data from misleading informations in some way.
@@ -32,7 +32,7 @@ namespace SongChordsRecognizer.Graphs
     /// By default epsilon=0.4 and n_harmonics=10.
     /// ( [Gomez 2006] Tonal description of polyphonic audio for music content processing. )
     /// </summary>
-    class FilterNthHarmonics : ISpectrogramFiltration
+    public class FilterNthHarmonics : ISpectrogramFiltration
     {
         private double epsilon = 0.4;
 
@@ -71,7 +71,7 @@ namespace SongChordsRecognizer.Graphs
     /// <summary>
     /// ISpectrogramFiltration that doesn't do any of filtration. It will just return spectrogramData. 
     /// </summary>
-    class Identity : ISpectrogramFiltration
+    public class Identity : ISpectrogramFiltration
     {
         public double[][] Filter(Spectrogram spectrogram)
         {
@@ -88,7 +88,7 @@ namespace SongChordsRecognizer.Graphs
     /// This filtration create a mask for that area, lets the values of that area same. The rest of the frequencies
     /// will be set on zero. 
     /// </summary>
-    class AccompanimentFrequencyAreaMask : ISpectrogramFiltration
+    public class AccompanimentFrequencyAreaMask : ISpectrogramFiltration
     {
         private double l_frequency_border = 123.47; // Great B
 
@@ -135,7 +135,7 @@ namespace SongChordsRecognizer.Graphs
     /// So it is a good idea to weight single octave tones by their "chord importance". For instance, great, small and one lined octaves are
     /// much more important than the rest of them.
     /// </summary>
-    class WeightedOctaves : ISpectrogramFiltration
+    public class WeightedOctaves : ISpectrogramFiltration
     {
         private Dictionary<int, double> weights = new Dictionary<int, double> {
             {0, 0.01}, // Sub-contra

@@ -6,7 +6,7 @@
     /// double Data[][] where first index corresponds to specific
     /// time frames, second index corresponds to tone pitches.
     /// </summary>
-    interface IGraph
+    public interface IGraph
     {
         /// <summary>
         /// Print and visualize data of graph with specific printer type.

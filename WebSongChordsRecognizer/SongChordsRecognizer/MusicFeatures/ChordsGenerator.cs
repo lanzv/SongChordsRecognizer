@@ -6,7 +6,7 @@ namespace SongChordsRecognizer.MusicFeatures
     /// <summary>
     /// Static class that provides important sets connected with Chord class. 
     /// </summary>
-    static class ChordsGenerator
+    public static class ChordsGenerator
     {
         /// <summary>
         /// Function generates list of all possible triad chords.

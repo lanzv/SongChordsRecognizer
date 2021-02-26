@@ -10,7 +10,7 @@ namespace SongChordsRecognizer.Graphs
     /// Result data are stored in double[][] SpectrogramData. You can get them
     /// by calling GetData() function.
     /// </summary>
-    class Spectrogram:IGraph
+    public class Spectrogram:IGraph
     {
         /// <summary>
         /// Spectrogram data.

@@ -9,7 +9,7 @@ namespace SongChordsRecognizer.MusicFeatures
     /// <summary>
     /// Static class that provides functions which will classify chords from some Chromagram.
     /// </summary>
-    static class ChordClassifier
+    public static class ChordClassifier
     {
         /// <summary>
         /// The function generates chord for each chromagram sample.
