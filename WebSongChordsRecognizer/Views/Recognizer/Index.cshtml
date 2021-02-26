@@ -5,9 +5,41 @@
 
 <div>
     <h4>Upload Audio File</h4>
-    <form asp-controller="Recognizer" asp-action="UploadAudio" 
-          enctype ="multipart/form-data" method="post">
+    <form asp-controller="Recognizer" asp-action="VisualizeChordSequence"
+          enctype="multipart/form-data" method="post">
         <input type="file" name="audio" />
+
+        <div>
+            <label for="windows">STFT convolution window type:</label>
+            <select value="Triangular" id="windows">
+                <option value="Rectangular">Rectangular window</option>
+                <option value="Triangular">Triangular window</option>
+                <option value="Parzen">Parzen window</option>
+                <option value="Welch">Welch window</option>
+                <option value="Nuttall">Nuttall window</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="filtrations">Spectrogram filtration types:</label>
+            <select value="Triangular" id="filtrations">
+                <option value="Identity">Identity</option>
+                <option value="AFAM">Accompaniment Frequency Area Mask</option>
+                <option value="WO">Weighted Octaves</option>
+                <option value="FNH">Filter Nth Harmonics</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="lengthLevel">Sample Length Level:</label>
+            <input type="number" id="lengthLevel" name="lengthLevel" min="10" max="18" value="14">
+        </div>
+
+        <div>
+            <label for="bpm">Beats per minute:</label>
+            <input type="number" id="bpm" name="bpm" min="5" max="350" value="120">
+        </div>
+
         <button type="submit">Process</button>
     </form>
 </div>
