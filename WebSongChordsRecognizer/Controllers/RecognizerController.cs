@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using SongChordsRecognizer.AudioSource;
+using SongChordsRecognizer.ErrorMessages;
 using SongChordsRecognizer.FourierTransform;
 using SongChordsRecognizer.Graphs;
 using SongChordsRecognizer.MusicFeatures;
@@ -33,13 +34,28 @@ namespace WebSongChordsRecognizer.Controllers
         
         public IActionResult VisualizeChordSequence(IFormFile audio, String windowArg, String filtrationArg, int sampleLengthLevel, int bpm)
         {
-            IWindow window = InputArgsParser.ParseSTFTWindow(windowArg);
-            ISpectrogramFiltration filtration = InputArgsParser.ParseFiltration(filtrationArg);
+            IWindow window;
+            ISpectrogramFiltration filtration;
 
-            if (audio.Length == 0)
+            // Handle exceptions on input
+            try
             {
-                return RedirectToAction("Index");
+                if (audio == null)
+                    throw new Exception(ErrorMessages.RecognizerController_MissingAudio);
+                if (!(bpm >= 5 && bpm <= 350))
+                    throw new Exception(ErrorMessages.RecognizerController_InvalidSampleLengthLevel);
+                if (!(sampleLengthLevel >= 10 && sampleLengthLevel <= 18))
+                    throw new Exception(ErrorMessages.RecognizerController_InvalidSampleLengthLevel);
+
+                window = InputArgsParser.ParseSTFTWindow(windowArg);
+                filtration = InputArgsParser.ParseFiltration(filtrationArg);
             }
+            catch (Exception e)
+            {
+                return RedirectToAction("IncorrectInputFormat", new { message = e.Message });
+            }
+
+            // Create model, process audio, generate chord sequence
             RecognizerModel model = new RecognizerModel();
             model.ProcessAudio(audio, window, filtration, sampleLengthLevel, bpm);
 
@@ -52,7 +68,10 @@ namespace WebSongChordsRecognizer.Controllers
         }
 
 
-
+        public IActionResult IncorrectInputFormat(String message)
+        {
+            return View(new ErrorMessageModel { Message = message });
+        }
 
 
 
