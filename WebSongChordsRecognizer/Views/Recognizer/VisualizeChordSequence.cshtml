@@ -1,0 +1,16 @@
+﻿@model WebSongChordsRecognizer.Models.RecognizerModel;
+@{
+    ViewData["Title"] = "ChordSequence";
+}
+
+<h1>Chord Sequence</h1>
+<div>
+    <form asp-controller="Recognizer" asp-action="Index"
+          enctype="multipart/form-data" method="post">
+        <button type="submit">Return back and process new audio.</button>
+    </form>
+</div>
+<div>
+    <span style="white-space: pre-wrap">@Model</span>
+</div>
+

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using SongChordsRecognizer.AudioSource;
 using SongChordsRecognizer.FourierTransform;
@@ -9,8 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using WebSongChordsRecognizer.Models;
 
 namespace WebSongChordsRecognizer.Controllers
@@ -24,12 +23,14 @@ namespace WebSongChordsRecognizer.Controllers
             _logger = logger;
         }
 
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult UploadAudio(IFormFile audio)
+        
+        public IActionResult VisualizeChordSequence(IFormFile audio)
         {
             int sampleLengthLevel = 14;
             IWindow window = new WelchWindow();
@@ -41,45 +42,21 @@ namespace WebSongChordsRecognizer.Controllers
             {
                 audio.CopyTo(filestream);
             }
+            RecognizerModel model = new RecognizerModel();
+            model.ProcessAudio("output.wav", window, filtration, sampleLengthLevel, bpm);
 
-            // Generate chords
-            AudioSourceWav wav = new AudioSourceWav("output.wav");
-
-            // SPECTROGRAM
-            // - generate
-            Spectrogram spectrogram = new Spectrogram(wav, sampleLengthLevel, window);
-
-            // CHROMAGRAM
-            // - generate
-            Chromagram chromagram = new Chromagram(spectrogram, filtration);
-
-
-            // CHORD CLASSIFIER
-            List<Chord> chords = ChordClassifier.GetChords(chromagram, bpm);
-
-
-
-
-            // ----------------- PRINT CHORDS -----------------
-            Console.WriteLine();
-            Console.WriteLine(new String('-', 56) + " CHORDS " + new String('-', 56));
-            Console.WriteLine();
-            for (int i = 0; i < chords.Count; i++)
-            {
-                Console.Write(chords[i].Description.PadRight(10));
-                if ((i + 1) % 12 == 0) Console.WriteLine();
-            }
-            Console.WriteLine();
-            Console.WriteLine(new String('-', 56) + " CHORDS " + new String('-', 56));
-            Console.WriteLine();
-            // -------------------------------------------------
-            return RedirectToAction("Index");
+            return View(model);
         }
 
-        public IActionResult Privacy()
+        public IActionResult About()
         {
             return View();
         }
+
+
+
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
