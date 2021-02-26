@@ -50,6 +50,24 @@ namespace SongChordsRecognizer.AudioSource
 
 
         /// <summary>
+        /// AudioSource constructor,
+        /// get data from audioData and name of audioName.
+        /// The audio file doesn't exist so there is no audio path.
+        /// </summary>
+        /// <param name="audioData">Byte array of audio data.</param>
+        /// <param name="audioName">The name of uploaded file.</param>
+        public AudioSource(byte[] audioData, String audioName)
+        {
+            this.audioPath = audioName + " was uploaded from browser!";
+            AudioData = audioData;
+            ParseAudioData();
+            // log
+            Console.WriteLine("[INFO] The AudioSource of file \"" + audioName + "\" was successfuly parsed.");
+        }
+
+
+
+        /// <summary>
         /// ParseAudioData parases AudioData from bytes into variables:
         /// AudioWaveform, SampleLength and NumberOfSamples
         /// </summary>

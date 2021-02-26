@@ -6,6 +6,7 @@ using SongChordsRecognizer.AudioSource;
 using SongChordsRecognizer.FourierTransform;
 using SongChordsRecognizer.Graphs;
 using SongChordsRecognizer.MusicFeatures;
+using SongChordsRecognizer.Parsers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,20 +31,17 @@ namespace WebSongChordsRecognizer.Controllers
         }
 
         
-        public IActionResult VisualizeChordSequence(IFormFile audio)
+        public IActionResult VisualizeChordSequence(IFormFile audio, String windowArg, String filtrationArg, int sampleLengthLevel, int bpm)
         {
-            int sampleLengthLevel = 14;
-            IWindow window = new WelchWindow();
-            ISpectrogramFiltration filtration = new WeightedOctaves();
-            int bpm = 120;
+            IWindow window = InputArgsParser.ParseSTFTWindow(windowArg);
+            ISpectrogramFiltration filtration = InputArgsParser.ParseFiltration(filtrationArg);
 
-
-            using (var filestream = new FileStream("output.wav", FileMode.Create, FileAccess.Write))
+            if (audio.Length == 0)
             {
-                audio.CopyTo(filestream);
+                return RedirectToAction("Index");
             }
             RecognizerModel model = new RecognizerModel();
-            model.ProcessAudio("output.wav", window, filtration, sampleLengthLevel, bpm);
+            model.ProcessAudio(audio, window, filtration, sampleLengthLevel, bpm);
 
             return View(model);
         }

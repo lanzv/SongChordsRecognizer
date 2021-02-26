@@ -11,7 +11,7 @@
 
         <div>
             <label for="windows">STFT convolution window type:</label>
-            <select value="Triangular" id="windows">
+            <select value="Triangular" id="windows" name="windowArg">
                 <option value="Rectangular">Rectangular window</option>
                 <option value="Triangular">Triangular window</option>
                 <option value="Parzen">Parzen window</option>
@@ -22,7 +22,7 @@
 
         <div>
             <label for="filtrations">Spectrogram filtration types:</label>
-            <select value="Triangular" id="filtrations">
+            <select value="Triangular" id="filtrations" name="filtrationArg">
                 <option value="Identity">Identity</option>
                 <option value="AFAM">Accompaniment Frequency Area Mask</option>
                 <option value="WO">Weighted Octaves</option>
@@ -32,7 +32,7 @@
 
         <div>
             <label for="lengthLevel">Sample Length Level:</label>
-            <input type="number" id="lengthLevel" name="lengthLevel" min="10" max="18" value="14">
+            <input type="number" id="lengthLevel" name="sampleLengthLevel" min="10" max="18" value="14">
         </div>
 
         <div>

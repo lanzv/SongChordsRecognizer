@@ -49,6 +49,16 @@ namespace SongChordsRecognizer.AudioSource
 
 
 
+
+        /// <summary>
+        /// AudioSourceWav constructor,
+        /// parses data from music file in 'audioData' using constructor of AudioSource.
+        /// </summary>
+        /// <param name="audioData">Byte array of audio data.</param>
+        /// <param name="audioName">The name of uploaded file.</param>
+        public AudioSourceWav(byte[] audioData, String audioName) : base(audioData, audioName) { }
+
+
         /// <summary>
         /// ParseAudioData parases AudioData from bytes into variables:
         /// AudioWaveform, SampleLength, NumberOfSamples and others, that WAV subchunks contain.

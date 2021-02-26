@@ -1,9 +1,11 @@
-﻿using SongChordsRecognizer.AudioSource;
+﻿using Microsoft.AspNetCore.Http;
+using SongChordsRecognizer.AudioSource;
 using SongChordsRecognizer.FourierTransform;
 using SongChordsRecognizer.Graphs;
 using SongChordsRecognizer.MusicFeatures;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace WebSongChordsRecognizer.Models
 {
@@ -38,19 +40,25 @@ namespace WebSongChordsRecognizer.Models
         /// <param name="window">STFT window.</param>
         /// <param name="filtration">Spectrogram filtration type.</param>
         /// <param name="sampleLengthLevel">Level of sample time for one chord.</param>
-        public void ProcessAudio(String audioPath, IWindow window, ISpectrogramFiltration filtration, int sampleLengthLevel, int bpm)
+        public void ProcessAudio(IFormFile audio, IWindow window, ISpectrogramFiltration filtration, int sampleLengthLevel, int bpm)
         {
             // Generate chords
+            using (var ms = new MemoryStream())
+            {
+                // Get audio data
+                audio.CopyTo(ms);
+                var audioBytes = ms.ToArray();
+                // Parse audio data
+                AudioSourceWav wav = new AudioSourceWav(audioBytes, audio.FileName);
+                // Generate SPECTROGRAM
+                Spectrogram spectrogram = new Spectrogram(wav, sampleLengthLevel, window);
+                // Generate CHROMAGRAM
+                Chromagram chromagram = new Chromagram(spectrogram, filtration);
+                // Classify chords
+                ChordSequence = ChordClassifier.GetChords(chromagram, bpm);
 
-            AudioSourceWav wav = new AudioSourceWav(audioPath);
-            // SPECTROGRAM - generate
-            Spectrogram spectrogram = new Spectrogram(wav, sampleLengthLevel, window);
-            // CHROMAGRAM - generate
-            Chromagram chromagram = new Chromagram(spectrogram, filtration);
-            // CHORD CLASSIFIER
-            ChordSequence = ChordClassifier.GetChords(chromagram, bpm);
-
-            ChordsPrepared = true;
+                ChordsPrepared = true;
+            }
         }
 
 
