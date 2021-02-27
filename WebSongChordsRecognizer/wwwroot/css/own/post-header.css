@@ -1,0 +1,16 @@
+﻿.post-header{
+    background-image: url(../../imgs/post-header_bc.png);
+}
+
+.post-header .container h1{
+    padding: 15px;
+    color:#d0d0d0;
+}
+
+.post-header .container p {
+    color: #d0d0d0;
+}
+
+.post-header .container p b {
+    color: #fff;
+}

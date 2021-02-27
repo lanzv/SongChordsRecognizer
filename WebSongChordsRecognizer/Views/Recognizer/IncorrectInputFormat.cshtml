@@ -2,7 +2,11 @@
     ViewData["Title"] = "Input format error";
 }
 
-<h1>@ViewData["Title"]</h1>
+@section header{
+    <h1>@ViewData["Title"]</h1>
+}
+
+
 <div class="back-to-index">
     <form asp-controller="Recognizer" asp-action="Index"
           enctype="multipart/form-data" method="post">

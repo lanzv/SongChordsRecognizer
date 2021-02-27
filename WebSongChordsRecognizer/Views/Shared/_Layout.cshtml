@@ -6,10 +6,12 @@
     <title>@ViewData["Title"] - WebSongChordsRecognizer</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/own/navbar.css" />
+    <link rel="stylesheet" href="~/css/own/post-header.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-nav navbar-dark border-bottom-nav box-shadow">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Recognizer" asp-action="Index">Song Chords Recognizer</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -19,16 +21,24 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Recognizer" asp-action="Index">Recognizer</a>
+                            <a class="nav-link" asp-area="" asp-controller="Recognizer" asp-action="Index">Recognizer</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Recognizer" asp-action="About">About</a>
+                            <a class="nav-link" asp-area="" asp-controller="Recognizer" asp-action="About">About</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+    <div class="post-header">
+        <div class="container">
+            <br />
+            <br />
+            @RenderSection("header", required: false)
+            <br />
+        </div>
+    </div>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

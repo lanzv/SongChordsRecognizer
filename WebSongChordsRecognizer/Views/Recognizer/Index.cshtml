@@ -8,37 +8,35 @@
         border-bottom: 1px dotted black;
     }
 
-    .help .tooltiptext {
-        visibility: hidden;
-        width: 500px;
-        background-color: darkgrey;
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px;
-        /* Position the tooltip */
-        position: absolute;
-        z-index: 1;
-    }
+        .help .tooltiptext {
+            visibility: hidden;
+            width: 500px;
+            background-color: darkgrey;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+        }
 
-    .help:hover .tooltiptext {
-        visibility: visible;
-    }
+        .help:hover .tooltiptext {
+            visibility: visible;
+        }
 </style>
 
+@section header{
+    <h1>@ViewData["Title"]</h1>
 
-
-<h1>@ViewData["Title"]</h1>
-
-
-<div class="motivation">
-    <p>1. Have you ever heard a <b>song</b> on YouTube or the radio that you would like to <b>play on guitar and sing</b> with your friends? </p>
-    <p>2. Is there some song you like and you want to play it <b>for yourself</b> or <b>improvise</b> on it <b>with your music friends</b>?</p>
-    <p>3. Are you trying to create <b>sheet music</b> for a specific <b>song</b> for your <b>band</b>?</p>
+    <p>1. Have you ever heard a <b>SONG</b> on YouTube or the radio that you would like to play on <b>GUITAR</b> and <b>SING</b> with your friends? </p>
+    <p>2. Is there some song you like and you want to play it for yourself or <b>IMPROVISE</b> on it with your music friends?</p>
+    <p>3. Are you trying to create <b>SHEET MUSIC</b> for a specific song for your <b>BAND</b>?</p>
     <br />
-    <p> <b>CHORDS and HARMONY analysis is a very good start!!</b> - And that is exactly what this application offers. </p>
-    <br /><br />
-</div>
+    <p><cetnter><b>CHORDS</b> and <b>HARMONY</b> analysis is a very good start!!</cetnter></p>
+    <br />
+}
+
 
 <div class="input-form">
     <h4>Upload Audio File</h4>
