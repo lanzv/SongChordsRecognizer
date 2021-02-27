@@ -1,16 +1,16 @@
 ﻿@{
-    ViewData["Title"] = "IncorrectInputFormat";
+    ViewData["Title"] = "Input format error";
 }
 
-<h1>Input format error</h1>
-<div>
+<h1>@ViewData["Title"]</h1>
+<div class="back-to-index">
     <form asp-controller="Recognizer" asp-action="Index"
           enctype="multipart/form-data" method="post">
         <button type="submit">Return back and process new audio.</button>
     </form>
 </div>
 
-<div>
+<div class="error-message">
     <span style="white-space: pre-wrap">@Model.Message</span>
 </div>
 

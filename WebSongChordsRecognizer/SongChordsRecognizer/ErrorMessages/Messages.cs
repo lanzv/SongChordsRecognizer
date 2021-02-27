@@ -15,7 +15,7 @@
         public static string Program_InvalidSampleLengthLevel = "\n\nThe fourth argument is invalid.\nThe fourth argument has to be non negative integer.\n";
         public static string Program_InvalidBPM = "\n\nThe fifth argument is invalid.\nThe bpm argument has to be non negative integer.\n";
         public static string RecognizerController_InvalidSampleLengthLevel = "\n\nThe fourth argument is invalid.\nThe fourth argument has to be non negative integer in range of 10 and 18.\n";
-        public static string RecognizerController_InvalidBPM = "\n\nThe fifth argument is invalid.\nThe bpm argument has to be non negative integer in range of 5 and 350.\n";
+        public static string RecognizerController_InvalidBPM = "\n\nThe fifth argument is invalid.\nThe bpm argument has to be non negative integer in range of 20 and 250.\n";
         public static string RecognizerController_MissingAudio = "\n\nThe audio file haven't been uploaded.";
     }
 }

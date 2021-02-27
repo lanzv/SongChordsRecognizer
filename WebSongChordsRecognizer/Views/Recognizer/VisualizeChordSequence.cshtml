@@ -4,20 +4,21 @@
 }
 
 <h1>Chord Sequence</h1>
-<div>
+<div class="back-to-index">
     <form asp-controller="Recognizer" asp-action="Index"
           enctype="multipart/form-data" method="post">
         <button type="submit">Return back and process new audio.</button>
     </form>
 </div>
+
 <div name="chordsequence">
     @{
         for (int i = 0; i < Model.ChordSequence.Count; i++)
         {
-            <div name="line" style="display: inline-flex">
+            <div name="chordsequence-line" style="display: inline-flex">
                 @for(int j = 0; j < 16 && i + j < Model.ChordSequence.Count; j++)
                 {
-                    <div name="chord" style=" border-style: dotted; height: 80px; width: 60px; text-align: center; background-color: powderblue;  margin: 5px;">@Model.ChordSequence[i+j].Description</div>
+                    <div name="chordsequence-chord" style=" border-style: dotted; height: 80px; width: 60px; text-align: center; background-color: powderblue;  margin: 5px;">@Model.ChordSequence[i+j].Description</div>
                 }
             </div>
             i = i + 16;
