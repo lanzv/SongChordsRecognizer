@@ -36,6 +36,7 @@ namespace WebSongChordsRecognizer.Controllers
         {
             IWindow window;
             ISpectrogramFiltration filtration;
+            RecognizerModel model = new RecognizerModel();
 
             // Handle exceptions on input
             try
@@ -49,15 +50,15 @@ namespace WebSongChordsRecognizer.Controllers
 
                 window = InputArgsParser.ParseSTFTWindow(windowArg);
                 filtration = InputArgsParser.ParseFiltration(filtrationArg);
+
+                // process audio, generate chord sequence
+                model.ProcessAudio(audio, window, filtration, sampleLengthLevel, bpm);
             }
             catch (Exception e)
             {
                 return RedirectToAction("IncorrectInputFormat", new { message = e.Message });
             }
 
-            // Create model, process audio, generate chord sequence
-            RecognizerModel model = new RecognizerModel();
-            model.ProcessAudio(audio, window, filtration, sampleLengthLevel, bpm);
 
             return View(model);
         }

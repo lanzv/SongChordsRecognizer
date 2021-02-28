@@ -44,7 +44,7 @@ namespace SongChordsRecognizer.MusicFeatures
 
             for (int i = 0; i < chromagramData.Length/samplesPerBeat; i++)
             {
-                chords.Add(ClassifyChord(chromagramData.SumSamples((int)(i*samplesPerBeat), (int)samplesPerBeat)));
+                chords.Add(ClassifyChord(chromagramData.SumSamples((int)(i*samplesPerBeat), samplesPerBeat >= 1 ? (int)samplesPerBeat : 1)));
             }
             return chords;
         }
