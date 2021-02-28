@@ -24,10 +24,19 @@ a {
   border-color: #1861ac;
 }
 
+/*buttons*/
+.back-to-index button {
+    background: #efefef;
+    color: #7d7d7d;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 8px;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 @media (min-width: 768px) {
   html {

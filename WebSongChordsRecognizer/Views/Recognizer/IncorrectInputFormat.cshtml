@@ -7,14 +7,17 @@
 }
 
 
+
+<div class="error-message">
+    <h4>
+        <span style="white-space: pre-wrap">@Model.Message</span>
+    </h4>
+</div>
+
+
 <div class="back-to-index">
     <form asp-controller="Recognizer" asp-action="Index"
           enctype="multipart/form-data" method="post">
-        <button type="submit">Return back and process new audio.</button>
+        <button type="submit">Return back and process new audio!</button>
     </form>
 </div>
-
-<div class="error-message">
-    <span style="white-space: pre-wrap">@Model.Message</span>
-</div>
-
