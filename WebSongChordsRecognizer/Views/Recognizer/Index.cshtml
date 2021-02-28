@@ -1,30 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Song Chords Recognizer";
 }
-<style>
-    .help {
-        position: relative;
-        display: inline-block;
-        border-bottom: 1px dotted black;
-    }
-
-        .help .tooltiptext {
-            visibility: hidden;
-            width: 500px;
-            background-color: darkgrey;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            /* Position the tooltip */
-            position: absolute;
-            z-index: 1;
-        }
-
-        .help:hover .tooltiptext {
-            visibility: visible;
-        }
-</style>
 
 @section header{
     <h1>@ViewData["Title"]</h1>
@@ -38,66 +14,90 @@
 }
 
 
-<div class="input-form">
-    <h4>Upload Audio File</h4>
+<div class="upload-form">
+    <h4>Upload Audio File - WAV format</h4>
     <form asp-controller="Recognizer" asp-action="VisualizeChordSequence"
           enctype="multipart/form-data" method="post">
 
         <div class="upload_file-div">
             <input type="file" name="audio" />
-            <div class="help">
-                ?
-                <span class="tooltiptext"> Audio file in WAV format.</span>
+        </div>
+
+        <div class="options w-100">
+
+            <h4 class="w-100">Options</h4>
+
+
+            <div class="window-div form-options w-50 w-sm-down-100">
+                <label class="col-sm-4" for="windows">
+                    <div class="help">
+                        (?)
+                        <span class="tooltiptext">STFT Window is a function that is applied on waveform and modifies its shape. We are using it in order to have Fourier Transform more accurate.</span>
+                    </div>
+                    STFT convolution window type
+                </label>
+                <select class="col-sm-8" value="Triangular" id="windows" name="windowArg">
+                    <option value="Rectangular">Rectangular window</option>
+                    <option value="Triangular" selected>Triangular window</option>
+                    <option value="Parzen">Parzen window</option>
+                    <option value="Welch">Welch window</option>
+                    <option value="Nuttall">Nuttall window</option>
+                </select>
+            </div>
+
+
+
+            <div class="filtration-div form-options w-50 w-sm-down-100">
+                <label class="col-sm-4" for="filtrations">
+                    <div class="help">
+                        (?)
+                        <span class="tooltiptext">Spectrogram filtration type to filtrate unplayed frequencies.</span>
+                    </div>
+                    Spectrogram filtration types
+                </label>
+                
+                <select class="col-sm-8" value="Identity" id="filtrations" name="filtrationArg">
+                    <option value="Identity" selected>Identity</option>
+                    <option value="AFAM">Accompaniment Frequency Area Mask</option>
+                    <option value="WO">Weighted Octaves</option>
+                    <option value="FNH">Filter Nth Harmonics</option>
+                </select>
+            </div>
+
+
+
+            <div class="lengthLevel-div form-options w-50 w-sm-down-100">
+                <label class="col-sm-4" for="lengthLevel">
+                    <div class="help">
+                        (?)
+                        <span class="tooltiptext">The STFT length_in_seconds = (2^(SampleLengthLevel))/(SampleRate)</span>
+                    </div>
+                    Sample Length Level
+                </label>
+                <input class="col-sm-8" type="number" id="lengthLevel" name="sampleLengthLevel" min="10" max="18" value="14">
+            </div>
+
+
+
+            <div class="bpm-div form-options w-50 w-sm-down-100">
+                <label class="col-sm-4" for="bpm">
+                    <div class="help">
+                        (?)
+                        <span class="tooltiptext">Beats per minute, how many beats are included in one minute.</span>
+                    </div>
+                    Beats per minute
+                </label>
+                <input class="col-sm-8" type="number" id="bpm" name="bpm" min="20" max="250" value="120">
             </div>
         </div>
 
-        <div class="window-div">
-            <label for="windows">STFT convolution window type:</label>
-            <select value="Triangular" id="windows" name="windowArg">
-                <option value="Rectangular">Rectangular window</option>
-                <option value="Triangular" selected>Triangular window</option>
-                <option value="Parzen">Parzen window</option>
-                <option value="Welch">Welch window</option>
-                <option value="Nuttall">Nuttall window</option>
-            </select>
-            <div class="help">
-                ?
-                <span class="tooltiptext">STFT Window is a function that is applied on waveform and modifies its shape. We are using it in order to have Fourier Transform more accurate.</span>
-            </div>
-        </div>
 
-        <div class="filtration-div">
-            <label for="filtrations">Spectrogram filtration types:</label>
-            <select value="Identity" id="filtrations" name="filtrationArg">
-                <option value="Identity" selected>Identity</option>
-                <option value="AFAM">Accompaniment Frequency Area Mask</option>
-                <option value="WO">Weighted Octaves</option>
-                <option value="FNH">Filter Nth Harmonics</option>
-            </select>
-            <div class="help">
-                ?
-                <span class="tooltiptext">Spectrogram filtration type to filtrate unplayed frequencies.</span>
-            </div>
-        </div>
 
-        <div class="lengthLevel-div">
-            <label for="lengthLevel">Sample Length Level:</label>
-            <input type="number" id="lengthLevel" name="sampleLengthLevel" min="10" max="18" value="14">
-            <div class="help">
-                ?
-                <span class="tooltiptext">The STFT length_in_seconds = (2^(SampleLengthLevel))/(SampleRate)</span>
-            </div>
-        </div>
 
-        <div class="bpm-div">
-            <label for="bpm">Beats per minute:</label>
-            <input type="number" id="bpm" name="bpm" min="20" max="250" value="120">
-            <div class="help">
-                ?
-                <span class="tooltiptext">Beats per minute, how many beats are included in one minute.</span>
-            </div>
-        </div>
 
-        <button type="submit">Process</button>
+        <button type="submit">Process!</button>
     </form>
 </div>
+
+<br />
+<br />

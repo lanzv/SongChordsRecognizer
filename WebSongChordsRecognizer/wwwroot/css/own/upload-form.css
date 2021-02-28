@@ -1,0 +1,107 @@
+﻿/*general form styles*/
+.upload-form {
+    text-align: center;
+    padding-top: 75px;
+    color: #7d7d7d;
+}
+
+
+.upload-form h4 {
+    text-align: left;
+    border: 1px solid;
+    padding: 5px;
+    border-radius: 5px;
+    background: #efefef;
+    padding-left: 25px;
+}
+
+/*upload file styles*/
+.upload_file-div {
+    margin: 50px;
+    margin-bottom: 100px;
+}
+
+.upload_file-div input {
+    border: 2px solid #000;
+    border-radius: 10px;
+    display: inline-block;
+    padding: 16px 25px;
+    cursor: pointer;
+    background-color: #010056;
+    color: #d0d0d0;
+    font-weight: bold;
+}
+
+
+/*options styles*/
+.upload-form .options .form-options{
+    display: flex;
+    padding: 10px;
+}
+
+.upload-form .options .form-options select, .upload-form .options .form-options input {
+    height: 40px;
+    align-content: center;
+    align-items: center;
+    text-align: left;
+    border-radius: 5px;
+    color: #7d7d7d;
+}
+
+
+.options {
+    flex-wrap: wrap !important;
+    display: flex;
+    margin-bottom: 100px;
+}
+
+
+/*form buttons, process button*/
+.upload-form button {
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 8px 90px;
+    display: block;
+    background: #efefef;
+    color: #7d7d7d;
+    font-weight: 700;
+}
+
+
+/*hint part*/
+.help {
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.help .tooltiptext {
+    visibility: hidden;
+    width: fit-content;
+    background-color: darkgrey;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.help:hover .tooltiptext {
+    visibility: visible;
+}
+
+
+/*general stuf for forms*/
+.w-100 {
+    width: 100%;
+}
+.w-50{
+    width: 50%;
+}
+
+@media (max-width: 991px){
+    .w-sm-down-100 {
+        width: 100% !important;
+    }
+}
