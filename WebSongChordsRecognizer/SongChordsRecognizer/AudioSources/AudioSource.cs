@@ -10,6 +10,8 @@ namespace SongChordsRecognizer.AudioSource
     /// </summary>
     public abstract class AudioSource
     {
+        #region Properties
+
         /// <summary>
         /// Audio waveform of AudioSource, where first index indicates number of channel, second one indicates number of sample.
         /// </summary>
@@ -32,6 +34,11 @@ namespace SongChordsRecognizer.AudioSource
         protected byte[] AudioData { get; }
 
 
+
+        #endregion
+
+
+        #region Initialization
 
         /// <summary>
         /// AudioSource constructor,
@@ -75,6 +82,11 @@ namespace SongChordsRecognizer.AudioSource
 
 
 
+        #endregion
+
+
+        #region Public methods
+
         /// <summary>
         /// Function averages waveforms over all channels and returns mono audio waveform. 
         /// </summary>
@@ -94,5 +106,9 @@ namespace SongChordsRecognizer.AudioSource
             }
             return averaged;
         }
+
+
+
+        #endregion
     }
 }

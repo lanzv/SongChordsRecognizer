@@ -8,6 +8,8 @@ namespace SongChordsRecognizer.MusicFeatures
     /// </summary>
     public static class ChordsGenerator
     {
+        #region Public core methods
+
         /// <summary>
         /// Function generates list of all possible triad chords.
         /// Overall there are 48 chords, 12 possible root (12 chroma) and for each root we have
@@ -93,6 +95,11 @@ namespace SongChordsRecognizer.MusicFeatures
 
 
 
+        #endregion
+
+
+        #region Private methods
+
         /// <summary>
         /// The private function that creates a triad description based on its intervals.
         /// </summary>
@@ -152,5 +159,9 @@ namespace SongChordsRecognizer.MusicFeatures
             }
             throw new Exception(ErrorMessages.ErrorMessages.ChordGenerator_InvalidIntervalFormat);
         }
+
+
+
+        #endregion
     }
 }

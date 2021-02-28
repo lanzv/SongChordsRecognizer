@@ -2,6 +2,8 @@
 
 namespace SongChordsRecognizer.MusicFeatures
 {
+    #region Tone descriptions, classes, structs
+
     /// <summary>
     /// Structure of tones. We have 108 tones (9 octaves and 12 chroma).
     /// One Tone is characterized by
@@ -35,4 +37,8 @@ namespace SongChordsRecognizer.MusicFeatures
         public String Description;
         public int HalfTones;
     }
+
+
+
+    #endregion
 }

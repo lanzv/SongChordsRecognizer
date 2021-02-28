@@ -12,6 +12,8 @@ namespace SongChordsRecognizer.Graphs
     /// </summary>
     public class Spectrogram:IGraph
     {
+        #region Properties
+
         /// <summary>
         /// Spectrogram data.
         /// First index corresponds to specific time frames ( that corresponds to 'TimeForSample' time of audio ).
@@ -48,6 +50,11 @@ namespace SongChordsRecognizer.Graphs
 
 
 
+        #endregion
+
+
+        #region Initialization
+
         /// <summary>
         /// Spectrogram constructor,
         /// generates spectrogram datas.
@@ -72,6 +79,11 @@ namespace SongChordsRecognizer.Graphs
         }
 
 
+
+        #endregion
+
+
+        #region Public core methods
 
         /// <summary>
         /// Compute intensity for specific frequency in specific time.
@@ -139,5 +151,9 @@ namespace SongChordsRecognizer.Graphs
             }
             return dataCopy;
         }
+
+
+
+        #endregion
     }
 }

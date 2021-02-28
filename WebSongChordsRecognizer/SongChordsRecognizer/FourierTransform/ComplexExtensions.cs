@@ -7,6 +7,8 @@ namespace SongChordsRecognizer.FourierTransform
     /// </summary>
     public static class ComplexExtensions
     {
+        #region Public core methods
+
         /// <summary>
         /// Convert Complex array to the new array of its Real values.
         /// </summary>
@@ -21,5 +23,9 @@ namespace SongChordsRecognizer.FourierTransform
             }
             return result;
         }
+
+
+
+        #endregion
     }
 }

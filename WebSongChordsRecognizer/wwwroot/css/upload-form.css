@@ -1,10 +1,11 @@
-﻿/*general form styles*/
+﻿
+/*general form styles*/
+
 .upload-form {
     text-align: center;
     padding-top: 75px;
     color: #7d7d7d;
 }
-
 
 .upload-form h4 {
     text-align: left;
@@ -16,6 +17,7 @@
 }
 
 /*upload file styles*/
+
 .upload_file-div {
     margin: 50px;
     margin-bottom: 100px;
@@ -32,8 +34,8 @@
     font-weight: bold;
 }
 
-
 /*options styles*/
+
 .upload-form .options .form-options{
     display: flex;
     padding: 10px;
@@ -48,15 +50,14 @@
     color: #7d7d7d;
 }
 
-
 .options {
     flex-wrap: wrap !important;
     display: flex;
     margin-bottom: 100px;
 }
 
-
 /*form buttons, process button*/
+
 .upload-form button {
     border: 1px solid;
     border-radius: 5px;
@@ -67,8 +68,8 @@
     font-weight: 700;
 }
 
-
 /*hint part*/
+
 .help {
     display: inline-block;
     border-bottom: 1px dotted black;
@@ -91,11 +92,12 @@
     visibility: visible;
 }
 
-
 /*general stuf for forms*/
+
 .w-100 {
     width: 100%;
 }
+
 .w-50{
     width: 50%;
 }

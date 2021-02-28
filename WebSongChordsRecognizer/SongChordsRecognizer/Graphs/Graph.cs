@@ -1,5 +1,7 @@
 ﻿namespace SongChordsRecognizer.Graphs
 {
+    #region Interfaces
+
     /// <summary>
     /// Interface for Graphs like Spectrogram or Chromagram,
     /// that could be printed and which have data in format
@@ -21,4 +23,8 @@
         /// <returns>Graph Data as a new copy.</returns>
         public double[][] GetData();
     }
+
+
+
+    #endregion
 }

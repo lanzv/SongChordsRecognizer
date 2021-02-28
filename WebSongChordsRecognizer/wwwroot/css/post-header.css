@@ -1,4 +1,7 @@
-﻿.post-header{
+﻿
+/*post header styles*/
+
+.post-header{
     background-image: url(../../imgs/post-header_bc.png);
 }
 

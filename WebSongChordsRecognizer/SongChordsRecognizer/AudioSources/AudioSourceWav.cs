@@ -9,6 +9,8 @@ namespace SongChordsRecognizer.AudioSource
     /// </summary>
     public class AudioSourceWav : AudioSource
     {
+        #region Properties
+
         /// <summary>
         /// Size of first subchunk, art of FMT subchunk.
         /// </summary>
@@ -39,6 +41,11 @@ namespace SongChordsRecognizer.AudioSource
         public int DataSize { get; private set; }
 
 
+
+        #endregion
+
+
+        #region Initialization
 
         /// <summary>
         /// AudioSourceWav constructor,
@@ -83,6 +90,11 @@ namespace SongChordsRecognizer.AudioSource
         }
 
 
+
+        #endregion
+
+
+        #region Private methods
 
         /// <summary>
         /// GetParsedWaveform parses 'data' subchunk from 'AudioData' bytes to array of channels and values representing audio waveform.
@@ -151,5 +163,9 @@ namespace SongChordsRecognizer.AudioSource
             }
             return i;
         }
+
+
+
+        #endregion
     }
 }

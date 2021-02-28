@@ -9,8 +9,13 @@ using System.IO;
 
 namespace WebSongChordsRecognizer.Models
 {
+    /// <summary>
+    /// ASP.NET Model to store information about generated chord sequence.
+    /// </summary>
     public class RecognizerModel
     {
+        #region Properties
+
         /// <summary>
         /// Boolean value. true if ChordSequence has been generated. Otherwise false.
         /// </summary>
@@ -22,6 +27,11 @@ namespace WebSongChordsRecognizer.Models
 
 
 
+        #endregion
+
+
+        #region Initialization
+
         /// <summary>
         /// Initialize RecognizerModel and its properties.
         /// </summary>
@@ -32,11 +42,17 @@ namespace WebSongChordsRecognizer.Models
         }
 
 
+
+        #endregion
+
+
+        #region Public core methods
+
         /// <summary>
         /// Whole process of the Song Chords Recognizer algorithm.
         /// audio file -> Spectrogram -> Chromagram -> Chord Classification
         /// </summary>
-        /// <param name="audioPath">Path of audio file.</param>
+        /// <param name="audio">IFormFile of an audio we want to process.</param>
         /// <param name="window">STFT window.</param>
         /// <param name="filtration">Spectrogram filtration type.</param>
         /// <param name="sampleLengthLevel">Level of sample time for one chord.</param>
@@ -60,7 +76,6 @@ namespace WebSongChordsRecognizer.Models
                 ChordsPrepared = true;
             }
         }
-
 
 
 
@@ -106,5 +121,9 @@ namespace WebSongChordsRecognizer.Models
             Console.WriteLine(result);
             return result;
         }
+
+
+
+        #endregion
     }
 }

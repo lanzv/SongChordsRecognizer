@@ -1,4 +1,7 @@
-﻿.navbar-nav{
+﻿
+/*navigation bar styles*/
+
+.navbar-nav{
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -11,4 +14,3 @@
 .border-bottom-nav {
     border-bottom: 1px solid #000 !important;
 }
-

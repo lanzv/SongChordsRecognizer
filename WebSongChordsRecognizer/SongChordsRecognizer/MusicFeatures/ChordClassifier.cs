@@ -11,6 +11,8 @@ namespace SongChordsRecognizer.MusicFeatures
     /// </summary>
     public static class ChordClassifier
     {
+        #region Public core methods
+
         /// <summary>
         /// The function generates chord for each chromagram sample.
         /// </summary>
@@ -50,6 +52,11 @@ namespace SongChordsRecognizer.MusicFeatures
         }
 
 
+
+        #endregion
+
+
+        #region Private methods
 
         /// <summary>
         /// The private static function that estimate the best match of chord
@@ -145,5 +152,9 @@ namespace SongChordsRecognizer.MusicFeatures
             double max_prob = probabilities.Max();
             return (seventhChords[probabilities.IndexOf(max_prob)], max_prob);
         }
+
+
+
+        #endregion
     }
 }

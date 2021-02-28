@@ -2,6 +2,8 @@
 {
     public static class ErrorMessages
     {
+        #region String messages
+
         public static string IWindow_NotCorrespondingLength = "\n\nGiven offset and length of window for array 'g' does not correspond to g's length.";
         public static string AudioSource_NotSupportedBitsPerSample = "\n\nThe number of bits per waveform sample that is not indivisible by 8 is not supported.";
         public static string GraphPrinters_NoneDataToPrint = "\n\nThe GraphPrinters tries to print empty Graph with 0 length of Data.";
@@ -17,5 +19,9 @@
         public static string RecognizerController_InvalidSampleLengthLevel = "\n\nThe fourth argument is invalid.\nThe fourth argument has to be non negative integer in range of 10 and 18.\n";
         public static string RecognizerController_InvalidBPM = "\n\nThe fifth argument is invalid.\nThe bpm argument has to be non negative integer in range of 20 and 250.\n";
         public static string RecognizerController_MissingAudio = "\n\nThe audio file haven't been uploaded.";
+
+
+
+        #endregion
     }
 }

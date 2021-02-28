@@ -2,6 +2,8 @@
 
 namespace SongChordsRecognizer.MusicFeatures
 {
+    #region General Chord classes
+
     /// <summary>
     /// Class of chords,
     /// One Chord is characterized by
@@ -19,6 +21,11 @@ namespace SongChordsRecognizer.MusicFeatures
     }
 
 
+
+    #endregion
+
+
+    #region Chord types and extensions
 
     /// <summary>
     /// Class of triads - chord of three tones / chroma.
@@ -40,4 +47,8 @@ namespace SongChordsRecognizer.MusicFeatures
     {
         public Chroma Seventh;
     }
+
+
+
+    #endregion
 }

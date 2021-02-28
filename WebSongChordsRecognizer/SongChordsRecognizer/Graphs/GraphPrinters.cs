@@ -4,6 +4,8 @@ using System.IO;
 
 namespace SongChordsRecognizer.Graphs
 {
+    #region Interfaces
+
     /// <summary>
     /// Interface for all printing functions of IGraph. 
     /// Each of printers should contain function 'Print' that 
@@ -23,6 +25,11 @@ namespace SongChordsRecognizer.Graphs
     }
 
 
+
+    #endregion
+
+
+    #region Graph Printers
 
     /// <summary>
     /// Very simple ASCII printer that prints graph from 'data' to the file 'graph.txt'. 
@@ -98,4 +105,8 @@ namespace SongChordsRecognizer.Graphs
             this.file = file;
         }
     }
+
+
+
+    #endregion
 }

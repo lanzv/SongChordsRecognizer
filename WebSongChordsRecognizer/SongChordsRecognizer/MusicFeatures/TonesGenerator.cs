@@ -8,6 +8,8 @@ namespace SongChordsRecognizer.MusicFeatures
     /// </summary>
     public static class TonesGenerator
     {
+        #region Public Tone Definitions
+
         /// <summary>
         /// The list of base frequencies that their multiples
         /// by 2^n generate all tones for all 9 octaves. 
@@ -49,6 +51,11 @@ namespace SongChordsRecognizer.MusicFeatures
 
 
 
+        #endregion
+
+
+        #region Public Tone Generators
+
         /// <summary>
         /// Function generates list of tones in 9 octaves: from sub-contra to five-lined octave.
         /// Overall there are 108 tones. One tone has String description, octave number, 
@@ -82,5 +89,9 @@ namespace SongChordsRecognizer.MusicFeatures
             }
             return tones;
         }
+
+
+
+        #endregion
     }
 }

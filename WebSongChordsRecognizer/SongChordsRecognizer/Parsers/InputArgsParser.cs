@@ -9,6 +9,7 @@ namespace SongChordsRecognizer.Parsers
 {
     public static class InputArgsParser
     {
+        #region Public core methods
 
         /// <summary>
         /// Parse stft window argument or throw exception.
@@ -89,5 +90,9 @@ namespace SongChordsRecognizer.Parsers
             }
             throw new Exception(ErrorMessages.ErrorMessages.Program_InvalidBPM);
         }
+
+
+
+        #endregion
     }
 }

@@ -4,18 +4,19 @@
 }
 
 @section header{
+    <!-- post header part -->
     <h1>Chord Sequence</h1>
 }
 
-
+<!-- content part -->
 @if (Model.ChordsPrepared)
 {
+    <!-- chord sequence -->
     <div class="chordsequence">
         @{
-            int nonSeparablePartLength = 4;
+            int nonSeparablePartLength = 4; // 4 for 4/4 bars. ToDo: Parametrize it
             for (int i = 0; i < Model.ChordSequence.Count; i = i + nonSeparablePartLength)
             {
-
                 <div class="bar">
                     @for (int j = 0; j < nonSeparablePartLength && i + j < Model.ChordSequence.Count; j++)
                     {
@@ -35,7 +36,6 @@ else
         </h4>
     </div>
 }
-
 
 <div class="back-to-index">
     <form asp-controller="Recognizer" asp-action="Index"

@@ -1,9 +1,6 @@
 ﻿using SongChordsRecognizer.MusicFeatures;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
 
 namespace SongChordsRecognizer.Graphs
 {
@@ -15,6 +12,8 @@ namespace SongChordsRecognizer.Graphs
     /// </summary>
     public class Chromagram :IGraph
     {
+        #region Properties
+
         /// <summary>
         /// Chromagram data.
         /// First index corresponds to specific time frames ( one time frame correspond to 'TimeForSample' time of audio )
@@ -28,6 +27,11 @@ namespace SongChordsRecognizer.Graphs
         public readonly double SampleLength;
 
 
+
+        #endregion
+
+
+        #region Initialization
 
         /// <summary>
         /// Chromagram constructor,
@@ -106,6 +110,11 @@ namespace SongChordsRecognizer.Graphs
 
 
 
+        #endregion
+
+
+        #region Public core methods
+
         /// <summary>
         /// Compute intensity for specific chroma in specific time.
         /// </summary>
@@ -159,5 +168,9 @@ namespace SongChordsRecognizer.Graphs
             }
             return dataCopy;
         }
+
+
+
+        #endregion
     }
 }

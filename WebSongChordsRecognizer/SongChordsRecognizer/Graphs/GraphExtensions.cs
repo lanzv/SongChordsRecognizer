@@ -8,6 +8,8 @@ namespace SongChordsRecognizer.Graphs
     /// </summary>
     public static class GraphExtensions
     {
+        #region Public core methods
+
         /// <summary>
         /// Sum specified subarrays in sequence of given array.
         /// </summary>
@@ -41,5 +43,9 @@ namespace SongChordsRecognizer.Graphs
             }
             return result;
         }
+
+
+
+        #endregion
     }
 }

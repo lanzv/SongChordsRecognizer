@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Numerics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SongChordsRecognizer.FourierTransform
 {
     public static class FourierTransform
     {
+        #region Public core methods
+
         /// <summary>
         /// Generate all STFT values for waveform 'g' asynchronously. 
         /// </summary>
@@ -106,6 +106,11 @@ namespace SongChordsRecognizer.FourierTransform
 
 
 
+        #endregion
+
+
+        #region Private methods
+
         /// <summary>
         /// Recursive function for FastFourierTransform to get the result in N*log(N)
         /// </summary>
@@ -134,5 +139,9 @@ namespace SongChordsRecognizer.FourierTransform
             }
             return result;
         }
+
+
+
+        #endregion
     }
 }

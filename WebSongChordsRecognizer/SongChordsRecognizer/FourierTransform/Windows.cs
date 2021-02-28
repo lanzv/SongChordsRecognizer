@@ -2,6 +2,8 @@
 
 namespace SongChordsRecognizer.FourierTransform
 {
+    #region Interfaces
+
     /// <summary>
     /// Interface for all STFT window functions. 
     /// Each of window should contain function 'Apply' that returns
@@ -28,8 +30,10 @@ namespace SongChordsRecognizer.FourierTransform
 
 
 
+    #endregion
 
 
+    #region Convolutional Windows
 
     /// <summary>
     /// Window function, in shape of rectangle.
@@ -207,4 +211,8 @@ namespace SongChordsRecognizer.FourierTransform
             return a0 - a1 * Math.Cos((2.0 * Math.PI * (double)n) / (double)length) + a2 * Math.Cos((4.0 * Math.PI * (double)n) / (double)length) - a3 * Math.Cos((6.0 * Math.PI * (double)n) / (double)length);
         }
     }
+
+
+
+    #endregion
 }
