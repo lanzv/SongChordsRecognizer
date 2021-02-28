@@ -8,25 +8,31 @@
 }
 
 
-<div class="back-to-index">
-    <form asp-controller="Recognizer" asp-action="Index"
-          enctype="multipart/form-data" method="post">
-        <button type="submit">Return back and process new audio.</button>
-    </form>
-</div>
 
-<div name="chordsequence">
+<div class="chordsequence">
     @{
+        int nonSeparablePartLength = 4;
         for (int i = 0; i < Model.ChordSequence.Count; i++)
         {
-            <div name="chordsequence-line" style="display: inline-flex">
-                @for (int j = 0; j < 16 && i + j < Model.ChordSequence.Count; j++)
+
+            <div class="bar">
+                @for (int j = 0; j < nonSeparablePartLength && i + j < Model.ChordSequence.Count; j++)
                 {
-                    <div name="chordsequence-chord" style=" border-style: dotted; height: 80px; width: 60px; text-align: center; background-color: powderblue;  margin: 5px;">@Model.ChordSequence[i + j].Description</div>
+                    <div class="chord">@Model.ChordSequence[i + j].Description</div>
                 }
             </div>
-            i = i + 16;
+            i = i + nonSeparablePartLength;
         }
     }
 </div>
 
+
+<div class="back-to-index">
+    <form asp-controller="Recognizer" asp-action="Index"
+          enctype="multipart/form-data" method="post">
+        <button type="submit">Return back and process new audio!</button>
+    </form>
+</div>
+
+<br />
+<br />

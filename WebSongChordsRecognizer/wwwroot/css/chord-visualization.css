@@ -1,0 +1,23 @@
+﻿
+/*Chord visualization styles*/
+
+.chordsequence{
+    margin-top: 60px;
+    margin-bottom: 80px;
+    display: block;
+}
+
+.chordsequence .bar {
+    display: inline-flex;
+    margin: 5px;
+}
+
+.chordsequence .bar .chord {
+    border-style: dotted;
+    height: 80px;
+    width: 55px;
+    text-align: center;
+    margin: 5px;
+    background: #efefef;
+    color: #7d7d7d;
+}
