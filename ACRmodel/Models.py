@@ -46,13 +46,35 @@ class CNN():
     def __init__(self, input_shape, output_classes):
         # Create model
         model = tensorflow.keras.models.Sequential()
-        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu', input_shape=input_shape))
-        model.add(tensorflow.keras.layers.MaxPooling2D((2,2)))
+
+        # Feature Extractor
+        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=input_shape))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.MaxPooling2D((1,3)))
+        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.MaxPooling2D((1,3)))
         model.add(tensorflow.keras.layers.Conv2D(64, (3,3), activation='relu'))
-        model.add(tensorflow.keras.layers.MaxPooling2D((2,2)))
+        model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Conv2D(64, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.MaxPooling2D((1,4)))
+        model.add(tensorflow.keras.layers.Conv2D(80, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Conv2D(80, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+
+        # Classifier
         model.add(tensorflow.keras.layers.Flatten())
-        model.add(tensorflow.keras.layers.Dense(64, activation='relu'))
+        model.add(tensorflow.keras.layers.Dense(100, activation='relu'))
         model.add(tensorflow.keras.layers.Dense(output_classes, activation='softmax'))
 
         # Compile model
