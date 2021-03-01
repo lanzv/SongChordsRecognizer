@@ -11,13 +11,15 @@ import numpy as np
 import re
 from Spectrograms import log_mel_spectrogram
 
+
+
 class IsophonicsDataset():
     """Isophonics Dataset.
     The train set contains 225 Bealtes, Queen, Carole King or Zweieck songs. 
     DATA contains audio waveform features.
     LABELS contains chord annotation for all song duration.
     """
-    def __init__(self, audio_directory, annotations_directory, sample_rate=44100, nfft=2**14):
+    def __init__(self, audio_directory=None, annotations_directory=None, sample_rate=44100, nfft=2**14):
         
         self.SAMPLE_RATE = sample_rate
         self.NFFT = nfft
@@ -26,20 +28,23 @@ class IsophonicsDataset():
         self.CHORDS = []
         self.KEYS =  []
 
-        audio_paths = sorted(glob(os.path.join(audio_directory, '*.wav')))
-        chord_annotations_paths = sorted(glob(os.path.join(annotations_directory+'/CHORDS', '*.lab')))
-        key_annotations_paths = sorted(glob(os.path.join(annotations_directory+'/KEYS', '*.lab')))
+        if audio_directory == None or annotations_directory == None:
 
-        if not (len(audio_paths) == len(chord_annotations_paths) and len(audio_paths) == len(key_annotations_paths)):
-            raise Exception("The number of WAV files doesn't equal the number of annotation files.")
+            audio_paths = sorted(glob(os.path.join(audio_directory, '*.wav')))
+            chord_annotations_paths = sorted(glob(os.path.join(annotations_directory+'/CHORDS', '*.lab')))
+            key_annotations_paths = sorted(glob(os.path.join(annotations_directory+'/KEYS', '*.lab')))
 
-        for audio_path, chord_lab_path, key_lab_path in zip(audio_paths, chord_annotations_paths, key_annotations_paths):
-            self.DATA.append(Audio(audio_path, self.SAMPLE_RATE))
-            self.CHORDS.append(ChordSequence(chord_lab_path))
-            self.KEYS.append(KeySequence(key_lab_path))
+            if not (len(audio_paths) == len(chord_annotations_paths) and len(audio_paths) == len(key_annotations_paths)):
+                raise Exception("The number of WAV files doesn't equal the number of annotation files.")
 
-        print("[INFO] The Dataset was successfully initialized.")
+            for audio_path, chord_lab_path, key_lab_path in zip(audio_paths, chord_annotations_paths, key_annotations_paths):
+                self.DATA.append(Audio(audio_path, self.SAMPLE_RATE))
+                self.CHORDS.append(ChordSequence(chord_lab_path))
+                self.KEYS.append(KeySequence(key_lab_path))
 
+            print("[INFO] The Dataset was successfully initialized.")
+        else:
+            print("[INFO] The Dataset was successfulyy initialized without any data or annotations.")
     
 
 
@@ -116,6 +121,7 @@ class IsophonicsDataset():
 
         print("[INFO] The Dataset was successfully preprocessed.")
         return np.array(prep_data), np.array(prep_targets)
+
 
 
     @staticmethod
@@ -238,13 +244,14 @@ class IsophonicsDataset():
         with lzma.open(dest, "wb") as dataset_file:
             pickle.dump((self.get_preprocessed_dataset(window_size, flattened_window, ms_intervals, to_skip, norm_to_C, spectrogram_generator)), dataset_file)
 
-        print("[INFO] The Dataset was saved successfully.")
+        print("[INFO] The Preprocessed Dataset was saved successfully.")
+
 
 
     @staticmethod
     def load_preprocessed_dataset(dest = "./Datasets/preprocessed_IsophonicsDataset.ds"): 
         """
-        Load preprocessed data from this dataset from destination path 'dest'. Targets and Data are stored by default as a .ds file.
+        Load preprocessed data from this dataset from destination path 'dest'. Targets and preprocessed Data are stored by default as a .ds file.
         
         Parameters
         ----------
@@ -260,6 +267,53 @@ class IsophonicsDataset():
         """
         with lzma.open(dest, "rb") as dataset_file:
             dataset = pickle.load(dataset_file)
+
+        print("[INFO] The Preprocessed Dataset was loaded successfully.")
+        return dataset
+
+
+
+    def save_dataset(self, dest = "./Datasets/IsophonicsDataset.ds"):
+        """
+        Save data from this dataset to destination path 'dest' by default as a .ds file.
+        
+        Parameters
+        ----------
+        dest : str
+            path to dataset
+        """
+        # Serialize the dataset.
+        with lzma.open(dest, "wb") as dataset_file:
+            pickle.dump((self.DATA, self.CHORDS, self.KEYS), dataset_file)
+
+        print("[INFO] The Dataset was saved successfully.") 
+
+
+           
+    @staticmethod
+    def load_dataset(dest = "./Datasets/IsophonicsDataset.ds"): 
+        """
+        Load data from this dataset from destination path 'dest'. Targets and Data are stored by default as a .ds file.
+        
+        Parameters
+        ----------
+        dest : str
+            path to data
+        Returns
+        -------
+        dataset : IsophonicsDataset object
+            dataset containing DATA, CHORDS and KEYS loaded from a file
+        """
+        with lzma.open(dest, "rb") as dataset_file:
+            loaded_dataset = pickle.load(dataset_file)
+
+        DATA, CHORDS, KEYS = loaded_dataset
+
+        dataset = IsophonicsDataset()
+
+        dataset.DATA = DATA
+        dataset.CHORDS = CHORDS
+        dataset.KEYS = KEYS
 
         print("[INFO] The Dataset was loaded successfully.")
         return dataset
