@@ -9,6 +9,7 @@ import lzma
 import librosa
 import numpy as np
 import re
+from Spectrograms import log_mel_spectrogram
 
 class IsophonicsDataset():
     """Isophonics Dataset.
@@ -16,12 +17,11 @@ class IsophonicsDataset():
     DATA contains audio waveform features.
     LABELS contains chord annotation for all song duration.
     """
-    SAMPLE_RATE = 44100
-    NFFT = 2**14
-
-    
-    def __init__(self, audio_directory, annotations_directory):
+    def __init__(self, audio_directory, annotations_directory, sample_rate=44100, nfft=2**14):
         
+        self.SAMPLE_RATE = sample_rate
+        self.NFFT = nfft
+
         self.DATA = []
         self.CHORDS = []
         self.KEYS =  []
@@ -44,7 +44,7 @@ class IsophonicsDataset():
 
 
        
-    def get_preprocessed_dataset(self, window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False):
+    def get_preprocessed_dataset(self, window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False, spectrogram_generator=log_mel_spectrogram):
         """
         Preprocess IsophonicsDataset dataset.
         Create features from self.DATA and its corresponding targets from self.LABELS.
@@ -61,6 +61,8 @@ class IsophonicsDataset():
             how many spectrogram we want to skip when creating new feature set
         norm_to_C : bool
             True if we want to transpose all songs to C key
+        spectrogram_generator : method from Spectrograms.py
+            function that generates spectrogram
         Returns
         -------
         prep_data : np array
@@ -70,15 +72,16 @@ class IsophonicsDataset():
         """
         prep_data = []
         prep_targets = []
-        hop_length = int(self.SAMPLE_RATE/(1000/ms_intervals))
+        hop_length = int(self.SAMPLE_RATE/(ms_intervals/10))
+        print(hop_length)
         k = 0
         # Iterate over all audio files
         for audio, chords, keys in zip(self.DATA, self.CHORDS, self.KEYS):
             print(k)
             k = k+1
             # Get log mel spectrogram
-            log_spectrogram = IsophonicsDataset.preprocess_audio(audio.WAVEFORM, audio.SAMPLE_RATE, self.NFFT, hop_length, norm_to_C, keys.get_first_key())
-            mel_length, num_samples = log_spectrogram.shape
+            spectrogram = IsophonicsDataset.preprocess_audio(waveform=audio.WAVEFORM, sample_rate=audio.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, key=keys.get_first_key())
+            spec_length, num_samples = spectrogram.shape
 
             # Collect data for each spectrogram sample
             j = 0 # labels index
@@ -87,17 +90,17 @@ class IsophonicsDataset():
                 if flattened_window:
                     prep_data.append(
                         np.concatenate((
-                            np.zeros((abs(min(0, i-window_size)), mel_length)),
-                            np.array(log_spectrogram[:, max(0, i-window_size):min(i+window_size+1, num_samples)]).swapaxes(0,1),
-                            np.zeros((abs(min(0, (num_samples)-(i+window_size+1))), mel_length))
+                            np.zeros((abs(min(0, i-window_size)), spec_length)),
+                            np.array(spectrogram[:, max(0, i-window_size):min(i+window_size+1, num_samples)]).swapaxes(0,1),
+                            np.zeros((abs(min(0, (num_samples)-(i+window_size+1))), spec_length))
                         ), axis = 0).flatten()
                     )
                 else:
                     prep_data.append(
                         np.concatenate((
-                            np.zeros((abs(min(0, i-window_size)), mel_length)),
-                            np.array(log_spectrogram[:, max(0, i-window_size):min(i+window_size+1, num_samples)]).swapaxes(0,1),
-                            np.zeros((abs(min(0, (num_samples)-(i+window_size+1))), mel_length))
+                            np.zeros((abs(min(0, i-window_size)), spec_length)),
+                            np.array(spectrogram[:, max(0, i-window_size):min(i+window_size+1, num_samples)]).swapaxes(0,1),
+                            np.zeros((abs(min(0, (num_samples)-(i+window_size+1))), spec_length))
                         ), axis = 0)
                     )
 
@@ -116,7 +119,7 @@ class IsophonicsDataset():
 
 
     @staticmethod
-    def preprocess_audio(waveform, sample_rate, nfft, hop_length, norm_to_C=False, key='C'):
+    def preprocess_audio(waveform, sample_rate, spectrogram_generator, nfft, hop_length, norm_to_C=False, key='C'):
         """
         Preprocess audio waveform, shift pitches to C major key (and its modes ... dorian, phrygian, aiolian, lydian, ...) and generate mel and log spectrograms.
         
@@ -126,6 +129,8 @@ class IsophonicsDataset():
             data of audio waveform
         sample_rate : int
             audio sample rate
+        spectrogram_generator : method from Spectrograms.py
+            function that generates spectrogram
         nfft : int
             length of FFT, power of 2
         hop_length : int
@@ -155,10 +160,9 @@ class IsophonicsDataset():
         # transpose song to C    
         waveform_shifted = librosa.effects.pitch_shift(waveform, sample_rate, n_steps=n_steps)
         # Get spectrogram
-        mel_spectrogram = librosa.feature.melspectrogram(waveform_shifted, sample_rate, n_fft=nfft, hop_length=hop_length)
-        log_spectrogram = librosa.amplitude_to_db(mel_spectrogram)
+        spectrogram = spectrogram_generator(waveform_shifted, sample_rate, nfft, hop_length)
 
-        return log_spectrogram
+        return spectrogram
 
 
 
@@ -209,7 +213,7 @@ class IsophonicsDataset():
 
 
 
-    def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_IsophonicsDataset.ds", window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False):
+    def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_IsophonicsDataset.ds", window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False, spectrogram_generator=log_mel_spectrogram):
         """
         Save preprocessed data from this dataset to destination path 'dest' by default as a .ds file.
         
@@ -227,10 +231,12 @@ class IsophonicsDataset():
             how many spectrogram we want to skip when creating new feature set
         norm_to_C : bool
             True if we want to transpose all songs to C key
+        spectrogram_generator : method from Spectrograms.py
+            function that generates spectrogram
         """
         # Serialize the dataset.
         with lzma.open(dest, "wb") as dataset_file:
-            pickle.dump((self.get_preprocessed_dataset(window_size, flattened_window, ms_intervals, to_skip, norm_to_C)), dataset_file)
+            pickle.dump((self.get_preprocessed_dataset(window_size, flattened_window, ms_intervals, to_skip, norm_to_C, spectrogram_generator)), dataset_file)
 
         print("[INFO] The Dataset was saved successfully.")
 
