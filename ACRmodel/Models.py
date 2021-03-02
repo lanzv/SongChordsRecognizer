@@ -42,40 +42,45 @@ class MLP():
         return score
 
 
-class CNN():
+class CRNN():
     def __init__(self, input_shape, output_classes):
+        n_frames, n_chromas, chanells = input_shape
         # Create model
         model = tensorflow.keras.models.Sequential()
 
         # Feature Extractor
-        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=input_shape))
+        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=input_shape,padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu',padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu',padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.MaxPooling2D((1,3)))
-        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.MaxPooling2D((1,3),padding='same'))
+        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.MaxPooling2D((1,3)))
-        model.add(tensorflow.keras.layers.Conv2D(64, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.MaxPooling2D((1,3),padding='same'))
+        model.add(tensorflow.keras.layers.Conv2D(64, (3,3), activation='relu',padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.Conv2D(64, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.Conv2D(64, (3,3), activation='relu',padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.MaxPooling2D((1,4)))
-        model.add(tensorflow.keras.layers.Conv2D(80, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.MaxPooling2D((1,4),padding='same'))
+        model.add(tensorflow.keras.layers.Conv2D(80, (3,3), activation='relu',padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.Conv2D(80, (3,3), activation='relu'))
+        model.add(tensorflow.keras.layers.Conv2D(80, (3,3), activation='relu',padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
 
-        # Classifier
-        model.add(tensorflow.keras.layers.Flatten())
-        model.add(tensorflow.keras.layers.Dense(100, activation='relu'))
-        model.add(tensorflow.keras.layers.Dense(output_classes, activation='softmax'))
+        # Classifier - RNN
+        model.add(tensorflow.keras.layers.Reshape((n_frames, 80), input_shape=(n_frames, 1, 80)))
+        model.add(tensorflow.keras.layers.Bidirectional(
+            tensorflow.keras.layers.LSTM(96, return_sequences=True))
+        )
+        model.add(
+            tensorflow.keras.layers.Dense(output_classes, activation='softmax')
+        )
 
         # Compile model
         model.compile(
@@ -87,15 +92,15 @@ class CNN():
 
         model.summary()
         self.model = model
-        print("[INFO] The CNN model was successfully created.")
+        print("[INFO] The CRNN model was successfully created.")
 
     def fit(self, data, targets, dev_data, dev_targets):
         # Train model
         self.history = self.model.fit(
-            data, targets, epochs=10, 
+            data, targets, epochs=150, 
             validation_data=(dev_data, dev_targets)
         )
-        print("[INFO] The CNN model was successfully trained.")
+        print("[INFO] The CRNN model was successfully trained.")
 
     def score(self, data, targets):
         _, test_acc = self.model.evaluate(data, targets, verbose=2)
