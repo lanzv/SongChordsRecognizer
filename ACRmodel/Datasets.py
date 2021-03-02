@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-from Annotations import ChordSequence, KeySequence
+from Annotations import ChordSequence, KeySequence, SongDescription
 from annotation_maps import chords_map, keys_map, key_modes_map
-from Audio import Audio
+from Audio import Audio, BillboardFeatures
 import os
 from glob import glob
 import pickle
@@ -10,7 +10,7 @@ import librosa
 import numpy as np
 import re
 from Spectrograms import log_mel_spectrogram
-
+import sys
 
 
 class IsophonicsDataset():
@@ -28,7 +28,7 @@ class IsophonicsDataset():
         self.CHORDS = []
         self.KEYS =  []
 
-        if audio_directory == None or annotations_directory == None:
+        if (not audio_directory == None) and (not annotations_directory == None):
 
             audio_paths = sorted(glob(os.path.join(audio_directory, '*.wav')))
             chord_annotations_paths = sorted(glob(os.path.join(annotations_directory+'/CHORDS', '*.lab')))
@@ -78,7 +78,6 @@ class IsophonicsDataset():
         prep_data = []
         prep_targets = []
         hop_length = int(self.SAMPLE_RATE/(ms_intervals/10))
-        print(hop_length)
         k = 0
         # Iterate over all audio files
         for audio, chords, keys in zip(self.DATA, self.CHORDS, self.KEYS):
@@ -284,7 +283,7 @@ class IsophonicsDataset():
         """
         # Serialize the dataset.
         with lzma.open(dest, "wb") as dataset_file:
-            pickle.dump((self.DATA, self.CHORDS, self.KEYS), dataset_file)
+            pickle.dump((self.DATA, self.CHORDS, self.KEYS, self.SAMPLE_RATE, self.NFFT), dataset_file)
 
         print("[INFO] The Dataset was saved successfully.") 
 
@@ -307,13 +306,128 @@ class IsophonicsDataset():
         with lzma.open(dest, "rb") as dataset_file:
             loaded_dataset = pickle.load(dataset_file)
 
-        DATA, CHORDS, KEYS = loaded_dataset
+        data, chords, keys, sample_rate, nfft  = loaded_dataset
 
         dataset = IsophonicsDataset()
 
-        dataset.DATA = DATA
-        dataset.CHORDS = CHORDS
-        dataset.KEYS = KEYS
+        dataset.DATA = data
+        dataset.CHORDS = chords
+        dataset.KEYS = keys
+        dataset.SAMPLE_RATE = sample_rate
+        dataset.NFFT = nfft
 
         print("[INFO] The Dataset was loaded successfully.")
+        return dataset
+
+
+
+
+
+
+class BillboardDataset():
+    """Billboard Dataset.
+    The train set contains 890 a representative samples of American popular music from the 1950s through the 1990s. 
+    DATA contains audio waveform features.
+    CHORDS contains a chord sequence.
+    KEYS contains a key sequence.
+    """
+    def __init__(self, audio_directory=None, annotations_directory=None):
+
+        self.SAMPLE_RATE = None
+        self.NFFT = None
+
+        self.DATA = []
+        self.CHORDS = []
+        self.DESC =  []
+
+        if (not audio_directory == None) and (not annotations_directory == None):
+
+            audio_paths = sorted(glob(os.path.join(audio_directory, 'CHORDINO/*/')))
+            chord_annotations_paths = sorted(glob(os.path.join(annotations_directory, 'LABs/*/')))
+            desc_annotations_paths = sorted(glob(os.path.join(annotations_directory, 'DESCRIPTIONs/*/')))
+
+            if not (len(audio_paths) == len(chord_annotations_paths) and len(audio_paths) == len(desc_annotations_paths)):
+                raise Exception("The number of WAV files doesn't equal the number of annotation files.")
+
+            for audio_path, chord_lab_path, desc_path in zip(audio_paths, chord_annotations_paths, desc_annotations_paths):
+                self.DATA.append(BillboardFeatures(audio_path))
+                self.CHORDS.append(ChordSequence(chord_lab_path+"full.lab"))
+                self.DESC.append(SongDescription(desc_path+"salami_chords.txt"))
+
+
+            self.DATA = np.array(self.DATA)
+            self.CHORDS = np.array(self.CHORDS)
+            self.DESC = np.array(self.DESC)
+            print("[INFO] The Billboard Dataset was successfully initialized.")
+        else:
+            print("[INFO] The Billboard Dataset was successfulyy initialized without any data or annotations.")
+
+
+
+    def get_preprocessed_dataset(self, n_frames):
+        """
+        """
+        prep_data = []
+        prep_targets = []
+        for audio, chords in zip(self.DATA, self.CHORDS):
+            j = 0
+            for i in range((int)(audio.CHROMA.shape[0]/n_frames)):
+                # Get chroma
+                prep_data.append(audio.CHROMA[i*n_frames:(i+1)*n_frames])
+                # Get labels
+                prep_targets.append([])
+                for chord_ind in range(i*n_frames, (i+1)*n_frames):
+                    second = audio.TIME_BINS[chord_ind]
+                    while j < len(chords.START) and second > chords.START[j] :
+                        j = j + 1
+
+                    if j == len(chords.START):
+                        prep_targets[-1].append(IsophonicsDataset.get_integered_chord("N"))
+                    else:
+                        prep_targets[-1].append(IsophonicsDataset.get_integered_chord(chords.CHORD[j]))
+
+            # Embed zero chromas to fill n_frames frames
+            last_ind = (int)(audio.CHROMA.shape[0]/n_frames)
+            prep_data.append(
+                np.concatenate((
+                    np.array(audio.CHROMA[last_ind*n_frames:]),
+                    np.zeros((n_frames - (len(audio.CHROMA) - last_ind*n_frames), 24))
+                ), axis=0 )
+            )
+            # Embed N chords to fill n_frames frames
+            prep_targets.append([])
+            for chord_ind in range(last_ind*n_frames, (last_ind+1) * n_frames):
+                if chord_ind < len(audio.TIME_BINS):
+                    second = audio.TIME_BINS[chord_ind]
+                    while j < len(chords.START) and second > chords.START[j] :
+                        j = j + 1
+
+                    if j == len(chords.START):
+                        prep_targets[-1].append(IsophonicsDataset.get_integered_chord("N"))
+                    else:
+                        prep_targets[-1].append(IsophonicsDataset.get_integered_chord(chords.CHORD[j]))
+                else:
+                    prep_targets[-1].append(IsophonicsDataset.get_integered_chord("N"))
+
+        return np.array(prep_data), np.array(prep_targets)
+
+
+    def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_BillboardDataset.ds", n_frames=1000):
+        """
+        """
+        # Serialize the dataset.
+        with lzma.open(dest, "wb") as dataset_file:
+            pickle.dump((self.get_preprocessed_dataset(n_frames)), dataset_file)
+
+        print("[INFO] The Preprocessed Billboard Dataset was saved successfully.")
+
+
+    @staticmethod
+    def load_preprocessed_dataset(dest = "./Datasets/preprocessed_BillboardDataset.ds"):
+        """
+        """
+        with lzma.open(dest, "rb") as dataset_file:
+            dataset = pickle.load(dataset_file)
+
+        print("[INFO] The Preprocessed Dataset was loaded successfully.")
         return dataset

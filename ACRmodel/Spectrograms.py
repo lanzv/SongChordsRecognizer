@@ -58,5 +58,5 @@ def cqt_spectrogram(waveform, sample_rate=44100, nfft=2**14, hop_length=4410):
 
     cqt_spectrogram = np.abs(librosa.cqt(waveform, sr=sample_rate, hop_length=hop_length, fmin=librosa.note_to_hz('C1'),
                 n_bins=n_bins, bins_per_octave=bins_per_octave))
-    print(cqt_spectrogram.shape)
+
     return cqt_spectrogram

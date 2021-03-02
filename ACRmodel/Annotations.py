@@ -104,3 +104,31 @@ class KeySequence():
                             raise Exception("The key lab file has an unexpected format.")
                         labels.append(splits[3])
         return starts, ends, labels
+
+class SongDescription():
+    """
+    """
+    def __init__(self, desc_path):
+        self.TITLE, self.ARTIST, self.METRE, self.TONIC = SongDescription.parse_lab(desc_path)
+
+    @staticmethod
+    def parse_lab(desc_path):
+        """
+        """
+        title, artist, metre, tonic = "", "", "", ""
+        with open(desc_path, 'r') as decs_file:
+            for line in decs_file:
+                if line:
+                    splits = line.split(": ")
+                    if len(splits) == 2:
+                        if splits[0] == "# title":
+                            title = splits[1].split('\n')[0]
+                        elif splits[0] == "# artist":
+                            artist = splits[1].split('\n')[0]
+                        elif splits[0] == "# metre":
+                            metre = splits[1].split('\n')[0]
+                        elif splits[0] == "# tonic":
+                            tonic = splits[1].split('\n')[0]
+                    else:
+                        break
+        return title, artist, metre, tonic
