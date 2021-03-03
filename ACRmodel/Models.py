@@ -180,7 +180,6 @@ class CRNN_1(CRNN):
 
 
 class CRNN_2(CRNN):
-    class CRNN_2(CRNN):
     """
     CRNN model inspired by Brian McFee and Juan Pablo Bello, 2017.
     """
