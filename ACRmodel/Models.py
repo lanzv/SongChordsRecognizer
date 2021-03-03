@@ -94,10 +94,10 @@ class CRNN():
         self.model = model
         print("[INFO] The CRNN model was successfully created.")
 
-    def fit(self, data, targets, dev_data, dev_targets):
+    def fit(self, data, targets, dev_data, dev_targets, epochs=50):
         # Train model
         self.history = self.model.fit(
-            data, targets, epochs=150, 
+            data, targets, epochs=epochs,
             validation_data=(dev_data, dev_targets)
         )
         print("[INFO] The CRNN model was successfully trained.")
@@ -121,8 +121,13 @@ class CRNN():
         display_labels = np.array(["N", "C", "C:min", "C#", "C#:min", "D", "D:min", "D#", "D#:min", "E", "E:min", "F", "F:min", "F#", "F#:min", "G", "G:min", "G#", "G#:min", "A", "A:min", "A#", "A#:min", "B", "B:min"])
         labels = np.array([i for i in range(len(display_labels))])
 
-        # Generate predictions
-        predictions = tensorflow.argmax(self.model.predict(data), axis=1)
+        # Generate predictions and targets
+        predictions = self.model.predict(data)
+        a1, a2, a3 = predictions.shape
+        predictions = predictions.reshape((a1*a2, a3))
+        predictions = tensorflow.argmax(predictions, axis=1)
+        a1, a2 = targets.shape
+        targets = targets.reshape((a1*a2))
 
         # Set and display confusion matrix
         disp = ConfusionMatrixDisplay(
