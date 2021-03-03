@@ -12,8 +12,8 @@ class MLP():
     """
     Very simple MLP model with one 100 units layer.
     """
-    def __init__(self):
-        self.model = MLPClassifier(max_iter = 500)
+    def __init__(self, max_iter=500, random_state=1):
+        self.model = MLPClassifier(max_iter=max_iter, random_state=random_state)
         print("[INFO] The MLP model was successfully created.")
 
     def fit(self, data, targets):
