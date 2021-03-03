@@ -12,12 +12,64 @@ import re
 from Spectrograms import log_mel_spectrogram
 import sys
 
+class Dataset():
+    def __init__(self, audio_directory=None, annotations_directory=None):
+        self.DATA = []
+        self.CHORDS = []
 
-class IsophonicsDataset():
+
+    @staticmethod
+    def get_integered_chord(chord, norm_to_C=False, key='C'):
+        """
+        Map chord label in string with its index.
+
+        Parameters
+        ----------
+        chord : string
+            labled chord, for instance N for none chord, or G#:min7
+        norm_to_C : bool
+            True, if we want to normalize chord to C major key (and its modes)
+        key : string
+            true label of audio music key
+        Returns
+        -------
+        chord_index : int
+            index of chord passed on input (or its normalization alternative), N has 0, other chord are integer in range of 1 and 24
+        """
+        # Get number of half tones to transpose
+        if norm_to_C:
+            splited_key = key.split(":")
+            if len(splited_key) == 1:
+                mode_shift = 0
+            elif len(splited_key) == 2:
+                mode_shift = key_modes_map[splited_key[1]]
+            else:
+                raise Exception("Some key mode format is not supported.")
+            to_shift = keys_map[splited_key[0]] - mode_shift
+            n_steps = -(to_shift%12) if to_shift%12 < 7 else 12-(to_shift%12)
+        else:
+            n_steps = 0
+        # Simplify chord label
+        chord = re.sub('6|7|9|11|13|maj|\/[0-9]|\/\#[0-9]|\/b[0-9]|\(.*\)', '', chord)
+        chord = re.sub(':$', '', chord)
+        # Get chord index
+        if chord in chords_map and not chord == "N":
+            if chords_map[chord] + 2*n_steps <= 0:
+                return chords_map[chord] + 2*n_steps + 24
+            elif chords_map[chord] + 2*n_steps > 24:
+                return chords_map[chord] + 2*n_steps - 24
+            else:
+                return chords_map[chord] + 2*n_steps
+        else:
+            return 0
+
+
+class IsophonicsDataset(Dataset):
     """Isophonics Dataset.
     The train set contains 225 Bealtes, Queen, Carole King or Zweieck songs. 
     DATA contains audio waveform features.
-    LABELS contains chord annotation for all song duration.
+    CHORDS contains chord annotation for all song duration.
+    KEYS contains key annotation for all song duration.
     """
     def __init__(self, audio_directory=None, annotations_directory=None, sample_rate=44100, nfft=2**14):
         
@@ -42,9 +94,9 @@ class IsophonicsDataset():
                 self.CHORDS.append(ChordSequence(chord_lab_path))
                 self.KEYS.append(KeySequence(key_lab_path))
 
-            print("[INFO] The Dataset was successfully initialized.")
+            print("[INFO] The Isophonics Dataset was successfully initialized.")
         else:
-            print("[INFO] The Dataset was successfulyy initialized without any data or annotations.")
+            print("[INFO] The Isophonics Dataset was successfulyy initialized without any data or annotations.")
     
 
 
@@ -52,7 +104,7 @@ class IsophonicsDataset():
     def get_preprocessed_dataset(self, window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False, spectrogram_generator=log_mel_spectrogram):
         """
         Preprocess IsophonicsDataset dataset.
-        Create features from self.DATA and its corresponding targets from self.LABELS.
+        Create features from self.DATA and its corresponding targets from self.CHORDS.
         
         Parameters
         ----------
@@ -71,7 +123,7 @@ class IsophonicsDataset():
         Returns
         -------
         prep_data : np array
-            flattened window of logarithmized mel spectrograms arround specific time point
+            window (flettend or not) of logarithmized mel spectrograms arround specific time point
         prep_targets : np array
             integers of chord labels for specific time point
         """
@@ -114,11 +166,11 @@ class IsophonicsDataset():
                 while j < len(chords.START) and second > chords.START[j] :
                     j = j + 1
                 if j == len(chords.START):
-                    prep_targets.append(IsophonicsDataset.get_integered_chord("N", norm_to_C, keys.get_first_key()))
+                    prep_targets.append(Dataset.get_integered_chord("N", norm_to_C, keys.get_first_key()))
                 else:
-                    prep_targets.append(IsophonicsDataset.get_integered_chord(chords.CHORD[j], norm_to_C, keys.get_first_key()))
+                    prep_targets.append(Dataset.get_integered_chord(chords.CHORD[j], norm_to_C, keys.get_first_key()))
 
-        print("[INFO] The Dataset was successfully preprocessed.")
+        print("[INFO] The Isophonics Dataset was successfully preprocessed.")
         return np.array(prep_data), np.array(prep_targets)
 
 
@@ -171,53 +223,6 @@ class IsophonicsDataset():
 
 
 
-    @staticmethod
-    def get_integered_chord(chord, norm_to_C=False, key='C'):
-        """
-        Map chord label in string with its index.
-        
-        Parameters
-        ----------
-        chord : string
-            labled chord, for instance N for none chord, or G#:min7
-        norm_to_C : bool
-            True, if we want to normalize chord to C major key (and its modes)
-        key : string
-            true label of audio music key
-        Returns
-        -------
-        chord_index : int 
-            index of chord passed on input (or its normalization alternative), N has 0, other chord are integer in range of 1 and 24
-        """
-        # Get number of half tones to transpose
-        if norm_to_C:
-            splited_key = key.split(":")
-            if len(splited_key) == 1:
-                mode_shift = 0
-            elif len(splited_key) == 2:
-                mode_shift = key_modes_map[splited_key[1]]
-            else:
-                raise Exception("Some key mode format is not supported.")
-            to_shift = keys_map[splited_key[0]] - mode_shift
-            n_steps = -(to_shift%12) if to_shift%12 < 7 else 12-(to_shift%12)
-        else:
-            n_steps = 0
-        # Simplify chord label
-        chord = re.sub('6|7|9|11|13|maj|\/[0-9]|\/\#[0-9]|\/b[0-9]|\(.*\)', '', chord)
-        chord = re.sub(':$', '', chord)
-        # Get chord index
-        if chord in chords_map and not chord == "N":
-            if chords_map[chord] + 2*n_steps <= 0:
-                return chords_map[chord] + 2*n_steps + 24
-            elif chords_map[chord] + 2*n_steps > 24:
-                return chords_map[chord] + 2*n_steps - 24
-            else:
-                return chords_map[chord] + 2*n_steps
-        else:
-            return 0
-
-
-
     def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_IsophonicsDataset.ds", window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False, spectrogram_generator=log_mel_spectrogram):
         """
         Save preprocessed data from this dataset to destination path 'dest' by default as a .ds file.
@@ -243,7 +248,7 @@ class IsophonicsDataset():
         with lzma.open(dest, "wb") as dataset_file:
             pickle.dump((self.get_preprocessed_dataset(window_size, flattened_window, ms_intervals, to_skip, norm_to_C, spectrogram_generator)), dataset_file)
 
-        print("[INFO] The Preprocessed Dataset was saved successfully.")
+        print("[INFO] The Preprocessed Isophonics Dataset was saved successfully.")
 
 
 
@@ -259,15 +264,14 @@ class IsophonicsDataset():
         Returns
         -------
         prep_data : np array
-            flattened window of logarithmized mel spectrograms arround specific time point
-
+            window (flettend or not) of logarithmized mel spectrograms arround specific time point
         prep_targets : np array
             integers of chord labels for specific time point
         """
         with lzma.open(dest, "rb") as dataset_file:
             dataset = pickle.load(dataset_file)
 
-        print("[INFO] The Preprocessed Dataset was loaded successfully.")
+        print("[INFO] The Preprocessed Isophonics Dataset was loaded successfully.")
         return dataset
 
 
@@ -285,7 +289,7 @@ class IsophonicsDataset():
         with lzma.open(dest, "wb") as dataset_file:
             pickle.dump((self.DATA, self.CHORDS, self.KEYS, self.SAMPLE_RATE, self.NFFT), dataset_file)
 
-        print("[INFO] The Dataset was saved successfully.") 
+        print("[INFO] The Isophonics Dataset was saved successfully.")
 
 
            
@@ -316,20 +320,16 @@ class IsophonicsDataset():
         dataset.SAMPLE_RATE = sample_rate
         dataset.NFFT = nfft
 
-        print("[INFO] The Dataset was loaded successfully.")
+        print("[INFO] The Isophonics Dataset was loaded successfully.")
         return dataset
 
 
-
-
-
-
-class BillboardDataset():
+class BillboardDataset(Dataset):
     """Billboard Dataset.
     The train set contains 890 a representative samples of American popular music from the 1950s through the 1990s. 
     DATA contains audio waveform features.
     CHORDS contains a chord sequence.
-    KEYS contains a key sequence.
+    DESC contains a audio description like tonic, metre, ect...
     """
     def __init__(self, audio_directory=None, annotations_directory=None):
 
@@ -364,8 +364,22 @@ class BillboardDataset():
 
 
 
+
     def get_preprocessed_dataset(self, n_frames):
         """
+        Preprocess Billboard dataset.
+        Divide chroma features from self.DATA to n_frames long sequences and do the same with targets from self.CHORDS.
+
+        Parameters
+        ----------
+        n_frames : int
+             how many frames should be included in a subsequence of a song
+        Returns
+        -------
+        prep_data : np array
+            sequences of song's chroma vectors separated to n_frames frames
+        prep_targets : np array
+            sequences of integers of chord labels for specific chroma vector sequences
         """
         prep_data = []
         prep_targets = []
@@ -382,9 +396,9 @@ class BillboardDataset():
                         j = j + 1
 
                     if j == len(chords.START):
-                        prep_targets[-1].append(IsophonicsDataset.get_integered_chord("N"))
+                        prep_targets[-1].append(Dataset.get_integered_chord("N"))
                     else:
-                        prep_targets[-1].append(IsophonicsDataset.get_integered_chord(chords.CHORD[j]))
+                        prep_targets[-1].append(Dataset.get_integered_chord(chords.CHORD[j]))
 
             # Embed zero chromas to fill n_frames frames
             last_ind = (int)(audio.CHROMA.shape[0]/n_frames)
@@ -412,8 +426,15 @@ class BillboardDataset():
         return np.array(prep_data), np.array(prep_targets)
 
 
+
     def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_BillboardDataset.ds", n_frames=1000):
         """
+        Save preprocessed data from this dataset to destination path 'dest' by default as a .ds file.
+
+        Parameters
+        ----------
+        n_frames : int
+            how many frames should be included in a subsequence of a song
         """
         # Serialize the dataset.
         with lzma.open(dest, "wb") as dataset_file:
@@ -422,12 +443,25 @@ class BillboardDataset():
         print("[INFO] The Preprocessed Billboard Dataset was saved successfully.")
 
 
+
     @staticmethod
-    def load_preprocessed_dataset(dest = "./Datasets/preprocessed_BillboardDataset.ds"):
+    def load_preprocessed_dataset(dest = "./Datasets/preprocessed_BillboardDataset.ds") -> tuple:
         """
+        Load preprocessed data from this dataset from destination path 'dest'. Targets and preprocessed Data are stored by default as a .ds file.
+
+        Parameters
+        ----------
+        dest : str
+            path to preprocessed data
+        Returns
+        -------
+        prep_data : np array
+            sequences of song's chroma vectors separated to n_frames frames
+        prep_targets : np array
+            sequences of integers of chord labels for specific chroma vector sequences
         """
         with lzma.open(dest, "rb") as dataset_file:
             dataset = pickle.load(dataset_file)
 
-        print("[INFO] The Preprocessed Dataset was loaded successfully.")
+        print("[INFO] The Preprocessed Billboard Dataset was loaded successfully.")
         return dataset

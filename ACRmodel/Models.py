@@ -9,6 +9,9 @@ from sklearn.metrics import confusion_matrix
 import numpy as np
 
 class MLP():
+    """
+    Very simple MLP model with one 100 units layer.
+    """
     def __init__(self):
         self.model = MLPClassifier(max_iter = 500)
         print("[INFO] The MLP model was successfully created.")
@@ -43,6 +46,9 @@ class MLP():
 
 
 class CRNN():
+    """
+    CRNN model inspired by Junyan Jiang, Ke Chen, Wei li, Gus Xia, 2019.
+    """
     def __init__(self, input_shape, output_classes):
         n_frames, n_chromas, chanells = input_shape
         # Create model

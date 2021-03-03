@@ -18,7 +18,13 @@ class Audio():
 
 
 class BillboardFeatures():
-    """
+    """Chroma features for Billboard audios and an audio information.
+    FILE original audio file path, doesn't exist anymore
+    START start time of the song
+    END end time of the song
+    TUNING tuning of the song
+    TIME_BINS list of time points we have chroma for
+    CHROMA list of chroma vectors for mapped to the time bins
     """
     def __init__(self, features_path):
         tuning_path = features_path + "tuning.csv"

@@ -106,14 +106,35 @@ class KeySequence():
         return starts, ends, labels
 
 class SongDescription():
-    """
+    """Song description sequence of specific audio parsed from salami_chord.txt file.
+    TITLE name of a song
+    ARTIST artist of a song
+    METRE metre of a song, for instance '4/4', '3/4', '6/8', ...
+    TONIC tonic of a song, not same as a key (probably) .. only C,D,E..., not major, dorian, phrygian, ..., minor, ...
     """
     def __init__(self, desc_path):
+
         self.TITLE, self.ARTIST, self.METRE, self.TONIC = SongDescription.parse_lab(desc_path)
 
     @staticmethod
     def parse_lab(desc_path):
         """
+        Load .lab file containing key sequence.
+
+        Parameters
+        ----------
+        desc_path : str
+            path to salami_chord.txt file
+        Returns
+        -------
+        title : str
+            name of a song
+        artist : str
+            song's artist
+        metre : str
+            song's metre, '4/4' or '6/8' or so
+        tonic :str
+            song's tonic, C,D,..ect (there is no information about modes)
         """
         title, artist, metre, tonic = "", "", "", ""
         with open(desc_path, 'r') as decs_file:
