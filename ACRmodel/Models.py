@@ -7,6 +7,10 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import plot_confusion_matrix
 from sklearn.metrics import confusion_matrix
 import numpy as np
+import sklearn.pipeline
+import sklearn.preprocessing
+
+
 
 class MLP():
     """
@@ -43,6 +47,19 @@ class MLP():
         comparisons = mir_eval.chord.triads(ref_labels, est_labels)
         score = mir_eval.chord.weighted_accuracy(comparisons, durations)
         return score
+
+
+
+class MLP_scalered(MLP):
+    def __init__(self, max_iter=500, random_state=1):
+        scalered_mlp = sklearn.pipeline.Pipeline([
+          ('scaler', sklearn.preprocessing.StandardScaler(with_mean=True, with_std=True)),
+          ('estimator', MLPClassifier(max_iter=max_iter, random_state=random_state))
+        ])
+        self.model = scalered_mlp
+        print("[INFO] The MLP model with scaler preprocessing was successfully created.")
+
+
 
 
 
