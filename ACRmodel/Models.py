@@ -155,9 +155,10 @@ class CRNN_1(CRNN):
         model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Conv2D(80, (3,3), activation='relu',padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-
+        _, a1, a2, a3 = model.output_shape
+        
         # Classifier - RNN
-        model.add(tensorflow.keras.layers.Reshape((n_frames, 80), input_shape=(n_frames, 1, 80)))
+        model.add(tensorflow.keras.layers.Reshape((a1, a2*a3), input_shape=(n_frames, a2, a3)))
         model.add(tensorflow.keras.layers.Bidirectional(
             tensorflow.keras.layers.LSTM(96, return_sequences=True))
         )
@@ -167,7 +168,7 @@ class CRNN_1(CRNN):
 
         # Compile model
         model.compile(
-            optimizer=tensorflow.keras.optimizers.Adam(learning_rate=0.1),
+            optimizer=tensorflow.keras.optimizers.Adam(),
             loss=tensorflow.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
             metrics=['accuracy']
         )
@@ -205,7 +206,7 @@ class CRNN_2(CRNN):
 
         # Compile model
         model.compile(
-            optimizer=tensorflow.keras.optimizers.Adam(learning_rate=0.1),
+            optimizer=tensorflow.keras.optimizers.Adam(),
             loss=tensorflow.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
             metrics=['accuracy']
         )
