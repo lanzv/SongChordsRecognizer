@@ -6,13 +6,15 @@ import matplotlib.pyplot as plt
 import librosa.display
 import csv
 import numpy as np
+
+
 class Audio():
     """Audio file and its data.
     PATH contains string of path of this audil file.
     WAVEFORM contains array of waveform.
     SAMPLE_RATE contains information about audio's sample rate.
     """
-    def __init__(self, audio_path, sr=None):
+    def __init__(self, audio_path: str, sr:int=None):
         self.PATH = audio_path
         self.WAVEFORM, self.SAMPLE_RATE = librosa.load(audio_path, sr=sr)
 
@@ -26,7 +28,7 @@ class BillboardFeatures():
     TIME_BINS list of time points we have chroma for
     CHROMA list of chroma vectors for mapped to the time bins
     """
-    def __init__(self, features_path):
+    def __init__(self, features_path: str):
         tuning_path = features_path + "tuning.csv"
         bothchroma_path = features_path + "bothchroma.csv"
 

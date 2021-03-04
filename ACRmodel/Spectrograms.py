@@ -2,7 +2,7 @@ import librosa
 import numpy as np
 import sys
 
-def log_mel_spectrogram(waveform, sample_rate=44100, nfft=2**14, hop_length=4410):
+def log_mel_spectrogram(waveform, sample_rate:int=44100, nfft:int=2**14, hop_length:int=4410):
     """
     Generate spectrogram from audio.
     The logarithmized mel spectrogram is used with 128 filter banks. 
@@ -33,7 +33,7 @@ def log_mel_spectrogram(waveform, sample_rate=44100, nfft=2**14, hop_length=4410
 
 
 
-def cqt_spectrogram(waveform, sample_rate=44100, nfft=2**14, hop_length=4410):
+def cqt_spectrogram(waveform, sample_rate:int=44100, nfft:int=2**14, hop_length:int=4410):
     """
     Generate spectrogram from audio.
     The cqt spectrogram is used with 252 bins started at C1 and with 36 filter banks for each octaves. 

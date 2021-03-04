@@ -8,12 +8,12 @@ class ChordSequence():
     END list of ending chord times in miliseconds
     CHORD sequence of chords (labeled as strings)
     """
-    def __init__(self, lab_path):
+    def __init__(self, lab_path: str):
 
         self.START, self.END, self.CHORD = ChordSequence.parse_lab(lab_path)
 
     @staticmethod
-    def parse_lab(lab_path):
+    def parse_lab(lab_path: str):
         """
         Load .lab file containing chord sequence.
 
@@ -47,7 +47,7 @@ class KeySequence():
     END list of ending key times in miliseconds
     KEY sequence of keys (labeled as strings)
     """
-    def __init__(self, lab_path):
+    def __init__(self, lab_path: str):
 
         self.START, self.END, self.KEYS = KeySequence.parse_lab(lab_path)
     
@@ -67,7 +67,7 @@ class KeySequence():
         return "N"
 
     @staticmethod
-    def parse_lab(lab_path):
+    def parse_lab(lab_path: str):
         """
         Load .lab file containing key sequence.
 
@@ -112,12 +112,12 @@ class SongDescription():
     METRE metre of a song, for instance '4/4', '3/4', '6/8', ...
     TONIC tonic of a song, not same as a key (probably) .. only C,D,E..., not major, dorian, phrygian, ..., minor, ...
     """
-    def __init__(self, desc_path):
+    def __init__(self, desc_path: str):
 
         self.TITLE, self.ARTIST, self.METRE, self.TONIC = SongDescription.parse_lab(desc_path)
 
     @staticmethod
-    def parse_lab(desc_path):
+    def parse_lab(desc_path: str):
         """
         Load .lab file containing key sequence.
 
