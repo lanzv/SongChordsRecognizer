@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from numpy.core.records import array
 from Annotations import ChordSequence, KeySequence, SongDescription
 from annotation_maps import chords_map, keys_map, key_modes_map
 from Audio import Audio, BillboardFeatures
@@ -19,7 +20,7 @@ class Dataset():
 
 
     @staticmethod
-    def get_integered_chord(chord, norm_to_C=False, key='C'):
+    def get_integered_chord(chord, norm_to_C=False, key='C') -> int:
         """
         Map chord label in string with its index.
 
@@ -64,6 +65,81 @@ class Dataset():
             return 0
 
 
+    @staticmethod
+    def songs_to_sequences(FEATURESs, CHORDs, TIME_BINSs, KEYs, n_frames=500, norm_to_C=False) -> tuple:
+        """
+        Preprocess dataset.
+        Divide features from FEATURESs to n_frames frames long sequences and do the same with targets from self.CHORDS.
+
+        Parameters
+        ----------
+        FEATURESs : list of lists of float
+            list of song features we want to separate to sequences about n_frames elements
+        CHORDs : list of Chord objects
+            list of song chords
+        TIME_BINSs :
+            time points mapped with features
+        KEYs : list of strings
+            song's key
+        n_frames : int
+             how many frames should be included in a subsequence of a song
+        Returns
+        -------
+        prep_data : np array
+            sequences of song's chroma vectors separated to n_frames frames
+        prep_targets : np array
+            sequences of integers of chord labels for specific chroma vector sequences
+        """
+        prep_data = []
+        prep_targets = []
+        for features, chords, time_bins, key in zip(FEATURESs, CHORDs, TIME_BINSs, KEYs):
+            j = 0
+            for i in range((int)(features.shape[0]/n_frames)):
+                # Get chroma
+                prep_data.append(features[i*n_frames:(i+1)*n_frames])
+                # Get labels
+                prep_targets.append([])
+                for chord_ind in range(i*n_frames, (i+1)*n_frames):
+                    second = time_bins[chord_ind]
+                    while j < len(chords.START) and second > chords.START[j] :
+                        j = j + 1
+
+                    if j == len(chords.START):
+                        prep_targets[-1].append(Dataset.get_integered_chord("N", norm_to_C, key))
+                    else:
+                        prep_targets[-1].append(Dataset.get_integered_chord(chords.CHORD[j], norm_to_C, key))
+
+            # Embed zero chromas to fill n_frames frames
+            last_ind = (int)(features.shape[0]/n_frames)
+            _, n_features = features.shape
+            prep_data.append(
+                np.concatenate((
+                    np.array(features[last_ind*n_frames:]),
+                    np.zeros((n_frames - (len(features) - last_ind*n_frames), n_features))
+                ), axis=0 )
+            )
+            # Embed N chords to fill n_frames frames
+            prep_targets.append([])
+            for chord_ind in range(last_ind*n_frames, (last_ind+1) * n_frames):
+                if chord_ind < len(time_bins):
+                    second = time_bins[chord_ind]
+                    while j < len(chords.START) and second > chords.START[j] :
+                        j = j + 1
+
+                    if j == len(chords.START):
+                        prep_targets[-1].append(Dataset.get_integered_chord("N", norm_to_C, key))
+                    else:
+                        prep_targets[-1].append(Dataset.get_integered_chord(chords.CHORD[j], norm_to_C, key))
+                else:
+                    prep_targets[-1].append(Dataset.get_integered_chord("N", norm_to_C, key))
+
+        print("[INFO] The Dataset was successfully preprocessed.")
+        return np.array(prep_data), np.array(prep_targets)
+
+
+
+
+
 class IsophonicsDataset(Dataset):
     """Isophonics Dataset.
     The train set contains 225 Bealtes, Queen, Carole King or Zweieck songs. 
@@ -96,19 +172,54 @@ class IsophonicsDataset(Dataset):
 
             print("[INFO] The Isophonics Dataset was successfully initialized.")
         else:
-            print("[INFO] The Isophonics Dataset was successfulyy initialized without any data or annotations.")
+            print("[INFO] The Isophonics Dataset was successfully initialized without any data or annotations.")
     
+
+    def get_preprocessed_dataset(self, hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500) -> tuple:
+        """
+        Preprocess Isophonics dataset.
+        Divide spectrogram features geenrated from self.DATA audio waveforms to n_frames frames long sequences and do the same with targets from self.CHORDS.
+
+        Parameters
+        ----------
+        hop_length : int
+            (sample_rate/hop_length)*10 is equal to number of miliseconds between to spectrograms
+        norm_to_C : bool
+            True if we want to transpose all songs to C key
+        spectrogram_generator : method from Spectrograms.py
+            function that generates spectrogram
+        n_frames : int
+             how many frames should be included in a subsequence of a song
+        Returns
+        -------
+        prep_data : np array
+            sequences of song's spectrogram vectors separated to n_frames frames
+        prep_targets : np array
+            sequences of integers of chord labels for specific spectrogram vector sequences
+        """
+        FEATURESs = []
+        CHORDs = self.CHORDS
+        TIME_BINSs = []
+        KEYs = []
+        norm_to_C = False
+        for audio, keys in zip(self.DATA, self.KEYS):
+            FEATURESs.append((IsophonicsDataset.preprocess_audio(waveform=audio.WAVEFORM, sample_rate=audio.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, key=keys.get_first_key()).swapaxes(0,1)))
+            num_samples, _ = FEATURESs[-1].shape
+            TIME_BINSs.append([float(i)/(float(self.SAMPLE_RATE) / float(hop_length)) for i in range(num_samples)])
+            KEYs.append(keys.get_first_key())
+
+        return Dataset.songs_to_sequences(FEATURESs=FEATURESs, CHORDs=CHORDs, TIME_BINSs=TIME_BINSs, KEYs=KEYs, n_frames=n_frames, norm_to_C=norm_to_C)
 
 
        
-    def get_preprocessed_dataset(self, window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False, spectrogram_generator=log_mel_spectrogram):
+    def preprocess_single_chords_list(self, window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False, spectrogram_generator=log_mel_spectrogram) -> tuple:
         """
         Preprocess IsophonicsDataset dataset.
         Create features from self.DATA and its corresponding targets from self.CHORDS.
         
         Parameters
         ----------
-        window : int
+        window_size : int
             how many spectrograms on left and on right we should take 
         flattened_window : bool
             True if we want to flatten spectrograms to one array, otherwise False
@@ -176,7 +287,7 @@ class IsophonicsDataset(Dataset):
 
 
     @staticmethod
-    def preprocess_audio(waveform, sample_rate, spectrogram_generator, nfft, hop_length, norm_to_C=False, key='C'):
+    def preprocess_audio(waveform, sample_rate, spectrogram_generator, nfft, hop_length, norm_to_C=False, key='C') -> list:
         """
         Preprocess audio waveform, shift pitches to C major key (and its modes ... dorian, phrygian, aiolian, lydian, ...) and generate mel and log spectrograms.
         
@@ -214,7 +325,7 @@ class IsophonicsDataset(Dataset):
             n_steps = -(to_shift%12) if to_shift%12 < 7 else 12-(to_shift%12)
         else:
             n_steps = 0
-        # transpose song to C    
+        # transpose song to C
         waveform_shifted = librosa.effects.pitch_shift(waveform, sample_rate, n_steps=n_steps)
         # Get spectrogram
         spectrogram = spectrogram_generator(waveform_shifted, sample_rate, nfft, hop_length)
@@ -223,7 +334,7 @@ class IsophonicsDataset(Dataset):
 
 
 
-    def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_IsophonicsDataset.ds", window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False, spectrogram_generator=log_mel_spectrogram):
+    def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_IsophonicsDataset.ds", hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500):
         """
         Save preprocessed data from this dataset to destination path 'dest' by default as a .ds file.
         
@@ -231,29 +342,25 @@ class IsophonicsDataset(Dataset):
         ----------
         dest : str
             path to preprocessed data
-        window : int
-            how many spectrograms on left and on right we should take 
-        flattened_window : bool
-            True if we want to flatten spectrograms to one array, otherwise False
-        ms_intervals : int
-            miliseconds between generated spectrogram
-        to_skip : int
-            how many spectrogram we want to skip when creating new feature set
+        hop_length : int
+            (sample_rate/hop_length)*10 is equal to number of miliseconds between to spectrograms
         norm_to_C : bool
             True if we want to transpose all songs to C key
         spectrogram_generator : method from Spectrograms.py
             function that generates spectrogram
+        n_frames : int
+             how many frames should be included in a subsequence of a song
         """
         # Serialize the dataset.
         with lzma.open(dest, "wb") as dataset_file:
-            pickle.dump((self.get_preprocessed_dataset(window_size, flattened_window, ms_intervals, to_skip, norm_to_C, spectrogram_generator)), dataset_file)
+            pickle.dump((self.get_preprocessed_dataset(hop_length=hop_length, norm_to_C=norm_to_C, spectrogram_generator=spectrogram_generator, n_frames=n_frames)), dataset_file)
 
         print("[INFO] The Preprocessed Isophonics Dataset was saved successfully.")
 
 
 
     @staticmethod
-    def load_preprocessed_dataset(dest = "./Datasets/preprocessed_IsophonicsDataset.ds"): 
+    def load_preprocessed_dataset(dest = "./Datasets/preprocessed_IsophonicsDataset.ds") -> tuple:
         """
         Load preprocessed data from this dataset from destination path 'dest'. Targets and preprocessed Data are stored by default as a .ds file.
         
@@ -294,7 +401,7 @@ class IsophonicsDataset(Dataset):
 
            
     @staticmethod
-    def load_dataset(dest = "./Datasets/IsophonicsDataset.ds"): 
+    def load_dataset(dest = "./Datasets/IsophonicsDataset.ds") -> 'IsophonicsDataset':
         """
         Load data from this dataset from destination path 'dest'. Targets and Data are stored by default as a .ds file.
         
@@ -322,6 +429,9 @@ class IsophonicsDataset(Dataset):
 
         print("[INFO] The Isophonics Dataset was loaded successfully.")
         return dataset
+
+
+
 
 
 class BillboardDataset(Dataset):
@@ -365,10 +475,10 @@ class BillboardDataset(Dataset):
 
 
 
-    def get_preprocessed_dataset(self, n_frames):
+    def get_preprocessed_dataset(self, n_frames=500) -> tuple:
         """
         Preprocess Billboard dataset.
-        Divide chroma features from self.DATA to n_frames long sequences and do the same with targets from self.CHORDS.
+        Divide chroma features from self.DATA to n_frames frames long sequences and do the same with targets from self.CHORDS.
 
         Parameters
         ----------
@@ -381,49 +491,17 @@ class BillboardDataset(Dataset):
         prep_targets : np array
             sequences of integers of chord labels for specific chroma vector sequences
         """
-        prep_data = []
-        prep_targets = []
-        for audio, chords in zip(self.DATA, self.CHORDS):
-            j = 0
-            for i in range((int)(audio.CHROMA.shape[0]/n_frames)):
-                # Get chroma
-                prep_data.append(audio.CHROMA[i*n_frames:(i+1)*n_frames])
-                # Get labels
-                prep_targets.append([])
-                for chord_ind in range(i*n_frames, (i+1)*n_frames):
-                    second = audio.TIME_BINS[chord_ind]
-                    while j < len(chords.START) and second > chords.START[j] :
-                        j = j + 1
+        FEATURESs = []
+        CHORDs = self.CHORDS
+        TIME_BINSs = []
+        KEYs = []
+        norm_to_C = False
+        for chroma, desc in zip(self.DATA, self.DESC):
+            FEATURESs.append(chroma.CHROMA)
+            TIME_BINSs.append(chroma.TIME_BINS)
+            KEYs.append(desc.TONIC)
 
-                    if j == len(chords.START):
-                        prep_targets[-1].append(Dataset.get_integered_chord("N"))
-                    else:
-                        prep_targets[-1].append(Dataset.get_integered_chord(chords.CHORD[j]))
-
-            # Embed zero chromas to fill n_frames frames
-            last_ind = (int)(audio.CHROMA.shape[0]/n_frames)
-            prep_data.append(
-                np.concatenate((
-                    np.array(audio.CHROMA[last_ind*n_frames:]),
-                    np.zeros((n_frames - (len(audio.CHROMA) - last_ind*n_frames), 24))
-                ), axis=0 )
-            )
-            # Embed N chords to fill n_frames frames
-            prep_targets.append([])
-            for chord_ind in range(last_ind*n_frames, (last_ind+1) * n_frames):
-                if chord_ind < len(audio.TIME_BINS):
-                    second = audio.TIME_BINS[chord_ind]
-                    while j < len(chords.START) and second > chords.START[j] :
-                        j = j + 1
-
-                    if j == len(chords.START):
-                        prep_targets[-1].append(IsophonicsDataset.get_integered_chord("N"))
-                    else:
-                        prep_targets[-1].append(IsophonicsDataset.get_integered_chord(chords.CHORD[j]))
-                else:
-                    prep_targets[-1].append(IsophonicsDataset.get_integered_chord("N"))
-
-        return np.array(prep_data), np.array(prep_targets)
+        return Dataset.songs_to_sequences(FEATURESs=FEATURESs, CHORDs=CHORDs, TIME_BINSs=TIME_BINSs, KEYs=KEYs, n_frames=n_frames, norm_to_C=norm_to_C)
 
 
 
