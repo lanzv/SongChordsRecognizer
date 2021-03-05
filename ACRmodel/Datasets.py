@@ -183,7 +183,7 @@ class IsophonicsDataset(Dataset):
         Parameters
         ----------
         hop_length : int
-            (sample_rate/hop_length)*10 is equal to number of miliseconds between to spectrograms
+            number of samples between successive spectrogram columns
         norm_to_C : bool
             True if we want to transpose all songs to C key
         spectrogram_generator : method from Spectrograms.py
@@ -212,7 +212,7 @@ class IsophonicsDataset(Dataset):
 
 
        
-    def preprocess_single_chords_list(self, window_size=5, flattened_window=True, ms_intervals=100, to_skip=5, norm_to_C=False, spectrogram_generator=log_mel_spectrogram) -> tuple:
+    def preprocess_single_chords_list(self, window_size=5, flattened_window=True, hop_length=4410, to_skip=5, norm_to_C=False, spectrogram_generator=log_mel_spectrogram) -> tuple:
         """
         Preprocess IsophonicsDataset dataset.
         Create features from self.DATA and its corresponding targets from self.CHORDS.
@@ -223,8 +223,8 @@ class IsophonicsDataset(Dataset):
             how many spectrograms on left and on right we should take 
         flattened_window : bool
             True if we want to flatten spectrograms to one array, otherwise False
-        ms_intervals : int
-            miliseconds between generated spectrogram
+        hop_length : int
+            number of samples between successive spectrogram columns
         to_skip : int
             how many spectrogram we want to skip when creating new feature set
         norm_to_C : bool
@@ -240,7 +240,6 @@ class IsophonicsDataset(Dataset):
         """
         prep_data = []
         prep_targets = []
-        hop_length = int(self.SAMPLE_RATE/(ms_intervals/10))
         k = 0
         # Iterate over all audio files
         for audio, chords, keys in zip(self.DATA, self.CHORDS, self.KEYS):
@@ -302,7 +301,7 @@ class IsophonicsDataset(Dataset):
         nfft : int
             length of FFT, power of 2
         hop_length : int
-            number of target rate, sample_rate/hop_length = interval between two spectrograms in miliseconds
+            number of samples between successive spectrogram columns
         norm_to_C : bool
             True, if we want to normalize all songs to C major key (and its modes)
         key : string
@@ -343,7 +342,7 @@ class IsophonicsDataset(Dataset):
         dest : str
             path to preprocessed data
         hop_length : int
-            (sample_rate/hop_length)*10 is equal to number of miliseconds between to spectrograms
+            number of samples between successive spectrogram columns
         norm_to_C : bool
             True if we want to transpose all songs to C key
         spectrogram_generator : method from Spectrograms.py
