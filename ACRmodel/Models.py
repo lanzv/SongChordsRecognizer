@@ -442,3 +442,93 @@ class MLP2RNN():
             )
         disp.plot(xticks_rotation='vertical', include_values=False)
         plt.show()
+
+
+
+
+class BassVsThird():
+    """
+    Two MLP models with StandartScaler Preprocesor,
+    The first one is to recognize major/minor chord, another one is to recognize the bass of the chord. 
+    """
+    def __init__(self, max_iter=500, random_state=1):
+        self._scaler = sklearn.preprocessing.StandardScaler(with_mean=True, with_std=True)
+        self._bass_model = MLPClassifier(max_iter=max_iter, random_state=random_state)
+        self._third_model = MLPClassifier(max_iter=max_iter, random_state=random_state)
+        print("[INFO] The MLP model was successfully created.")
+
+    def fit(self, data, targets):
+        self._scaler.fit(data)
+        data, bass_targets, third_targets = self.preprocess_datataset(data, targets)
+
+        self._bass_model.fit(data, bass_targets)
+        self._third_model.fit(data, third_targets)
+        print("[INFO] The MLP model was successfully trained.")
+
+
+
+    def predict(self, data):
+        # Preprocess data
+        data = np.array(self._scaler.transform(data)),
+
+        # Predict thirds and basses
+        thirds = self._bass_model.predict(data)
+        basses = self._third_model.predict(data)
+
+        # Collect thirds and basses to chords
+        predictions = self.postprocess_targets(thirds, basses)
+
+        return np.array(predictions)
+
+
+    def score(self, data, targets):
+        # Predict targets
+        predictions = self.predict(data)
+
+        return sklearn.metrics.accuracy_score(targets, predictions)
+
+
+
+
+
+    def preprocess_datataset(self, data, targets):
+        bass_targets = []
+        third_targets = []
+        for chord in targets:
+            if chord == 0:
+                bass_targets.append(0)
+                third_targets.append(0)
+            else:
+                bass_targets.append((int)((chord+1)/2))
+                third_targets.append((int)((chord+1)%2)+1)
+
+        return np.array(self._scaler.transform(data)), np.array(bass_targets), np.array(third_targets)
+
+
+    def postprocess_targets(self, bass_targets, third_targets):
+        targets = []
+        for bass, third in zip(bass_targets, third_targets):
+            if bass == 0 or third == 0:
+                targets.append(0)
+            else:
+                targets.append((bass-1)*2 + third)
+
+        return np.array(bass_targets), np.array(third_targets)
+
+
+
+    def display_confusion_matrix(self, data, targets):
+        # Define labels
+        display_labels = np.array(["N", "C", "C:min", "C#", "C#:min", "D", "D:min", "D#", "D#:min", "E", "E:min", "F", "F:min", "F#", "F#:min", "G", "G:min", "G#", "G#:min", "A", "A:min", "A#", "A#:min", "B", "B:min"])
+        labels = np.array([i for i in range(len(display_labels))])
+
+        # Generate predictions
+        predictions = self.predict(data)
+
+        # Set and display confusion matrix
+        disp = ConfusionMatrixDisplay(
+            confusion_matrix=confusion_matrix(targets, predictions, labels=labels, normalize='all'),
+            display_labels=display_labels
+            )
+        disp.plot(xticks_rotation='vertical', include_values=False)
+        plt.show()
