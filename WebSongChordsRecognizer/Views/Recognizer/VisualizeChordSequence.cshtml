@@ -1,0 +1,48 @@
+﻿@model WebSongChordsRecognizer.Models.RecognizerModel;
+@{
+    ViewData["Title"] = "ChordSequence";
+}
+
+@section header{
+    <!-- post header part -->
+    <h1>Chord Sequence</h1>
+}
+
+<!-- content part -->
+@if (Model.ChordsPrepared)
+{
+    <!-- chord sequence -->
+    <div class="chordsequence">
+        @{
+            int nonSeparablePartLength = 4; // 4 for 4/4 bars. ToDo: Parametrize it
+            for (int i = 0; i < Model.ChordSequence.Count; i = i + nonSeparablePartLength)
+            {
+                <div class="bar">
+                    @for (int j = 0; j < nonSeparablePartLength && i + j < Model.ChordSequence.Count; j++)
+                    {
+                        <div class="chord">@Model.ChordSequence[i + j].Description</div>
+                    }
+                </div>
+            }
+        }
+    </div>
+}
+else
+{
+    // No chord sequence to print
+    <div class="error-message">
+        <h4>
+            <span style="white-space: pre-wrap">Audio file wasn't processed. An error has occured.</span>
+        </h4>
+    </div>
+}
+
+<div class="back-to-index">
+    <form asp-controller="Recognizer" asp-action="Index"
+          enctype="multipart/form-data" method="post">
+        <button type="submit">Return back and process new audio!</button>
+    </form>
+</div>
+
+<br />
+<br />

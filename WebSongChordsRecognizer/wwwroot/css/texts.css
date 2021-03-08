@@ -1,0 +1,16 @@
+﻿
+/*about project*/
+
+.about-project p {
+    margin: 100px 20px 20px 20px;
+    width: 80%;
+    color: #7d7d7d;
+    font-size: large;
+}
+
+/*incorrect input, parssing errors, format message*/
+
+.error-message h4 {
+    color: #7d7d7d;
+    margin: 20px 0 30px 0px;
+}

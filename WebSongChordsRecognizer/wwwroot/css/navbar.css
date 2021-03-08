@@ -1,0 +1,16 @@
+﻿
+/*navigation bar styles*/
+
+.navbar-nav{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.bg-nav {
+    background-color: #02006e;
+}
+
+.border-bottom-nav {
+    border-bottom: 1px solid #000 !important;
+}
