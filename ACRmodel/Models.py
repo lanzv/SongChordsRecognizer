@@ -467,25 +467,27 @@ class BassVsThird():
 
 
 
-    def predict(self, data):
+    def predict(self, data, targets):
         # Preprocess data
-        data = np.array(self._scaler.transform(data)),
+        data, bass_targets, third_targets = self.preprocess_datataset(data, targets)
 
         # Predict thirds and basses
-        thirds = self._bass_model.predict(data)
-        basses = self._third_model.predict(data)
+        basses = self._bass_model.predict(data)
+        print("[INFO] The accuracy of the bass model is ", "{:.2f}".format(100*sklearn.metrics.accuracy_score(bass_targets, basses)), "%")
+        thirds = self._third_model.predict(data)
+        print("[INFO] The accuracy of the third model is ", "{:.2f}".format(100*sklearn.metrics.accuracy_score(third_targets, thirds)), "%")
 
         # Collect thirds and basses to chords
-        predictions = self.postprocess_targets(thirds, basses)
+        predictions = self.postprocess_targets(basses, thirds)
 
         return np.array(predictions)
 
 
     def score(self, data, targets):
         # Predict targets
-        predictions = self.predict(data)
+        predictions = self.predict(data, targets)
 
-        return sklearn.metrics.accuracy_score(targets, predictions)
+        return sklearn.metrics.accuracy_score(np.array(targets), np.array(predictions))
 
 
 
@@ -513,7 +515,7 @@ class BassVsThird():
             else:
                 targets.append((bass-1)*2 + third)
 
-        return np.array(bass_targets), np.array(third_targets)
+        return np.array(targets)
 
 
 
@@ -523,7 +525,7 @@ class BassVsThird():
         labels = np.array([i for i in range(len(display_labels))])
 
         # Generate predictions
-        predictions = self.predict(data)
+        predictions = self.predict(data, targets)
 
         # Set and display confusion matrix
         disp = ConfusionMatrixDisplay(
