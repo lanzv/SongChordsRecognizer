@@ -68,7 +68,7 @@ class CRNN():
     Very basic CRNN model, maybe not working, who knows.
     """
     def __init__(self, input_shape, output_classes):
-        n_frames, n_chromas, chanells = input_shape
+        n_frames, n_features, chanells = input_shape
         # Create model
         model = tensorflow.keras.models.Sequential()
 
@@ -144,7 +144,7 @@ class CRNN_1(CRNN):
     CRNN model inspired by Junyan Jiang, Ke Chen, Wei li, Gus Xia, 2019.
     """
     def __init__(self, input_shape, output_classes):
-        n_frames, n_chromas, chanells = input_shape
+        n_frames, n_features, chanells = input_shape
         # Create model
         model = tensorflow.keras.models.Sequential()
 
@@ -202,14 +202,14 @@ class CRNN_2(CRNN):
     CRNN model inspired by Brian McFee and Juan Pablo Bello, 2017.
     """
     def __init__(self, input_shape, output_classes):
-        n_frames, n_chromas, chanells = input_shape
+        n_frames, n_features, chanells = input_shape
         # Create model
         model = tensorflow.keras.models.Sequential()
 
         # Feature Extractor
         model.add(tensorflow.keras.layers.Conv2D(1, (5,5), activation='relu', input_shape=input_shape,padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.Reshape((n_frames, n_chromas)))
+        model.add(tensorflow.keras.layers.Reshape((n_frames, n_features)))
         model.add(tensorflow.keras.layers.Conv1D(36, kernel_size=1))
 
 
@@ -235,12 +235,17 @@ class CRNN_2(CRNN):
 
 
 
+
+
+
 class MLP2RNN():
     """
     sklearn scalered MLP -> tensorflow RNN
     """
+    _window_size = 5
+    _test_size = 0.3
     def __init__(self, input_shape, output_classes, max_iter=500, random_state=7):
-        n_frames, n_chromas, chanells = input_shape
+        _, n_frames, _ = input_shape
         # ACOUSTIC model
 
         # Create Pipeline
@@ -261,7 +266,10 @@ class MLP2RNN():
         model = tensorflow.keras.models.Sequential()
 
         model.add(tensorflow.keras.layers.Bidirectional(
-            tensorflow.keras.layers.LSTM(256, return_sequences=True))
+            tensorflow.keras.layers.LSTM(64, return_sequences=True), input_shape=(n_frames, output_classes))
+        )
+        model.add(
+            tensorflow.keras.layers.Dense(32, activation='relu')
         )
         model.add(
             tensorflow.keras.layers.Dense(output_classes, activation='softmax')
@@ -279,73 +287,113 @@ class MLP2RNN():
         print("[INFO] The RNN model was successfully created.")
 
 
-    def fit(self, data, targets, epochs=50):
+    def fit(self, data, targets, dev_data, dev_targets, epochs=50):
+        test_size = 0.7
+        random_state = 42
+        train_x, dev_x, train_y, dev_y = sklearn.model_selection.train_test_split(data, targets, test_size=test_size, random_state=random_state)
+
+
         # Train ACOUSTIC model
 
         # Preprocess acoustic data
-        acoustic_data, acoustic_targets, dev_acoustic_data, dev_acousting_targets = MLP2RNN.preprocess_acoustic(data, targets)
+        acoustic_data, acoustic_targets = self.preprocess_acoustic(train_x, train_y)
+        dev_acoustic_data, dev_acousting_targets = self.preprocess_acoustic(dev_x, dev_y)
         # Fit model
         self._acoustic_model.fit(acoustic_data, acoustic_targets)
-        print("[INFO] The acoustic model was successfully trained with dev accuracy {:.2f}".format(100*self._acoustic_model.score(data, targets)), "%")
+        print("[INFO] The acoustic model was successfully trained with dev accuracy {:.2f}".format(100*self._acoustic_model.score(dev_acoustic_data, dev_acousting_targets)), "%")
         # Display results
         self.display_acoustic_confusion_matrix(dev_acoustic_data, dev_acousting_targets)
-
-
 
 
         # Train LINGUISTIC model
 
         # Preprocess linguistic data
-        linguistic_data, linguistic_target, dev_linguistic_data, dev_linguistic_targets = MLP2RNN.preprocess_linguistic(data, targets)
+        linguistic_data, linguistic_target = self.preprocess_linguistic(dev_x, dev_y)
+        dev_linguistic_data, dev_linguistic_targets = self.preprocess_linguistic(dev_data, dev_targets)
         # Fit model
         self._linguistic_history = self._linguistic_model.fit(
             linguistic_data, linguistic_target, epochs=epochs,
             validation_data=(dev_linguistic_data, dev_linguistic_targets)
         )
-        print("[INFO] The linguistic model was successfully trained with dev accuracy {:.2f}".format(100*self._acoustic_model.evaluate(data, targets, verbose=2)[1]), "%")
+        print("[INFO] The linguistic model was successfully trained with dev accuracy {:.2f}".format(100*self._linguistic_model.evaluate(dev_linguistic_data, dev_linguistic_targets, verbose=2)[1]), "%")
         # Display results
-        self.display_linguistic_confusion_matrix(dev_acoustic_data, dev_acousting_targets)
         self.display_linguistic_training_progress()
+        self.display_linguistic_confusion_matrix(dev_linguistic_data, dev_linguistic_targets)
 
 
-
-    def preprocess_acoustic(self, data, targets):
-        window_size = 5
-        test_size = 0.3
-        random_state = None
-        acoustic_data, acoustic_targets = [], []
-
-        # Preprocess data
-        _, n_frames, n_features = data.shape
-        for sequence in data:
-            for i in range(n_frames):
-                acoustic_data.append(
-                    np.concatenate((
-                        np.zeros((abs(min(0, i-window_size)), n_features)),
-                        np.array(sequence[:, max(0, i-window_size):min(i+window_size+1, n_frames)]),
-                        np.zeros((abs(min(0, (n_frames)-(i+window_size+1))), n_features))
-                    ), axis = 0).flatten()
-                )
-        # Preprocess targets
-        n_sequences, n_frames = targets.shape
-        acoustic_targets = targets.reshape((n_sequences*n_frames))
-
-        # Divide dataset to training and developing sets
-        train_x, dev_x, train_y, dev_y = sklearn.model_selection.train_test_split(np.array(acoustic_data), np.array(acoustic_targets), test_size=test_size, random_state=random_state)
-        return train_x, dev_x, train_y, dev_y
-
-    def preprocess_linguistic(self, data, targets):
-        test_size = 0.3
+    def display_score(self, data, targets):
+        window_size = self._window_size
         random_state = None
         linguistic_data, linguistic_targets = [], targets
 
         # Preprocess data
+        _, n_frames, n_features = data.shape
         for sequence in data:
-            linguistic_data.append(self._acoustic_model.predict_proba(sequence))
+            predictable_sequence = []
+            for i in range(n_frames):
+                predictable_sequence.append(
+                    np.concatenate((
+                        np.zeros((abs(min(0, i-window_size)), n_features)),
+                        np.array(sequence[max(0, i-window_size):min(i+window_size+1, n_frames), :]),
+                        np.zeros((abs(min(0, (n_frames)-(i+window_size+1))), n_features))
+                    ), axis=0).flatten()
+                )
+            linguistic_data.append(self._acoustic_model.predict_proba(predictable_sequence))
+
+        linguistic_data = np.array(linguistic_data)
+        linguistic_targets = np.array(linguistic_targets)
+
+        print("[INFO] The linguistic model was successfully trained with dev accuracy {:.2f}".format(100*self._linguistic_model.evaluate(linguistic_data, linguistic_targets, verbose=2)[1]), "%")
+        # Display results
+        self.display_linguistic_confusion_matrix(linguistic_data, linguistic_targets)
 
 
-        train_x, dev_x, train_y, dev_y = sklearn.model_selection.train_test_split(np.array(linguistic_data), np.array(linguistic_targets), test_size=test_size, random_state=random_state)
-        return train_x, dev_x, train_y, dev_y
+
+    def preprocess_acoustic(self, data, targets):
+        window_size = self._window_size
+        test_size = self._test_size
+        random_state = None
+        acoustic_data, acoustic_targets = [], []
+
+        # Preprocess data and targets
+        _, n_frames, n_features = data.shape
+        for data_sequence, chord_sequence in zip(data, targets):
+            for i in range(n_frames):
+                acoustic_data.append(
+                    np.concatenate((
+                        np.zeros((abs(min(0, i-window_size)), n_features)),
+                        np.array(data_sequence[max(0, i-window_size):min(i+window_size+1, n_frames), :]),
+                        np.zeros((abs(min(0, (n_frames)-(i+window_size+1))), n_features))
+                    ), axis=0).flatten()
+                )
+                acoustic_targets.append(chord_sequence[i])
+
+        # Divide dataset to training and developing sets
+        return np.array(acoustic_data), np.array(acoustic_targets)
+
+    def preprocess_linguistic(self, data, targets):
+        window_size = self._window_size
+        test_size = self._test_size
+        random_state = None
+        linguistic_data, linguistic_targets = [], targets
+
+        # Preprocess data
+        _, n_frames, n_features = data.shape
+        for sequence in data:
+            predictable_sequence = []
+            for i in range(n_frames):
+                predictable_sequence.append(
+                    np.concatenate((
+                        np.zeros((abs(min(0, i-window_size)), n_features)),
+                        np.array(sequence[max(0, i-window_size):min(i+window_size+1, n_frames), :]),
+                        np.zeros((abs(min(0, (n_frames)-(i+window_size+1))), n_features))
+                    ), axis=0).flatten()
+                )
+            linguistic_data.append(self._acoustic_model.predict_proba(predictable_sequence))
+
+
+
+        return np.array(linguistic_data), np.array(linguistic_targets)
 
 
 
@@ -372,6 +420,7 @@ class MLP2RNN():
             display_labels=display_labels
             )
         disp.plot(xticks_rotation='vertical', include_values=False)
+        plt.show()
 
     def display_linguistic_confusion_matrix(self, data, targets):
         # Define labels
@@ -379,7 +428,7 @@ class MLP2RNN():
         labels = np.array([i for i in range(len(display_labels))])
 
         # Generate predictions and targets
-        predictions = self._linguistic_history.predict(data)
+        predictions = self._linguistic_model.predict(data)
         a1, a2, a3 = predictions.shape
         predictions = predictions.reshape((a1*a2, a3))
         predictions = tensorflow.argmax(predictions, axis=1)
@@ -392,3 +441,4 @@ class MLP2RNN():
             display_labels=display_labels
             )
         disp.plot(xticks_rotation='vertical', include_values=False)
+        plt.show()
