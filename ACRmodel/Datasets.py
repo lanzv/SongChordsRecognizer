@@ -11,7 +11,7 @@ import librosa
 import numpy as np
 import re
 from Spectrograms import log_mel_spectrogram
-import sys
+from SegmentationModels import SegmentationCRNN
 
 class Dataset():
     def __init__(self, audio_directory=None, annotations_directory=None):
@@ -430,6 +430,52 @@ class IsophonicsDataset(Dataset):
         print("[INFO] The Isophonics Dataset was loaded successfully.")
         return dataset
 
+
+
+    def save_segmented_samples(self, dest="./Datasets/IsophonicsSegmentation.ds", song_indices=[0, 10, 20, 30, 40, 50, 60, 70], hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500):
+        """
+        """
+        data = []
+        chords = []
+        gold_targets = []
+        for song_ind in song_indices:
+            preprocessed_audio = IsophonicsDataset.preprocess_audio(
+                waveform=self.DATA[song_ind].WAVEFORM,
+                sample_rate=self.DATA[song_ind].SAMPLE_RATE,
+                spectrogram_generator=spectrogram_generator,
+                nfft=self.NFFT, hop_length=hop_length,
+                norm_to_C=norm_to_C, key=self.KEYS[song_ind].get_first_key()
+            ).swapaxes(0,1)
+
+            num_samples, _ = preprocessed_audio.shape
+
+            data_in_seqs, targets_in_seqs = Dataset.songs_to_sequences(
+                FEATURESs=[preprocessed_audio],
+                CHORDs=[self.CHORDS[song_ind]],
+                TIME_BINSs=[[float(i)/(float(self.SAMPLE_RATE) / float(hop_length)) for i in range(num_samples)]],
+                KEYs=self.KEYS[song_ind].get_first_key(),
+                n_frames=n_frames,
+                norm_to_C=norm_to_C
+            )
+
+            data.append(data_in_seqs)
+            chords.append(targets_in_seqs)
+            gold_targets.append(SegmentationCRNN.labels2changes(targets = chords[-1]))
+
+        with lzma.open(dest, "wb") as dataset_file:
+            pickle.dump((np.array(data), np.array(chords), np.array(gold_targets)), dataset_file)
+    
+
+
+
+    @staticmethod
+    def load_segmented_samples(dest = "./Datasets/IsophonicsSegmentation.ds") -> tuple:
+        """
+        """
+        with lzma.open(dest, "rb") as segmentation_samles:
+            loaded_samples = pickle.load(segmentation_samles)
+
+        return loaded_samples
 
 
 
