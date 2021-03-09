@@ -98,7 +98,16 @@ class SegmentationCRNN():
 
         return np.array(seg_targets)
 
+    @staticmethod
+    def get_change_points(target_changes, sequence_length_ms):
+        change_points = []
+        _, n_frames, _ = target_changes.shape
+        for sequence in target_changes:
+            change_points.append(
+                np.where(sequence == 1) * (sequence_length_ms / n_frames)
+            )
 
+        return change_points
 
     def score(self, data, targets):
         # Get chord changes from chord labels
