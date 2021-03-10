@@ -371,9 +371,9 @@ class IsophonicsDataset(Dataset):
         Returns
         -------
         prep_data : np array
-            window (flettend or not) of logarithmized mel spectrograms arround specific time point
+            sequences of song's spectrogram vectors separated to n_frames frames
         prep_targets : np array
-            integers of chord labels for specific time point
+            sequences of integers of chord labels for specific spectrogram vector sequences
         """
         with lzma.open(dest, "rb") as dataset_file:
             dataset = pickle.load(dataset_file)
@@ -432,13 +432,31 @@ class IsophonicsDataset(Dataset):
 
 
 
-    def save_segmented_samples(self, dest="./Datasets/IsophonicsSegmentation.ds", song_indices=[0, 10, 20, 30, 40, 50, 60, 70], hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500):
+    def save_segmentation_samples(self, dest="./Datasets/IsophonicsSegmentation.seg", song_indices=[0, 10, 20, 30, 40, 50, 60, 70], hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500):
         """
+        Save preprocessed data from this dataset with its target and chord changes to destination path 'dest' by default as a .seg file.
+
+        Parameters
+        ----------
+        dest : str
+            path to preprocessed data
+        song_indices : list of integers
+            list of song indices as representing samples
+        hop_length : int
+            number of samples between successive spectrogram columns
+        norm_to_C : bool
+            True if we want to transpose all songs to C key
+        spectrogram_generator : method from Spectrograms.py
+            function that generates spectrogram
+        n_frames : int
+             how many frames should be included in a subsequence of a song
         """
         data = []
         chords = []
         gold_targets = []
+        # Iterate over all song indices on the input
         for song_ind in song_indices:
+            # Prprocess audio
             preprocessed_audio = IsophonicsDataset.preprocess_audio(
                 waveform=self.DATA[song_ind].WAVEFORM,
                 sample_rate=self.DATA[song_ind].SAMPLE_RATE,
@@ -449,6 +467,7 @@ class IsophonicsDataset(Dataset):
 
             num_samples, _ = preprocessed_audio.shape
 
+            # Convert data and chord targets to sequences
             data_in_seqs, targets_in_seqs = Dataset.songs_to_sequences(
                 FEATURESs=[preprocessed_audio],
                 CHORDs=[self.CHORDS[song_ind]],
@@ -458,23 +477,41 @@ class IsophonicsDataset(Dataset):
                 norm_to_C=norm_to_C
             )
 
+            # Add song's sequences to lists as a new element
             data.append(data_in_seqs)
             chords.append(targets_in_seqs)
             gold_targets.append(SegmentationCRNN.labels2changes(targets = chords[-1]))
 
+        # Save all three np arrays generated in this function .. data, chords, gold_targets aka chord changes
         with lzma.open(dest, "wb") as dataset_file:
             pickle.dump((np.array(data), np.array(chords), np.array(gold_targets)), dataset_file)
-    
+
+        print("[INFO] The Isophonics segmentation samples was saved successfully.")
 
 
 
     @staticmethod
-    def load_segmented_samples(dest = "./Datasets/IsophonicsSegmentation.ds") -> tuple:
+    def load_segmentation_samples(dest = "./Datasets/IsophonicsSegmentation.seg") -> tuple:
         """
+        Load preprocessed data and targets with its chord changes points from destination path 'dest'. This kind of data are stored by default as a .seg file.
+
+        Parameters
+        ----------
+        dest : str
+            path to segmentation samples
+        Returns
+        -------
+        prep_data : np array
+            sequences of song's spectrogram vectors separated to n_frames frames
+        prep_chords : np array
+            array of n_frame long sequences of integers of chord labels
+        prep_chord_changes : np array
+            array of n_frame long sequences of 0s and 1s where 0 means 'not chord change' and 1 means 'chord change'
         """
         with lzma.open(dest, "rb") as segmentation_samles:
             loaded_samples = pickle.load(segmentation_samles)
 
+        print("[INFO] The Isophonics segmentation samples was loaded successfully.")
         return loaded_samples
 
 
