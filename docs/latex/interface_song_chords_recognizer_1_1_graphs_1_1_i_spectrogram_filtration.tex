@@ -1,0 +1,53 @@
+\hypertarget{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration}{}\doxysection{Song\+Chords\+Recognizer.\+Graphs.\+ISpectrogram\+Filtration Interface Reference}
+\label{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration}\index{SongChordsRecognizer.Graphs.ISpectrogramFiltration@{SongChordsRecognizer.Graphs.ISpectrogramFiltration}}
+
+
+Interface for all \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} filter functions. Each of Filtration should contain function \textquotesingle{}Filter\textquotesingle{} that returns filtered spectrogram from from misleading informations.  
+
+
+Inheritance diagram for Song\+Chords\+Recognizer.\+Graphs.\+ISpectrogram\+Filtration\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=0.681265cm]{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+double\mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration_a16c67088e56f8fc0f355b11ea06f6f98}{Filter}} (\mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} spectrogram)
+\begin{DoxyCompactList}\small\item\em An algorithm that filters spectrogram data from misleading informations in some way. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Interface for all \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} filter functions. Each of Filtration should contain function \textquotesingle{}Filter\textquotesingle{} that returns filtered spectrogram from from misleading informations. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration_a16c67088e56f8fc0f355b11ea06f6f98}\label{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration_a16c67088e56f8fc0f355b11ea06f6f98}} 
+\index{SongChordsRecognizer.Graphs.ISpectrogramFiltration@{SongChordsRecognizer.Graphs.ISpectrogramFiltration}!Filter@{Filter}}
+\index{Filter@{Filter}!SongChordsRecognizer.Graphs.ISpectrogramFiltration@{SongChordsRecognizer.Graphs.ISpectrogramFiltration}}
+\doxysubsubsection{\texorpdfstring{Filter()}{Filter()}}
+{\footnotesize\ttfamily double \mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Graphs.\+ISpectrogram\+Filtration.\+Filter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}}}]{spectrogram }\end{DoxyParamCaption})}
+
+
+
+An algorithm that filters spectrogram data from misleading informations in some way. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em spectrogram} & \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} with generated spectrogram data.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Filtered spectrogram by specific algorithm.
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_weighted_octaves_a3c3df348e60da41f2a6bc0e2ed8d3f37}{Song\+Chords\+Recognizer.\+Graphs.\+Weighted\+Octaves}}, \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_accompaniment_frequency_area_mask_afe144d7b7f67f42ef887ebe5c5c38e57}{Song\+Chords\+Recognizer.\+Graphs.\+Accompaniment\+Frequency\+Area\+Mask}}, \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_identity_a2e99607aaa640b155b708d59af62c287}{Song\+Chords\+Recognizer.\+Graphs.\+Identity}}, and \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_filter_nth_harmonics_a549d12f9d8e0150ebfbd18579b776164}{Song\+Chords\+Recognizer.\+Graphs.\+Filter\+Nth\+Harmonics}}.
+
+
+
+The documentation for this interface was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Web\+Song\+Chords\+Recognizer/\+Song\+Chords\+Recognizer/\+Graphs/\mbox{\hyperlink{_spectrogram_filtrations_8cs}{Spectrogram\+Filtrations.\+cs}}\end{DoxyCompactItemize}

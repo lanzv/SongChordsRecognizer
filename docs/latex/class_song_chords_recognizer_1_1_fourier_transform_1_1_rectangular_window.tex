@@ -1,0 +1,81 @@
+\hypertarget{class_song_chords_recognizer_1_1_fourier_transform_1_1_rectangular_window}{}\doxysection{Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Rectangular\+Window Class Reference}
+\label{class_song_chords_recognizer_1_1_fourier_transform_1_1_rectangular_window}\index{SongChordsRecognizer.FourierTransform.RectangularWindow@{SongChordsRecognizer.FourierTransform.RectangularWindow}}
+
+
+Window function, in shape of rectangle. w\mbox{[}n\mbox{]} = 1  
+
+
+Inheritance diagram for Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Rectangular\+Window\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_song_chords_recognizer_1_1_fourier_transform_1_1_rectangular_window}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+double\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_song_chords_recognizer_1_1_fourier_transform_1_1_rectangular_window_a69f318aeb8089ad3060138dc338974a9}{Apply}} (double\mbox{[}$\,$\mbox{]} g)
+\begin{DoxyCompactList}\small\item\em Apply specific window function on whole audio waveform \textquotesingle{}g\textquotesingle{}. \end{DoxyCompactList}\item 
+double\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_song_chords_recognizer_1_1_fourier_transform_1_1_rectangular_window_af3ec166eeea518bd655b5212c56d631f}{Apply}} (double\mbox{[}$\,$\mbox{]} g, int offset, int length)
+\begin{DoxyCompactList}\small\item\em Apply specific window function on part of audio waveform \textquotesingle{}g\textquotesingle{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Window function, in shape of rectangle. w\mbox{[}n\mbox{]} = 1 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_fourier_transform_1_1_rectangular_window_a69f318aeb8089ad3060138dc338974a9}\label{class_song_chords_recognizer_1_1_fourier_transform_1_1_rectangular_window_a69f318aeb8089ad3060138dc338974a9}} 
+\index{SongChordsRecognizer.FourierTransform.RectangularWindow@{SongChordsRecognizer.FourierTransform.RectangularWindow}!Apply@{Apply}}
+\index{Apply@{Apply}!SongChordsRecognizer.FourierTransform.RectangularWindow@{SongChordsRecognizer.FourierTransform.RectangularWindow}}
+\doxysubsubsection{\texorpdfstring{Apply()}{Apply()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily double \mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Rectangular\+Window.\+Apply (\begin{DoxyParamCaption}\item[{double\mbox{[}$\,$\mbox{]}}]{g }\end{DoxyParamCaption})}
+
+
+
+Apply specific window function on whole audio waveform \textquotesingle{}g\textquotesingle{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em g} & Waveform of some music sample.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window_ab0dbcc399ebb3196014989895a40c4c3}{Song\+Chords\+Recognizer.\+Fourier\+Transform.\+IWindow}}.
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_fourier_transform_1_1_rectangular_window_af3ec166eeea518bd655b5212c56d631f}\label{class_song_chords_recognizer_1_1_fourier_transform_1_1_rectangular_window_af3ec166eeea518bd655b5212c56d631f}} 
+\index{SongChordsRecognizer.FourierTransform.RectangularWindow@{SongChordsRecognizer.FourierTransform.RectangularWindow}!Apply@{Apply}}
+\index{Apply@{Apply}!SongChordsRecognizer.FourierTransform.RectangularWindow@{SongChordsRecognizer.FourierTransform.RectangularWindow}}
+\doxysubsubsection{\texorpdfstring{Apply()}{Apply()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily double \mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Rectangular\+Window.\+Apply (\begin{DoxyParamCaption}\item[{double\mbox{[}$\,$\mbox{]}}]{g,  }\item[{int}]{offset,  }\item[{int}]{length }\end{DoxyParamCaption})}
+
+
+
+Apply specific window function on part of audio waveform \textquotesingle{}g\textquotesingle{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em g} & Waveform of some music sample.\\
+\hline
+{\em offset} & Starting index of \textquotesingle{}g\textquotesingle{} of this specific part of audio waveform.\\
+\hline
+{\em length} & Length of \textquotesingle{}g\textquotesingle{} part (and also length of window).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window_a53409d02a1e269297688d41bece1a95d}{Song\+Chords\+Recognizer.\+Fourier\+Transform.\+IWindow}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Web\+Song\+Chords\+Recognizer/\+Song\+Chords\+Recognizer/\+Fourier\+Transform/\mbox{\hyperlink{_windows_8cs}{Windows.\+cs}}\end{DoxyCompactItemize}

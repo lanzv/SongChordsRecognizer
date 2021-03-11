@@ -1,0 +1,181 @@
+\hypertarget{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{}\doxysection{Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram Class Reference}
+\label{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}\index{SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}}
+
+
+Data about frequency intensities in time for specific Audio waveform. Result data are stored in double\mbox{[}\mbox{]}\mbox{[}\mbox{]} Spectrogram\+Data. You can get them by calling \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a8ca13bb51161c9b9d6ed777296f0ec52}{Get\+Data()}} function.  
+
+
+Inheritance diagram for Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_acb61a287869921828ee66ca90237b15c}{Spectrogram}} (\mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}{Audio\+Source.\+Audio\+Source}} source, int log2\+\_\+waveform\+\_\+length\+\_\+for\+\_\+sample, \mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window}{IWindow}} STFTwindow)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} constructor, generates spectrogram datas. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a63aebd5933ee8051f7e22caf51aba98c}{Get\+Intensity}} (double time, double frequency)
+\begin{DoxyCompactList}\small\item\em Compute intensity for specific frequency in specific time. \end{DoxyCompactList}\item 
+double\mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a4db254013e3e48a84ee58f28cb88246e}{Get\+Filtered\+Spectogram\+Data}} (\mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration}{ISpectrogram\+Filtration}} filtration)
+\begin{DoxyCompactList}\small\item\em Filter this spectrogram from misleading results. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a9087cdebaee4bac610158e381a95bf34}{Print}} (\mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_printer}{IGraph\+Printer}} printer, int starting\+Sample, int length)
+\begin{DoxyCompactList}\small\item\em Print spectrogram result of \textquotesingle{}length\textquotesingle{} samples starting on \textquotesingle{}starting\+Sample\textquotesingle{}. This function prints only intensities for existing tone frequencies. \end{DoxyCompactList}\item 
+double\mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a8ca13bb51161c9b9d6ed777296f0ec52}{Get\+Data}} ()
+\begin{DoxyCompactList}\small\item\em Get\+Data creates the copy of \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} Data and returns it as a result. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+readonly double \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a412a8e9041abaee9550a7d6c2da6049d}{Sample\+Length}}
+\begin{DoxyCompactList}\small\item\em Time duration of one spectrogram sample in seconds. \end{DoxyCompactList}\item 
+readonly int \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_abc1e7f354d0f5cbccb6080cd0f194e57}{Number\+Of\+Samples}}
+\begin{DoxyCompactList}\small\item\em Number of spectrogram samples. \end{DoxyCompactList}\item 
+readonly double \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_ada8657804a73421316a702f4abdc88dd}{Frequency\+To\+Bin\+Const}}
+\begin{DoxyCompactList}\small\item\em Constant for converting frequency to STFT indices and backward. i = Frequency\+To\+Bin\+Const $\ast$ frequency frequency = i / Frequency\+To\+Bin\+Const \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Data about frequency intensities in time for specific Audio waveform. Result data are stored in double\mbox{[}\mbox{]}\mbox{[}\mbox{]} Spectrogram\+Data. You can get them by calling \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a8ca13bb51161c9b9d6ed777296f0ec52}{Get\+Data()}} function. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_acb61a287869921828ee66ca90237b15c}\label{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_acb61a287869921828ee66ca90237b15c}} 
+\index{SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}!Spectrogram@{Spectrogram}}
+\index{Spectrogram@{Spectrogram}!SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}}
+\doxysubsubsection{\texorpdfstring{Spectrogram()}{Spectrogram()}}
+{\footnotesize\ttfamily Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram.\+Spectrogram (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}{Audio\+Source.\+Audio\+Source}}}]{source,  }\item[{int}]{log2\+\_\+waveform\+\_\+length\+\_\+for\+\_\+sample,  }\item[{\mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window}{IWindow}}}]{STFTwindow }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} constructor, generates spectrogram datas. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & \mbox{\hyperlink{namespace_song_chords_recognizer_1_1_audio_source}{Audio\+Source}} of some music sample.\\
+\hline
+{\em log2\+\_\+waveform\+\_\+length\+\_\+for\+\_\+sample} & Number of waveform samples for one \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} sample is equal to 2$^\wedge$\{\textquotesingle{}log2\+\_\+waveform\+\_\+length\+\_\+for\+\_\+sample\textquotesingle{}\}.\\
+\hline
+{\em STFTwindow} & Convolution window we want to apply on waveform function in STFT algorithm.\\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a8ca13bb51161c9b9d6ed777296f0ec52}\label{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a8ca13bb51161c9b9d6ed777296f0ec52}} 
+\index{SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}!GetData@{GetData}}
+\index{GetData@{GetData}!SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}}
+\doxysubsubsection{\texorpdfstring{GetData()}{GetData()}}
+{\footnotesize\ttfamily double \mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram.\+Get\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get\+Data creates the copy of \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} Data and returns it as a result. 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} Data as a new copy.
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_aab7898f79d5d9dab698fd373ba799758}{Song\+Chords\+Recognizer.\+Graphs.\+IGraph}}.
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a4db254013e3e48a84ee58f28cb88246e}\label{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a4db254013e3e48a84ee58f28cb88246e}} 
+\index{SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}!GetFilteredSpectogramData@{GetFilteredSpectogramData}}
+\index{GetFilteredSpectogramData@{GetFilteredSpectogramData}!SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}}
+\doxysubsubsection{\texorpdfstring{GetFilteredSpectogramData()}{GetFilteredSpectogramData()}}
+{\footnotesize\ttfamily double \mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram.\+Get\+Filtered\+Spectogram\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration}{ISpectrogram\+Filtration}}}]{filtration }\end{DoxyParamCaption})}
+
+
+
+Filter this spectrogram from misleading results. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filtration} & Filtration contains specific algorithm of filtration we want to do.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Copy of filtered spectrogram data for given filtration algorithm.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a63aebd5933ee8051f7e22caf51aba98c}\label{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a63aebd5933ee8051f7e22caf51aba98c}} 
+\index{SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}!GetIntensity@{GetIntensity}}
+\index{GetIntensity@{GetIntensity}!SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}}
+\doxysubsubsection{\texorpdfstring{GetIntensity()}{GetIntensity()}}
+{\footnotesize\ttfamily double Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram.\+Get\+Intensity (\begin{DoxyParamCaption}\item[{double}]{time,  }\item[{double}]{frequency }\end{DoxyParamCaption})}
+
+
+
+Compute intensity for specific frequency in specific time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & Time in seconds of music sample.\\
+\hline
+{\em frequency} & Frequency of any pitch.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Intensity of frequency and time passed as arguments.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a9087cdebaee4bac610158e381a95bf34}\label{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a9087cdebaee4bac610158e381a95bf34}} 
+\index{SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}!Print@{Print}}
+\index{Print@{Print}!SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}}
+\doxysubsubsection{\texorpdfstring{Print()}{Print()}}
+{\footnotesize\ttfamily void Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram.\+Print (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_printer}{IGraph\+Printer}}}]{printer,  }\item[{int}]{starting\+Sample,  }\item[{int}]{length }\end{DoxyParamCaption})}
+
+
+
+Print spectrogram result of \textquotesingle{}length\textquotesingle{} samples starting on \textquotesingle{}starting\+Sample\textquotesingle{}. This function prints only intensities for existing tone frequencies. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em printer} & \mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_printer}{IGraph\+Printer}} printer that prints \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} in some specific way (to file, console, image ... ).\\
+\hline
+{\em starting\+Sample} & Starting index of \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} samples we want to print.\\
+\hline
+{\em length} & Number of \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} samples we want to print.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_a0e09793af9888bc9ea1ca1990cdc31a6}{Song\+Chords\+Recognizer.\+Graphs.\+IGraph}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_ada8657804a73421316a702f4abdc88dd}\label{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_ada8657804a73421316a702f4abdc88dd}} 
+\index{SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}!FrequencyToBinConst@{FrequencyToBinConst}}
+\index{FrequencyToBinConst@{FrequencyToBinConst}!SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}}
+\doxysubsubsection{\texorpdfstring{FrequencyToBinConst}{FrequencyToBinConst}}
+{\footnotesize\ttfamily readonly double Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram.\+Frequency\+To\+Bin\+Const}
+
+
+
+Constant for converting frequency to STFT indices and backward. i = Frequency\+To\+Bin\+Const $\ast$ frequency frequency = i / Frequency\+To\+Bin\+Const 
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_abc1e7f354d0f5cbccb6080cd0f194e57}\label{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_abc1e7f354d0f5cbccb6080cd0f194e57}} 
+\index{SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}!NumberOfSamples@{NumberOfSamples}}
+\index{NumberOfSamples@{NumberOfSamples}!SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}}
+\doxysubsubsection{\texorpdfstring{NumberOfSamples}{NumberOfSamples}}
+{\footnotesize\ttfamily readonly int Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram.\+Number\+Of\+Samples}
+
+
+
+Number of spectrogram samples. 
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a412a8e9041abaee9550a7d6c2da6049d}\label{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a412a8e9041abaee9550a7d6c2da6049d}} 
+\index{SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}!SampleLength@{SampleLength}}
+\index{SampleLength@{SampleLength}!SongChordsRecognizer.Graphs.Spectrogram@{SongChordsRecognizer.Graphs.Spectrogram}}
+\doxysubsubsection{\texorpdfstring{SampleLength}{SampleLength}}
+{\footnotesize\ttfamily readonly double Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram.\+Sample\+Length}
+
+
+
+Time duration of one spectrogram sample in seconds. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Web\+Song\+Chords\+Recognizer/\+Song\+Chords\+Recognizer/\+Graphs/\mbox{\hyperlink{_spectrogram_8cs}{Spectrogram.\+cs}}\end{DoxyCompactItemize}

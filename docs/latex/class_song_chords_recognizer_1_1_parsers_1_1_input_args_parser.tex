@@ -1,0 +1,93 @@
+\hypertarget{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser}{}\doxysection{Song\+Chords\+Recognizer.\+Parsers.\+Input\+Args\+Parser Class Reference}
+\label{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser}\index{SongChordsRecognizer.Parsers.InputArgsParser@{SongChordsRecognizer.Parsers.InputArgsParser}}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window}{IWindow}} \mbox{\hyperlink{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_a18ab263d8f62636b79893c0bec3e3826}{Parse\+STFTWindow}} (String stft\+Window)
+\begin{DoxyCompactList}\small\item\em Parse stft window argument or throw exception. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration}{ISpectrogram\+Filtration}} \mbox{\hyperlink{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_af1ecc810ea1672b5a72cc78f7168977f}{Parse\+Filtration}} (String filtration)
+\begin{DoxyCompactList}\small\item\em Parse spectrogram filtration argument or throw exception. \end{DoxyCompactList}\item 
+static int \mbox{\hyperlink{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_ae5e4e79de232f1841ad09542c1296561}{Parse\+Sample\+Length\+Level}} (String sample\+Length\+Level)
+\begin{DoxyCompactList}\small\item\em Parse sample length argument or throw exception. \end{DoxyCompactList}\item 
+static int \mbox{\hyperlink{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_ac10b52d1cb823c90f1f584662473fd88}{Parse\+BPM}} (String bpm)
+\begin{DoxyCompactList}\small\item\em Parse bpm argument or throw exception. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_ac10b52d1cb823c90f1f584662473fd88}\label{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_ac10b52d1cb823c90f1f584662473fd88}} 
+\index{SongChordsRecognizer.Parsers.InputArgsParser@{SongChordsRecognizer.Parsers.InputArgsParser}!ParseBPM@{ParseBPM}}
+\index{ParseBPM@{ParseBPM}!SongChordsRecognizer.Parsers.InputArgsParser@{SongChordsRecognizer.Parsers.InputArgsParser}}
+\doxysubsubsection{\texorpdfstring{ParseBPM()}{ParseBPM()}}
+{\footnotesize\ttfamily static int Song\+Chords\+Recognizer.\+Parsers.\+Input\+Args\+Parser.\+Parse\+BPM (\begin{DoxyParamCaption}\item[{String}]{bpm }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Parse bpm argument or throw exception. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bpm} & BPM of the song. Non negative integer.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Non negative integer that corresponds to bpm string.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_af1ecc810ea1672b5a72cc78f7168977f}\label{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_af1ecc810ea1672b5a72cc78f7168977f}} 
+\index{SongChordsRecognizer.Parsers.InputArgsParser@{SongChordsRecognizer.Parsers.InputArgsParser}!ParseFiltration@{ParseFiltration}}
+\index{ParseFiltration@{ParseFiltration}!SongChordsRecognizer.Parsers.InputArgsParser@{SongChordsRecognizer.Parsers.InputArgsParser}}
+\doxysubsubsection{\texorpdfstring{ParseFiltration()}{ParseFiltration()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration}{ISpectrogram\+Filtration}} Song\+Chords\+Recognizer.\+Parsers.\+Input\+Args\+Parser.\+Parse\+Filtration (\begin{DoxyParamCaption}\item[{String}]{filtration }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Parse spectrogram filtration argument or throw exception. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filtration} & Spectrogram filtration type in string.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ISpectrogram\+Filtration object that corresponds to filtration string.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_ae5e4e79de232f1841ad09542c1296561}\label{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_ae5e4e79de232f1841ad09542c1296561}} 
+\index{SongChordsRecognizer.Parsers.InputArgsParser@{SongChordsRecognizer.Parsers.InputArgsParser}!ParseSampleLengthLevel@{ParseSampleLengthLevel}}
+\index{ParseSampleLengthLevel@{ParseSampleLengthLevel}!SongChordsRecognizer.Parsers.InputArgsParser@{SongChordsRecognizer.Parsers.InputArgsParser}}
+\doxysubsubsection{\texorpdfstring{ParseSampleLengthLevel()}{ParseSampleLengthLevel()}}
+{\footnotesize\ttfamily static int Song\+Chords\+Recognizer.\+Parsers.\+Input\+Args\+Parser.\+Parse\+Sample\+Length\+Level (\begin{DoxyParamCaption}\item[{String}]{sample\+Length\+Level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Parse sample length argument or throw exception. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sample\+Length\+Level} & Logarithm (base 2) of STFT samples. Non negative integer.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Non negative integer that corresponds to sample\+Length string.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_a18ab263d8f62636b79893c0bec3e3826}\label{class_song_chords_recognizer_1_1_parsers_1_1_input_args_parser_a18ab263d8f62636b79893c0bec3e3826}} 
+\index{SongChordsRecognizer.Parsers.InputArgsParser@{SongChordsRecognizer.Parsers.InputArgsParser}!ParseSTFTWindow@{ParseSTFTWindow}}
+\index{ParseSTFTWindow@{ParseSTFTWindow}!SongChordsRecognizer.Parsers.InputArgsParser@{SongChordsRecognizer.Parsers.InputArgsParser}}
+\doxysubsubsection{\texorpdfstring{ParseSTFTWindow()}{ParseSTFTWindow()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window}{IWindow}} Song\+Chords\+Recognizer.\+Parsers.\+Input\+Args\+Parser.\+Parse\+STFTWindow (\begin{DoxyParamCaption}\item[{String}]{stft\+Window }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Parse stft window argument or throw exception. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stft\+Window} & STFT window type in string.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+IWindow object that corresponds to stft\+Window string.
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Web\+Song\+Chords\+Recognizer/\+Song\+Chords\+Recognizer/\+Parsers/\mbox{\hyperlink{_input_args_parser_8cs}{Input\+Args\+Parser.\+cs}}\end{DoxyCompactItemize}

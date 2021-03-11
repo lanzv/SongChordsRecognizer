@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['audiosource_132',['AudioSource',['../namespace_song_chords_recognizer_1_1_audio_source.html',1,'SongChordsRecognizer']]],
+  ['errormessages_133',['ErrorMessages',['../namespace_song_chords_recognizer_1_1_error_messages.html',1,'SongChordsRecognizer']]],
+  ['fouriertransform_134',['FourierTransform',['../namespace_song_chords_recognizer_1_1_fourier_transform.html',1,'SongChordsRecognizer']]],
+  ['graphs_135',['Graphs',['../namespace_song_chords_recognizer_1_1_graphs.html',1,'SongChordsRecognizer']]],
+  ['musicfeatures_136',['MusicFeatures',['../namespace_song_chords_recognizer_1_1_music_features.html',1,'SongChordsRecognizer']]],
+  ['parsers_137',['Parsers',['../namespace_song_chords_recognizer_1_1_parsers.html',1,'SongChordsRecognizer']]],
+  ['samplelength_138',['SampleLength',['../class_song_chords_recognizer_1_1_audio_source_1_1_audio_source.html#acd56ef60f9b3b4a2e3f48cb9a8bc07eb',1,'SongChordsRecognizer.AudioSource.AudioSource.SampleLength()'],['../class_song_chords_recognizer_1_1_graphs_1_1_chromagram.html#ae50830966954c6dfcf538ce0ce6fe173',1,'SongChordsRecognizer.Graphs.Chromagram.SampleLength()'],['../class_song_chords_recognizer_1_1_graphs_1_1_spectrogram.html#a412a8e9041abaee9550a7d6c2da6049d',1,'SongChordsRecognizer.Graphs.Spectrogram.SampleLength()']]],
+  ['samplerate_139',['SampleRate',['../class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_wav.html#a7e6280b30bc62f1f77cb85c0c687e413',1,'SongChordsRecognizer::AudioSource::AudioSourceWav']]],
+  ['setfilename_140',['SetFileName',['../class_song_chords_recognizer_1_1_graphs_1_1_print_graph_to_text_file.html#aad2cde8122c2c2569360fc916ecee78d',1,'SongChordsRecognizer::Graphs::PrintGraphToTextFile']]],
+  ['setweight_141',['SetWeight',['../class_song_chords_recognizer_1_1_graphs_1_1_weighted_octaves.html#ae4012af87c2153a31d2f4273c1bf8ffd',1,'SongChordsRecognizer::Graphs::WeightedOctaves']]],
+  ['seventh_142',['Seventh',['../class_song_chords_recognizer_1_1_music_features_1_1_seventh_chord.html#a8883ace027f02227945fe7bd1abde440',1,'SongChordsRecognizer::MusicFeatures::SeventhChord']]],
+  ['seventhchord_143',['SeventhChord',['../class_song_chords_recognizer_1_1_music_features_1_1_seventh_chord.html',1,'SongChordsRecognizer::MusicFeatures']]],
+  ['showrequestid_144',['ShowRequestId',['../class_web_song_chords_recognizer_1_1_models_1_1_error_view_model.html#a41a8d46b0097c0c0ddc0ba9791aff4e6',1,'WebSongChordsRecognizer::Models::ErrorViewModel']]],
+  ['songchordsrecognizer_145',['SongChordsRecognizer',['../namespace_song_chords_recognizer.html',1,'']]],
+  ['spectrogram_146',['Spectrogram',['../class_song_chords_recognizer_1_1_graphs_1_1_spectrogram.html',1,'SongChordsRecognizer.Graphs.Spectrogram'],['../class_song_chords_recognizer_1_1_graphs_1_1_spectrogram.html#acb61a287869921828ee66ca90237b15c',1,'SongChordsRecognizer.Graphs.Spectrogram.Spectrogram()']]],
+  ['spectrogram_2ecs_147',['Spectrogram.cs',['../_spectrogram_8cs.html',1,'']]],
+  ['spectrogramfiltration_5foctaveoutofrange_148',['SpectrogramFiltration_OctaveOutOfRange',['../class_song_chords_recognizer_1_1_error_messages_1_1_error_messages.html#a7810cdc0c9a7029f2d8e670843cb1ee1',1,'SongChordsRecognizer::ErrorMessages::ErrorMessages']]],
+  ['spectrogramfiltrations_2ecs_149',['SpectrogramFiltrations.cs',['../_spectrogram_filtrations_8cs.html',1,'']]],
+  ['startup_150',['Startup',['../class_web_song_chords_recognizer_1_1_startup.html#a2e0ede6b5c566b07f64f1dc10557b4af',1,'WebSongChordsRecognizer.Startup.Startup()'],['../class_web_song_chords_recognizer_1_1_startup.html',1,'WebSongChordsRecognizer.Startup']]],
+  ['startup_2ecs_151',['Startup.cs',['../_startup_8cs.html',1,'']]],
+  ['stft_152',['STFT',['../class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform.html#a62a053058d3550b5967486dfc3dc61a5',1,'SongChordsRecognizer::FourierTransform::FourierTransform']]],
+  ['sumsamples_153',['SumSamples',['../class_song_chords_recognizer_1_1_graphs_1_1_graph_extensions.html#a0182cce0fda74c7aa9fbdcb886723a12',1,'SongChordsRecognizer::Graphs::GraphExtensions']]]
+];

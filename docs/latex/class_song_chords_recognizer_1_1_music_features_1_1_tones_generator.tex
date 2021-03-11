@@ -1,0 +1,104 @@
+\hypertarget{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator}{}\doxysection{Song\+Chords\+Recognizer.\+Music\+Features.\+Tones\+Generator Class Reference}
+\label{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator}\index{SongChordsRecognizer.MusicFeatures.TonesGenerator@{SongChordsRecognizer.MusicFeatures.TonesGenerator}}
+
+
+Static class that provides important sets connected with \mbox{\hyperlink{struct_song_chords_recognizer_1_1_music_features_1_1_tone}{Tone}} or \mbox{\hyperlink{struct_song_chords_recognizer_1_1_music_features_1_1_chroma}{Chroma}} classes.  
+
+
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static List$<$ \mbox{\hyperlink{struct_song_chords_recognizer_1_1_music_features_1_1_tone}{Tone}} $>$ \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_a6b74ce97b8bad6d6219fb8eeacb0017c}{Get\+List\+Of\+Tones}} ()
+\begin{DoxyCompactList}\small\item\em Function generates list of tones in 9 octaves\+: from sub-\/contra to five-\/lined octave. Overall there are 108 tones. One tone has String description, octave number, chroma, frequency and frequency deviation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static readonly float\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_a71bad816ec552049e42235100cb1527a}{Base\+Frequencies}}
+\begin{DoxyCompactList}\small\item\em The list of base frequencies that their multiples by 2$^\wedge$n generate all tones for all 9 octaves. \end{DoxyCompactList}\item 
+static readonly List$<$ \mbox{\hyperlink{struct_song_chords_recognizer_1_1_music_features_1_1_chroma}{Chroma}} $>$ \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}
+\begin{DoxyCompactList}\small\item\em The list of chroma, all twelve tones with descriptions and half tones, which says how many half tones are between that chroma and the chroma C. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Static class that provides important sets connected with \mbox{\hyperlink{struct_song_chords_recognizer_1_1_music_features_1_1_tone}{Tone}} or \mbox{\hyperlink{struct_song_chords_recognizer_1_1_music_features_1_1_chroma}{Chroma}} classes. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_a6b74ce97b8bad6d6219fb8eeacb0017c}\label{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_a6b74ce97b8bad6d6219fb8eeacb0017c}} 
+\index{SongChordsRecognizer.MusicFeatures.TonesGenerator@{SongChordsRecognizer.MusicFeatures.TonesGenerator}!GetListOfTones@{GetListOfTones}}
+\index{GetListOfTones@{GetListOfTones}!SongChordsRecognizer.MusicFeatures.TonesGenerator@{SongChordsRecognizer.MusicFeatures.TonesGenerator}}
+\doxysubsubsection{\texorpdfstring{GetListOfTones()}{GetListOfTones()}}
+{\footnotesize\ttfamily static List$<$\mbox{\hyperlink{struct_song_chords_recognizer_1_1_music_features_1_1_tone}{Tone}}$>$ Song\+Chords\+Recognizer.\+Music\+Features.\+Tones\+Generator.\+Get\+List\+Of\+Tones (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Function generates list of tones in 9 octaves\+: from sub-\/contra to five-\/lined octave. Overall there are 108 tones. One tone has String description, octave number, chroma, frequency and frequency deviation. 
+
+\begin{DoxyReturn}{Returns}
+The list of 108 tones in interval between sub-\/contra and five-\/lined octaves.
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_a71bad816ec552049e42235100cb1527a}\label{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_a71bad816ec552049e42235100cb1527a}} 
+\index{SongChordsRecognizer.MusicFeatures.TonesGenerator@{SongChordsRecognizer.MusicFeatures.TonesGenerator}!BaseFrequencies@{BaseFrequencies}}
+\index{BaseFrequencies@{BaseFrequencies}!SongChordsRecognizer.MusicFeatures.TonesGenerator@{SongChordsRecognizer.MusicFeatures.TonesGenerator}}
+\doxysubsubsection{\texorpdfstring{BaseFrequencies}{BaseFrequencies}}
+{\footnotesize\ttfamily readonly float \mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Music\+Features.\+Tones\+Generator.\+Base\+Frequencies\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \textcolor{keyword}{new} \textcolor{keywordtype}{float}[] \{}
+\DoxyCodeLine{            16.35160f, }
+\DoxyCodeLine{            17.32391f, }
+\DoxyCodeLine{            18.35405f, }
+\DoxyCodeLine{            19.44544f, }
+\DoxyCodeLine{            20.60172f, }
+\DoxyCodeLine{            21.82676f, }
+\DoxyCodeLine{            23.12465f, }
+\DoxyCodeLine{            24.49971f, }
+\DoxyCodeLine{            25.95654f, }
+\DoxyCodeLine{            27.50000f, }
+\DoxyCodeLine{            29.13524f, }
+\DoxyCodeLine{            30.86771f  }
+\DoxyCodeLine{        \}}
+
+\end{DoxyCode}
+
+
+The list of base frequencies that their multiples by 2$^\wedge$n generate all tones for all 9 octaves. 
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}\label{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}} 
+\index{SongChordsRecognizer.MusicFeatures.TonesGenerator@{SongChordsRecognizer.MusicFeatures.TonesGenerator}!Chroma@{Chroma}}
+\index{Chroma@{Chroma}!SongChordsRecognizer.MusicFeatures.TonesGenerator@{SongChordsRecognizer.MusicFeatures.TonesGenerator}}
+\doxysubsubsection{\texorpdfstring{Chroma}{Chroma}}
+{\footnotesize\ttfamily readonly List$<$\mbox{\hyperlink{struct_song_chords_recognizer_1_1_music_features_1_1_chroma}{Chroma}}$>$ Song\+Chords\+Recognizer.\+Music\+Features.\+Tones\+Generator.\+Chroma\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \textcolor{keyword}{new} List<Chroma>() \{ }
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}C"{}}, HalfTones = 0\},}
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}C\#"{}}, HalfTones = 1\},}
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}D"{}}, HalfTones = 2\},}
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}D\#"{}}, HalfTones = 3\},}
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}E"{}}, HalfTones = 4\},}
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}F"{}}, HalfTones = 5\},}
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}F\#"{}}, HalfTones = 6\},}
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}G"{}}, HalfTones = 7\},}
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}G\#"{}}, HalfTones = 8\},}
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}A"{}}, HalfTones = 9\},}
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}A\#"{}}, HalfTones = 10\},}
+\DoxyCodeLine{            \textcolor{keyword}{new} \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_tones_generator_ac1e7ef69f6941205290420a1f04d887f}{Chroma}}()\{ Description = \textcolor{stringliteral}{"{}B"{}}, HalfTones = 11\},}
+\DoxyCodeLine{        \}}
+
+\end{DoxyCode}
+
+
+The list of chroma, all twelve tones with descriptions and half tones, which says how many half tones are between that chroma and the chroma C. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Web\+Song\+Chords\+Recognizer/\+Song\+Chords\+Recognizer/\+Music\+Features/\mbox{\hyperlink{_tones_generator_8cs}{Tones\+Generator.\+cs}}\end{DoxyCompactItemize}

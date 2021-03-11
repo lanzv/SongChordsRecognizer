@@ -1,0 +1,118 @@
+\hypertarget{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model}{}\doxysection{Web\+Song\+Chords\+Recognizer.\+Models.\+Recognizer\+Model Class Reference}
+\label{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model}\index{WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}}
+
+
+ASP.\+NET Model to store information about generated chord sequence.  
+
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a0cc979b8b7e8c2d5ec7ca7aafaf6523a}{Recognizer\+Model}} ()
+\begin{DoxyCompactList}\small\item\em Initialize \mbox{\hyperlink{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model}{Recognizer\+Model}} and its properties. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a61c20bafcb140aac0980f77406fb42e3}{Process\+Audio}} (IForm\+File audio, \mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window}{IWindow}} window, \mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration}{ISpectrogram\+Filtration}} filtration, int sample\+Length\+Level, int bpm)
+\begin{DoxyCompactList}\small\item\em Whole process of the Song Chords Recognizer algorithm. audio file -\/$>$ Spectrogram -\/$>$ Chromagram -\/$>$ Chord Classification \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_ad871f190e3907df3283a0e64f11c3a53}{Reset\+Recognizer}} ()
+\begin{DoxyCompactList}\small\item\em Reset all class data. \end{DoxyCompactList}\item 
+override string \mbox{\hyperlink{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a8bdfa6bc93f5ddad1e6e93bac3c95847}{To\+String}} ()
+\begin{DoxyCompactList}\small\item\em Convert Chord\+Sequence List to justified and readable string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+Boolean \mbox{\hyperlink{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a2b1d3473e4b8b11e78fc1e79022004cf}{Chords\+Prepared}}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Boolean value. true if Chord\+Sequence has been generated. Otherwise false. \end{DoxyCompactList}\item 
+List$<$ \mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_chord}{Chord}} $>$ \mbox{\hyperlink{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a37ed2bd3d0485995860b3f21e21d176f}{Chord\+Sequence}}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Sequence of chords played in an audio. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+ASP.\+NET Model to store information about generated chord sequence. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a0cc979b8b7e8c2d5ec7ca7aafaf6523a}\label{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a0cc979b8b7e8c2d5ec7ca7aafaf6523a}} 
+\index{WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}!RecognizerModel@{RecognizerModel}}
+\index{RecognizerModel@{RecognizerModel}!WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}}
+\doxysubsubsection{\texorpdfstring{RecognizerModel()}{RecognizerModel()}}
+{\footnotesize\ttfamily Web\+Song\+Chords\+Recognizer.\+Models.\+Recognizer\+Model.\+Recognizer\+Model (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Initialize \mbox{\hyperlink{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model}{Recognizer\+Model}} and its properties. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a61c20bafcb140aac0980f77406fb42e3}\label{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a61c20bafcb140aac0980f77406fb42e3}} 
+\index{WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}!ProcessAudio@{ProcessAudio}}
+\index{ProcessAudio@{ProcessAudio}!WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}}
+\doxysubsubsection{\texorpdfstring{ProcessAudio()}{ProcessAudio()}}
+{\footnotesize\ttfamily void Web\+Song\+Chords\+Recognizer.\+Models.\+Recognizer\+Model.\+Process\+Audio (\begin{DoxyParamCaption}\item[{IForm\+File}]{audio,  }\item[{\mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window}{IWindow}}}]{window,  }\item[{\mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_spectrogram_filtration}{ISpectrogram\+Filtration}}}]{filtration,  }\item[{int}]{sample\+Length\+Level,  }\item[{int}]{bpm }\end{DoxyParamCaption})}
+
+
+
+Whole process of the Song Chords Recognizer algorithm. audio file -\/$>$ Spectrogram -\/$>$ Chromagram -\/$>$ Chord Classification 
+
+
+\begin{DoxyParams}{Parameters}
+{\em audio} & IForm\+File of an audio we want to process.\\
+\hline
+{\em window} & STFT window.\\
+\hline
+{\em filtration} & Spectrogram filtration type.\\
+\hline
+{\em sample\+Length\+Level} & Level of sample time for one chord.\\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_ad871f190e3907df3283a0e64f11c3a53}\label{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_ad871f190e3907df3283a0e64f11c3a53}} 
+\index{WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}!ResetRecognizer@{ResetRecognizer}}
+\index{ResetRecognizer@{ResetRecognizer}!WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}}
+\doxysubsubsection{\texorpdfstring{ResetRecognizer()}{ResetRecognizer()}}
+{\footnotesize\ttfamily void Web\+Song\+Chords\+Recognizer.\+Models.\+Recognizer\+Model.\+Reset\+Recognizer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Reset all class data. 
+
+\mbox{\Hypertarget{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a8bdfa6bc93f5ddad1e6e93bac3c95847}\label{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a8bdfa6bc93f5ddad1e6e93bac3c95847}} 
+\index{WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}!ToString@{ToString}}
+\index{ToString@{ToString}!WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}}
+\doxysubsubsection{\texorpdfstring{ToString()}{ToString()}}
+{\footnotesize\ttfamily override string Web\+Song\+Chords\+Recognizer.\+Models.\+Recognizer\+Model.\+To\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Convert Chord\+Sequence List to justified and readable string. 
+
+\begin{DoxyReturn}{Returns}
+String of song\textquotesingle{}s chord sequence.
+\end{DoxyReturn}
+
+
+\doxysubsection{Property Documentation}
+\mbox{\Hypertarget{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a37ed2bd3d0485995860b3f21e21d176f}\label{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a37ed2bd3d0485995860b3f21e21d176f}} 
+\index{WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}!ChordSequence@{ChordSequence}}
+\index{ChordSequence@{ChordSequence}!WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}}
+\doxysubsubsection{\texorpdfstring{ChordSequence}{ChordSequence}}
+{\footnotesize\ttfamily List$<$\mbox{\hyperlink{class_song_chords_recognizer_1_1_music_features_1_1_chord}{Chord}}$>$ Web\+Song\+Chords\+Recognizer.\+Models.\+Recognizer\+Model.\+Chord\+Sequence\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Sequence of chords played in an audio. 
+
+\mbox{\Hypertarget{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a2b1d3473e4b8b11e78fc1e79022004cf}\label{class_web_song_chords_recognizer_1_1_models_1_1_recognizer_model_a2b1d3473e4b8b11e78fc1e79022004cf}} 
+\index{WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}!ChordsPrepared@{ChordsPrepared}}
+\index{ChordsPrepared@{ChordsPrepared}!WebSongChordsRecognizer.Models.RecognizerModel@{WebSongChordsRecognizer.Models.RecognizerModel}}
+\doxysubsubsection{\texorpdfstring{ChordsPrepared}{ChordsPrepared}}
+{\footnotesize\ttfamily Boolean Web\+Song\+Chords\+Recognizer.\+Models.\+Recognizer\+Model.\+Chords\+Prepared\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Boolean value. true if Chord\+Sequence has been generated. Otherwise false. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Web\+Song\+Chords\+Recognizer/\+Models/\mbox{\hyperlink{_recognizer_model_8cs}{Recognizer\+Model.\+cs}}\end{DoxyCompactItemize}

@@ -1,0 +1,133 @@
+\hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages}{}\doxysection{Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages Class Reference}
+\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages}\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a70e3e3b8c12ee3dbba92dcab9e8aad2c}{IWindow\+\_\+\+Not\+Corresponding\+Length}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+Given offset and length of window for array \textquotesingle{}g\textquotesingle{} does not correspond to g\textquotesingle{}s length.\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a3fca61d9bdd14c6d31f500b517eef5d9}{Audio\+Source\+\_\+\+Not\+Supported\+Bits\+Per\+Sample}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+The number of bits per waveform sample that is not indivisible by 8 is not supported.\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a699d626d9b9350d56229df6f2a16418d}{Graph\+Printers\+\_\+\+None\+Data\+To\+Print}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+The Graph\+Printers tries to print empty Graph with 0 length of Data.\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_afa6d23ad676e8f33f18ef67ccdb9e1d0}{Graph\+Sum\+Samples\+\_\+\+Invalid\+Length}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+The length in Sum\+Samples function has to be non negative and non zero integer.\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ab0100ead4f2ea07b4650c3301d8e578d}{Graph\+Sum\+Samples\+\_\+\+Invalid\+Offset}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+The offset in Sum\+Samples function has to be in range of number of all samples in array.\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a7810cdc0c9a7029f2d8e670843cb1ee1}{Spectrogram\+Filtration\+\_\+\+Octave\+Out\+Of\+Range}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+Weighted\+Octaves tries to change weight of octave that does not exist.\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ae4a0943de4ef220bf78eaf15c8d43e5d}{Chord\+Generator\+\_\+\+Invalid\+Interval\+Format}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+Program tries to get description of chord with invalid third, fifth or seventh interval format.\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ab0deb286849f7b6f48f173a9aa3511e0}{Program\+\_\+\+Wrong\+Number\+Of\+Arguments}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+There was passed invalid number of arguments. The correct format of arguments is \textbackslash{}n\mbox{[}path of audio file\mbox{]} \mbox{[}STFT window type\mbox{]} \mbox{[}Spectrogram filtration type\mbox{]} \mbox{[}time length level of one sample\mbox{]} \mbox{[}BPM value\mbox{]}\textbackslash{}n\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ac41223f53aa129720dd3ffce2d664c63}{Program\+\_\+\+Not\+Known\+STFTWindow\+Type}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+The second argument is invalid.\textbackslash{}n\+Only these STFT window types are supported\+: \{Rectangular, Triangular, Parzen, Welch, Nuttall\}.\textbackslash{}n\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ae064483bbe5b7000cfcdc92a3fa6591e}{Program\+\_\+\+Not\+Known\+Filtration\+Type}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+The third argument is invalid.\textbackslash{}n\+Only these filtration types are supported\+: \{Identity, AFAM, WO, FNH\}.\textbackslash{}n\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a37ca75f4c42f015d2cd944a84972d922}{Program\+\_\+\+Invalid\+Sample\+Length\+Level}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+The fourth argument is invalid.\textbackslash{}n\+The fourth argument has to be non negative integer.\textbackslash{}n\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a7e2801fa070d7a68d3f57b654726541a}{Program\+\_\+\+Invalid\+BPM}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+The fifth argument is invalid.\textbackslash{}n\+The bpm argument has to be non negative integer.\textbackslash{}n\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a1c22c755e91d2095a082d5581fc31e3a}{Recognizer\+Controller\+\_\+\+Invalid\+Sample\+Length\+Level}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+The fourth argument is invalid.\textbackslash{}n\+The fourth argument has to be non negative integer in range of 10 and 18.\textbackslash{}n\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a4df44be94272a3c976dcb393a439e9c2}{Recognizer\+Controller\+\_\+\+Invalid\+BPM}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+The fifth argument is invalid.\textbackslash{}n\+The bpm argument has to be non negative integer in range of 20 and 250.\textbackslash{}n\char`\"{}
+\item 
+static string \mbox{\hyperlink{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a015f7968b0663433bcbfa5920665c1fe}{Recognizer\+Controller\+\_\+\+Missing\+Audio}} = \char`\"{}\textbackslash{}n\textbackslash{}n\+The audio file haven\textquotesingle{}t been uploaded.\char`\"{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a3fca61d9bdd14c6d31f500b517eef5d9}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a3fca61d9bdd14c6d31f500b517eef5d9}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!AudioSource\_NotSupportedBitsPerSample@{AudioSource\_NotSupportedBitsPerSample}}
+\index{AudioSource\_NotSupportedBitsPerSample@{AudioSource\_NotSupportedBitsPerSample}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{AudioSource\_NotSupportedBitsPerSample}{AudioSource\_NotSupportedBitsPerSample}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Audio\+Source\+\_\+\+Not\+Supported\+Bits\+Per\+Sample = \char`\"{}\textbackslash{}n\textbackslash{}n\+The number of bits per waveform sample that is not indivisible by 8 is not supported.\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ae4a0943de4ef220bf78eaf15c8d43e5d}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ae4a0943de4ef220bf78eaf15c8d43e5d}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!ChordGenerator\_InvalidIntervalFormat@{ChordGenerator\_InvalidIntervalFormat}}
+\index{ChordGenerator\_InvalidIntervalFormat@{ChordGenerator\_InvalidIntervalFormat}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{ChordGenerator\_InvalidIntervalFormat}{ChordGenerator\_InvalidIntervalFormat}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Chord\+Generator\+\_\+\+Invalid\+Interval\+Format = \char`\"{}\textbackslash{}n\textbackslash{}n\+Program tries to get description of chord with invalid third, fifth or seventh interval format.\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a699d626d9b9350d56229df6f2a16418d}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a699d626d9b9350d56229df6f2a16418d}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!GraphPrinters\_NoneDataToPrint@{GraphPrinters\_NoneDataToPrint}}
+\index{GraphPrinters\_NoneDataToPrint@{GraphPrinters\_NoneDataToPrint}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{GraphPrinters\_NoneDataToPrint}{GraphPrinters\_NoneDataToPrint}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Graph\+Printers\+\_\+\+None\+Data\+To\+Print = \char`\"{}\textbackslash{}n\textbackslash{}n\+The Graph\+Printers tries to print empty Graph with 0 length of Data.\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_afa6d23ad676e8f33f18ef67ccdb9e1d0}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_afa6d23ad676e8f33f18ef67ccdb9e1d0}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!GraphSumSamples\_InvalidLength@{GraphSumSamples\_InvalidLength}}
+\index{GraphSumSamples\_InvalidLength@{GraphSumSamples\_InvalidLength}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{GraphSumSamples\_InvalidLength}{GraphSumSamples\_InvalidLength}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Graph\+Sum\+Samples\+\_\+\+Invalid\+Length = \char`\"{}\textbackslash{}n\textbackslash{}n\+The length in Sum\+Samples function has to be non negative and non zero integer.\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ab0100ead4f2ea07b4650c3301d8e578d}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ab0100ead4f2ea07b4650c3301d8e578d}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!GraphSumSamples\_InvalidOffset@{GraphSumSamples\_InvalidOffset}}
+\index{GraphSumSamples\_InvalidOffset@{GraphSumSamples\_InvalidOffset}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{GraphSumSamples\_InvalidOffset}{GraphSumSamples\_InvalidOffset}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Graph\+Sum\+Samples\+\_\+\+Invalid\+Offset = \char`\"{}\textbackslash{}n\textbackslash{}n\+The offset in Sum\+Samples function has to be in range of number of all samples in array.\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a70e3e3b8c12ee3dbba92dcab9e8aad2c}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a70e3e3b8c12ee3dbba92dcab9e8aad2c}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!IWindow\_NotCorrespondingLength@{IWindow\_NotCorrespondingLength}}
+\index{IWindow\_NotCorrespondingLength@{IWindow\_NotCorrespondingLength}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{IWindow\_NotCorrespondingLength}{IWindow\_NotCorrespondingLength}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+IWindow\+\_\+\+Not\+Corresponding\+Length = \char`\"{}\textbackslash{}n\textbackslash{}n\+Given offset and length of window for array \textquotesingle{}g\textquotesingle{} does not correspond to g\textquotesingle{}s length.\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a7e2801fa070d7a68d3f57b654726541a}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a7e2801fa070d7a68d3f57b654726541a}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!Program\_InvalidBPM@{Program\_InvalidBPM}}
+\index{Program\_InvalidBPM@{Program\_InvalidBPM}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{Program\_InvalidBPM}{Program\_InvalidBPM}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Program\+\_\+\+Invalid\+BPM = \char`\"{}\textbackslash{}n\textbackslash{}n\+The fifth argument is invalid.\textbackslash{}n\+The bpm argument has to be non negative integer.\textbackslash{}n\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a37ca75f4c42f015d2cd944a84972d922}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a37ca75f4c42f015d2cd944a84972d922}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!Program\_InvalidSampleLengthLevel@{Program\_InvalidSampleLengthLevel}}
+\index{Program\_InvalidSampleLengthLevel@{Program\_InvalidSampleLengthLevel}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{Program\_InvalidSampleLengthLevel}{Program\_InvalidSampleLengthLevel}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Program\+\_\+\+Invalid\+Sample\+Length\+Level = \char`\"{}\textbackslash{}n\textbackslash{}n\+The fourth argument is invalid.\textbackslash{}n\+The fourth argument has to be non negative integer.\textbackslash{}n\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ae064483bbe5b7000cfcdc92a3fa6591e}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ae064483bbe5b7000cfcdc92a3fa6591e}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!Program\_NotKnownFiltrationType@{Program\_NotKnownFiltrationType}}
+\index{Program\_NotKnownFiltrationType@{Program\_NotKnownFiltrationType}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{Program\_NotKnownFiltrationType}{Program\_NotKnownFiltrationType}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Program\+\_\+\+Not\+Known\+Filtration\+Type = \char`\"{}\textbackslash{}n\textbackslash{}n\+The third argument is invalid.\textbackslash{}n\+Only these filtration types are supported\+: \{Identity, AFAM, WO, FNH\}.\textbackslash{}n\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ac41223f53aa129720dd3ffce2d664c63}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ac41223f53aa129720dd3ffce2d664c63}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!Program\_NotKnownSTFTWindowType@{Program\_NotKnownSTFTWindowType}}
+\index{Program\_NotKnownSTFTWindowType@{Program\_NotKnownSTFTWindowType}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{Program\_NotKnownSTFTWindowType}{Program\_NotKnownSTFTWindowType}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Program\+\_\+\+Not\+Known\+STFTWindow\+Type = \char`\"{}\textbackslash{}n\textbackslash{}n\+The second argument is invalid.\textbackslash{}n\+Only these STFT window types are supported\+: \{Rectangular, Triangular, Parzen, Welch, Nuttall\}.\textbackslash{}n\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ab0deb286849f7b6f48f173a9aa3511e0}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_ab0deb286849f7b6f48f173a9aa3511e0}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!Program\_WrongNumberOfArguments@{Program\_WrongNumberOfArguments}}
+\index{Program\_WrongNumberOfArguments@{Program\_WrongNumberOfArguments}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{Program\_WrongNumberOfArguments}{Program\_WrongNumberOfArguments}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Program\+\_\+\+Wrong\+Number\+Of\+Arguments = \char`\"{}\textbackslash{}n\textbackslash{}n\+There was passed invalid number of arguments. The correct format of arguments is \textbackslash{}n\mbox{[}path of audio file\mbox{]} \mbox{[}STFT window type\mbox{]} \mbox{[}Spectrogram filtration type\mbox{]} \mbox{[}time length level of one sample\mbox{]} \mbox{[}BPM value\mbox{]}\textbackslash{}n\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a4df44be94272a3c976dcb393a439e9c2}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a4df44be94272a3c976dcb393a439e9c2}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!RecognizerController\_InvalidBPM@{RecognizerController\_InvalidBPM}}
+\index{RecognizerController\_InvalidBPM@{RecognizerController\_InvalidBPM}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{RecognizerController\_InvalidBPM}{RecognizerController\_InvalidBPM}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Recognizer\+Controller\+\_\+\+Invalid\+BPM = \char`\"{}\textbackslash{}n\textbackslash{}n\+The fifth argument is invalid.\textbackslash{}n\+The bpm argument has to be non negative integer in range of 20 and 250.\textbackslash{}n\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a1c22c755e91d2095a082d5581fc31e3a}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a1c22c755e91d2095a082d5581fc31e3a}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!RecognizerController\_InvalidSampleLengthLevel@{RecognizerController\_InvalidSampleLengthLevel}}
+\index{RecognizerController\_InvalidSampleLengthLevel@{RecognizerController\_InvalidSampleLengthLevel}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{RecognizerController\_InvalidSampleLengthLevel}{RecognizerController\_InvalidSampleLengthLevel}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Recognizer\+Controller\+\_\+\+Invalid\+Sample\+Length\+Level = \char`\"{}\textbackslash{}n\textbackslash{}n\+The fourth argument is invalid.\textbackslash{}n\+The fourth argument has to be non negative integer in range of 10 and 18.\textbackslash{}n\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a015f7968b0663433bcbfa5920665c1fe}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a015f7968b0663433bcbfa5920665c1fe}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!RecognizerController\_MissingAudio@{RecognizerController\_MissingAudio}}
+\index{RecognizerController\_MissingAudio@{RecognizerController\_MissingAudio}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{RecognizerController\_MissingAudio}{RecognizerController\_MissingAudio}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Recognizer\+Controller\+\_\+\+Missing\+Audio = \char`\"{}\textbackslash{}n\textbackslash{}n\+The audio file haven\textquotesingle{}t been uploaded.\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a7810cdc0c9a7029f2d8e670843cb1ee1}\label{class_song_chords_recognizer_1_1_error_messages_1_1_error_messages_a7810cdc0c9a7029f2d8e670843cb1ee1}} 
+\index{SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}!SpectrogramFiltration\_OctaveOutOfRange@{SpectrogramFiltration\_OctaveOutOfRange}}
+\index{SpectrogramFiltration\_OctaveOutOfRange@{SpectrogramFiltration\_OctaveOutOfRange}!SongChordsRecognizer.ErrorMessages.ErrorMessages@{SongChordsRecognizer.ErrorMessages.ErrorMessages}}
+\doxysubsubsection{\texorpdfstring{SpectrogramFiltration\_OctaveOutOfRange}{SpectrogramFiltration\_OctaveOutOfRange}}
+{\footnotesize\ttfamily string Song\+Chords\+Recognizer.\+Error\+Messages.\+Error\+Messages.\+Spectrogram\+Filtration\+\_\+\+Octave\+Out\+Of\+Range = \char`\"{}\textbackslash{}n\textbackslash{}n\+Weighted\+Octaves tries to change weight of octave that does not exist.\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Web\+Song\+Chords\+Recognizer/\+Song\+Chords\+Recognizer/\+Error\+Messages/\mbox{\hyperlink{_messages_8cs}{Messages.\+cs}}\end{DoxyCompactItemize}

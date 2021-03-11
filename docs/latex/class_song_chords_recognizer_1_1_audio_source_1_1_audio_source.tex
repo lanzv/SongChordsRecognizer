@@ -1,0 +1,168 @@
+\hypertarget{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}{}\doxysection{Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source Class Reference}
+\label{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}\index{SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}}
+
+
+\mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}{Audio\+Source}} contains parsed data of music file that was passed as an argument to constructor. The waveform of audio is stored in \textquotesingle{}Audio\+Waveform\textquotesingle{}, the length of one waveform sample in seconds is stored in \textquotesingle{}Sample\+Length\textquotesingle{}.  
+
+
+Inheritance diagram for Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a2c9437c6cf48618c0078c0e5674d8832}{Audio\+Source}} (String \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a67427aaa61bd1a90343e67e1de383e78}{audio\+Path}})
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}{Audio\+Source}} constructor, parses data from music file in \textquotesingle{}audio\+Path\textquotesingle{}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_ad7b2b58075c567776438bd391486ec3e}{Audio\+Source}} (byte\mbox{[}$\,$\mbox{]} audio\+Data, String audio\+Name)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}{Audio\+Source}} constructor, get data from audio\+Data and name of audio\+Name. The audio file doesn\textquotesingle{}t exist so there is no audio path. \end{DoxyCompactList}\item 
+double\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a639e275be495333163bf846c58661095}{Get\+Mono\+Waveform}} ()
+\begin{DoxyCompactList}\small\item\em Function averages waveforms over all channels and returns mono audio waveform. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+abstract void \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a516524b1ae409a56b52746e0c9db6fcc}{Parse\+Audio\+Data}} ()
+\begin{DoxyCompactList}\small\item\em Parse\+Audio\+Data parases Audio\+Data from bytes into variables\+: Audio\+Waveform, Sample\+Length and Number\+Of\+Samples \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+double\mbox{[},\mbox{]} \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a8b51d427fbc32164dd91773755a5d712}{Audio\+Waveform}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, protected set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Audio waveform of \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}{Audio\+Source}}, where first index indicates number of channel, second one indicates number of sample. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_acd56ef60f9b3b4a2e3f48cb9a8bc07eb}{Sample\+Length}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, protected set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Time duration of one waveform sample in seconds. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a16eca577845bd3f0d66239e9a86d060a}{Number\+Of\+Samples}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, protected set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Number of waveform samples for each channel. \end{DoxyCompactList}\item 
+String \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a67427aaa61bd1a90343e67e1de383e78}{audio\+Path}}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Absolute path to your music file. \end{DoxyCompactList}\item 
+byte\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_aa770a6449546edd123c2bcbf85e0612d}{Audio\+Data}}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Content of the music file in bytes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}{Audio\+Source}} contains parsed data of music file that was passed as an argument to constructor. The waveform of audio is stored in \textquotesingle{}Audio\+Waveform\textquotesingle{}, the length of one waveform sample in seconds is stored in \textquotesingle{}Sample\+Length\textquotesingle{}. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a2c9437c6cf48618c0078c0e5674d8832}\label{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a2c9437c6cf48618c0078c0e5674d8832}} 
+\index{SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}!AudioSource@{AudioSource}}
+\index{AudioSource@{AudioSource}!SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}}
+\doxysubsubsection{\texorpdfstring{AudioSource()}{AudioSource()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source.\+Audio\+Source (\begin{DoxyParamCaption}\item[{String}]{audio\+Path }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}{Audio\+Source}} constructor, parses data from music file in \textquotesingle{}audio\+Path\textquotesingle{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em audio\+Path} & Absolute path to your music file.\\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_ad7b2b58075c567776438bd391486ec3e}\label{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_ad7b2b58075c567776438bd391486ec3e}} 
+\index{SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}!AudioSource@{AudioSource}}
+\index{AudioSource@{AudioSource}!SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}}
+\doxysubsubsection{\texorpdfstring{AudioSource()}{AudioSource()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source.\+Audio\+Source (\begin{DoxyParamCaption}\item[{byte\mbox{[}$\,$\mbox{]}}]{audio\+Data,  }\item[{String}]{audio\+Name }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}{Audio\+Source}} constructor, get data from audio\+Data and name of audio\+Name. The audio file doesn\textquotesingle{}t exist so there is no audio path. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em audio\+Data} & Byte array of audio data.\\
+\hline
+{\em audio\+Name} & The name of uploaded file.\\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a639e275be495333163bf846c58661095}\label{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a639e275be495333163bf846c58661095}} 
+\index{SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}!GetMonoWaveform@{GetMonoWaveform}}
+\index{GetMonoWaveform@{GetMonoWaveform}!SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}}
+\doxysubsubsection{\texorpdfstring{GetMonoWaveform()}{GetMonoWaveform()}}
+{\footnotesize\ttfamily double \mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source.\+Get\+Mono\+Waveform (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Function averages waveforms over all channels and returns mono audio waveform. 
+
+\begin{DoxyReturn}{Returns}
+Averaged mono audio waveform.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a516524b1ae409a56b52746e0c9db6fcc}\label{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a516524b1ae409a56b52746e0c9db6fcc}} 
+\index{SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}!ParseAudioData@{ParseAudioData}}
+\index{ParseAudioData@{ParseAudioData}!SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}}
+\doxysubsubsection{\texorpdfstring{ParseAudioData()}{ParseAudioData()}}
+{\footnotesize\ttfamily abstract void Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source.\+Parse\+Audio\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Parse\+Audio\+Data parases Audio\+Data from bytes into variables\+: Audio\+Waveform, Sample\+Length and Number\+Of\+Samples 
+
+
+
+Implemented in \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_wav_a6b21eb8e431e5b9bece620f151d275e0}{Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source\+Wav}}.
+
+
+
+\doxysubsection{Property Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_aa770a6449546edd123c2bcbf85e0612d}\label{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_aa770a6449546edd123c2bcbf85e0612d}} 
+\index{SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}!AudioData@{AudioData}}
+\index{AudioData@{AudioData}!SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}}
+\doxysubsubsection{\texorpdfstring{AudioData}{AudioData}}
+{\footnotesize\ttfamily byte \mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source.\+Audio\+Data\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [protected]}}
+
+
+
+Content of the music file in bytes. 
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a67427aaa61bd1a90343e67e1de383e78}\label{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a67427aaa61bd1a90343e67e1de383e78}} 
+\index{SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}!audioPath@{audioPath}}
+\index{audioPath@{audioPath}!SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}}
+\doxysubsubsection{\texorpdfstring{audioPath}{audioPath}}
+{\footnotesize\ttfamily String Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source.\+audio\+Path\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [protected]}}
+
+
+
+Absolute path to your music file. 
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a8b51d427fbc32164dd91773755a5d712}\label{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a8b51d427fbc32164dd91773755a5d712}} 
+\index{SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}!AudioWaveform@{AudioWaveform}}
+\index{AudioWaveform@{AudioWaveform}!SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}}
+\doxysubsubsection{\texorpdfstring{AudioWaveform}{AudioWaveform}}
+{\footnotesize\ttfamily double \mbox{[},\mbox{]} Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source.\+Audio\+Waveform\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [protected set]}}
+
+
+
+Audio waveform of \mbox{\hyperlink{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source}{Audio\+Source}}, where first index indicates number of channel, second one indicates number of sample. 
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a16eca577845bd3f0d66239e9a86d060a}\label{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_a16eca577845bd3f0d66239e9a86d060a}} 
+\index{SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}!NumberOfSamples@{NumberOfSamples}}
+\index{NumberOfSamples@{NumberOfSamples}!SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}}
+\doxysubsubsection{\texorpdfstring{NumberOfSamples}{NumberOfSamples}}
+{\footnotesize\ttfamily int Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source.\+Number\+Of\+Samples\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [protected set]}}
+
+
+
+Number of waveform samples for each channel. 
+
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_acd56ef60f9b3b4a2e3f48cb9a8bc07eb}\label{class_song_chords_recognizer_1_1_audio_source_1_1_audio_source_acd56ef60f9b3b4a2e3f48cb9a8bc07eb}} 
+\index{SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}!SampleLength@{SampleLength}}
+\index{SampleLength@{SampleLength}!SongChordsRecognizer.AudioSource.AudioSource@{SongChordsRecognizer.AudioSource.AudioSource}}
+\doxysubsubsection{\texorpdfstring{SampleLength}{SampleLength}}
+{\footnotesize\ttfamily double Song\+Chords\+Recognizer.\+Audio\+Source.\+Audio\+Source.\+Sample\+Length\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [protected set]}}
+
+
+
+Time duration of one waveform sample in seconds. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Web\+Song\+Chords\+Recognizer/\+Song\+Chords\+Recognizer/\+Audio\+Sources/\mbox{\hyperlink{_audio_source_8cs}{Audio\+Source.\+cs}}\end{DoxyCompactItemize}

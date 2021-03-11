@@ -1,0 +1,73 @@
+\hypertarget{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph}{}\doxysection{Song\+Chords\+Recognizer.\+Graphs.\+IGraph Interface Reference}
+\label{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph}\index{SongChordsRecognizer.Graphs.IGraph@{SongChordsRecognizer.Graphs.IGraph}}
+
+
+Interface for \mbox{\hyperlink{namespace_song_chords_recognizer_1_1_graphs}{Graphs}} like \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} or \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_chromagram}{Chromagram}}, that could be printed and which have data in format double Data\mbox{[}\mbox{]}\mbox{[}\mbox{]} where first index corresponds to specific time frames, second index corresponds to tone pitches.  
+
+
+Inheritance diagram for Song\+Chords\+Recognizer.\+Graphs.\+IGraph\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_a0e09793af9888bc9ea1ca1990cdc31a6}{Print}} (\mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_printer}{IGraph\+Printer}} printer, int starting\+Sample, int length)
+\begin{DoxyCompactList}\small\item\em Print and visualize data of graph with specific printer type. \end{DoxyCompactList}\item 
+double\mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_aab7898f79d5d9dab698fd373ba799758}{Get\+Data}} ()
+\begin{DoxyCompactList}\small\item\em Get\+Data creates the copy of Graph Data and returns it as a result. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Interface for \mbox{\hyperlink{namespace_song_chords_recognizer_1_1_graphs}{Graphs}} like \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram}{Spectrogram}} or \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_chromagram}{Chromagram}}, that could be printed and which have data in format double Data\mbox{[}\mbox{]}\mbox{[}\mbox{]} where first index corresponds to specific time frames, second index corresponds to tone pitches. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_aab7898f79d5d9dab698fd373ba799758}\label{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_aab7898f79d5d9dab698fd373ba799758}} 
+\index{SongChordsRecognizer.Graphs.IGraph@{SongChordsRecognizer.Graphs.IGraph}!GetData@{GetData}}
+\index{GetData@{GetData}!SongChordsRecognizer.Graphs.IGraph@{SongChordsRecognizer.Graphs.IGraph}}
+\doxysubsubsection{\texorpdfstring{GetData()}{GetData()}}
+{\footnotesize\ttfamily double \mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Graphs.\+IGraph.\+Get\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get\+Data creates the copy of Graph Data and returns it as a result. 
+
+\begin{DoxyReturn}{Returns}
+Graph Data as a new copy.
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a8ca13bb51161c9b9d6ed777296f0ec52}{Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram}}, and \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_chromagram_ada73e029a55c54767aa6673e8e1b6d22}{Song\+Chords\+Recognizer.\+Graphs.\+Chromagram}}.
+
+\mbox{\Hypertarget{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_a0e09793af9888bc9ea1ca1990cdc31a6}\label{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_a0e09793af9888bc9ea1ca1990cdc31a6}} 
+\index{SongChordsRecognizer.Graphs.IGraph@{SongChordsRecognizer.Graphs.IGraph}!Print@{Print}}
+\index{Print@{Print}!SongChordsRecognizer.Graphs.IGraph@{SongChordsRecognizer.Graphs.IGraph}}
+\doxysubsubsection{\texorpdfstring{Print()}{Print()}}
+{\footnotesize\ttfamily void Song\+Chords\+Recognizer.\+Graphs.\+IGraph.\+Print (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_printer}{IGraph\+Printer}}}]{printer,  }\item[{int}]{starting\+Sample,  }\item[{int}]{length }\end{DoxyParamCaption})}
+
+
+
+Print and visualize data of graph with specific printer type. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em printer} & \mbox{\hyperlink{interface_song_chords_recognizer_1_1_graphs_1_1_i_graph_printer}{IGraph\+Printer}} printer that says how we want to visualize data.\\
+\hline
+{\em starting\+Sample} & Starting index of time frame samples we want to print.\\
+\hline
+{\em length} & Number of time frame samples we want to print.\\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_spectrogram_a9087cdebaee4bac610158e381a95bf34}{Song\+Chords\+Recognizer.\+Graphs.\+Spectrogram}}, and \mbox{\hyperlink{class_song_chords_recognizer_1_1_graphs_1_1_chromagram_a1b30ee3d982fc148117415f7c11eda44}{Song\+Chords\+Recognizer.\+Graphs.\+Chromagram}}.
+
+
+
+The documentation for this interface was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Web\+Song\+Chords\+Recognizer/\+Song\+Chords\+Recognizer/\+Graphs/\mbox{\hyperlink{_graph_8cs}{Graph.\+cs}}\end{DoxyCompactItemize}

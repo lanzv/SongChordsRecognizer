@@ -1,0 +1,107 @@
+\hypertarget{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform}{}\doxysection{Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Fourier\+Transform Class Reference}
+\label{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform}\index{SongChordsRecognizer.FourierTransform.FourierTransform@{SongChordsRecognizer.FourierTransform.FourierTransform}}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static async Task$<$ double\mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]}$>$ \mbox{\hyperlink{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a25c9b976f9161549af01d0809d073b64}{Get\+Frequency\+Intensities\+Async}} (double\mbox{[}$\,$\mbox{]} g, int log2\+\_\+fft\+\_\+length, \mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window}{IWindow}} window)
+\begin{DoxyCompactList}\small\item\em Generate all STFT values for waveform \textquotesingle{}g\textquotesingle{} asynchronously. \end{DoxyCompactList}\item 
+static Complex\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a62a053058d3550b5967486dfc3dc61a5}{STFT}} (double\mbox{[}$\,$\mbox{]} g, int offset, int log2\+\_\+fft\+\_\+length, \mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window}{IWindow}} window)
+\begin{DoxyCompactList}\small\item\em Short Time Fourier Transform. Uses FFT to compute frequency intensities from part of function \textquotesingle{}g\textquotesingle{} multiplied by \textquotesingle{}window\textquotesingle{} function. \end{DoxyCompactList}\item 
+static Complex\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a3718c39ce0d373e2ac09ed8d3b641926}{Fast\+Fourier\+Transform}} (double\mbox{[}$\,$\mbox{]} g, int offset, int log2\+\_\+fft\+\_\+length)
+\begin{DoxyCompactList}\small\item\em Fast Fourier Transform for waveform \textquotesingle{}g\textquotesingle{}. \end{DoxyCompactList}\item 
+static Complex\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a076b037460ef3199392f08d71c44a2e2}{Discrete\+Fourier\+Transform}} (double\mbox{[}$\,$\mbox{]} g)
+\begin{DoxyCompactList}\small\item\em Discrete Fourier Transform for waveform \textquotesingle{}g\textquotesingle{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a076b037460ef3199392f08d71c44a2e2}\label{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a076b037460ef3199392f08d71c44a2e2}} 
+\index{SongChordsRecognizer.FourierTransform.FourierTransform@{SongChordsRecognizer.FourierTransform.FourierTransform}!DiscreteFourierTransform@{DiscreteFourierTransform}}
+\index{DiscreteFourierTransform@{DiscreteFourierTransform}!SongChordsRecognizer.FourierTransform.FourierTransform@{SongChordsRecognizer.FourierTransform.FourierTransform}}
+\doxysubsubsection{\texorpdfstring{DiscreteFourierTransform()}{DiscreteFourierTransform()}}
+{\footnotesize\ttfamily static Complex \mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Fourier\+Transform.\+Discrete\+Fourier\+Transform (\begin{DoxyParamCaption}\item[{double\mbox{[}$\,$\mbox{]}}]{g }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Discrete Fourier Transform for waveform \textquotesingle{}g\textquotesingle{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em g} & Waveform of some music sample.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Array of complex numbers representing intensities of frequencies in waveform \textquotesingle{}g\textquotesingle{}. The number of specific frequency in HZ for index \textquotesingle{}i\textquotesingle{} is i / (intensities.\+Length $\ast$ time\+For\+One\+Sample) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a3718c39ce0d373e2ac09ed8d3b641926}\label{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a3718c39ce0d373e2ac09ed8d3b641926}} 
+\index{SongChordsRecognizer.FourierTransform.FourierTransform@{SongChordsRecognizer.FourierTransform.FourierTransform}!FastFourierTransform@{FastFourierTransform}}
+\index{FastFourierTransform@{FastFourierTransform}!SongChordsRecognizer.FourierTransform.FourierTransform@{SongChordsRecognizer.FourierTransform.FourierTransform}}
+\doxysubsubsection{\texorpdfstring{FastFourierTransform()}{FastFourierTransform()}}
+{\footnotesize\ttfamily static Complex \mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Fourier\+Transform.\+Fast\+Fourier\+Transform (\begin{DoxyParamCaption}\item[{double\mbox{[}$\,$\mbox{]}}]{g,  }\item[{int}]{offset,  }\item[{int}]{log2\+\_\+fft\+\_\+length }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Fast Fourier Transform for waveform \textquotesingle{}g\textquotesingle{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em g} & Waveform of some music sample.\\
+\hline
+{\em offset} & Starting index of \textquotesingle{}g\textquotesingle{}\\
+\hline
+{\em log2\+\_\+fft\+\_\+length} & Number of FFT samples is equal to N = 2$^\wedge$\{nth\+\_\+power\+\_\+of\+\_\+two\}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Array of complex numbers representing intensities of frequencies in waveform \textquotesingle{}g\textquotesingle{}. The number of specific frequency in HZ for index \textquotesingle{}i\textquotesingle{} is computed as i / (intensities.\+Length $\ast$ time\+For\+One\+Sample) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a25c9b976f9161549af01d0809d073b64}\label{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a25c9b976f9161549af01d0809d073b64}} 
+\index{SongChordsRecognizer.FourierTransform.FourierTransform@{SongChordsRecognizer.FourierTransform.FourierTransform}!GetFrequencyIntensitiesAsync@{GetFrequencyIntensitiesAsync}}
+\index{GetFrequencyIntensitiesAsync@{GetFrequencyIntensitiesAsync}!SongChordsRecognizer.FourierTransform.FourierTransform@{SongChordsRecognizer.FourierTransform.FourierTransform}}
+\doxysubsubsection{\texorpdfstring{GetFrequencyIntensitiesAsync()}{GetFrequencyIntensitiesAsync()}}
+{\footnotesize\ttfamily static async Task$<$double\mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]}$>$ Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Fourier\+Transform.\+Get\+Frequency\+Intensities\+Async (\begin{DoxyParamCaption}\item[{double\mbox{[}$\,$\mbox{]}}]{g,  }\item[{int}]{log2\+\_\+fft\+\_\+length,  }\item[{\mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window}{IWindow}}}]{window }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Generate all STFT values for waveform \textquotesingle{}g\textquotesingle{} asynchronously. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em g} & Waveform of some music sample.\\
+\hline
+{\em log2\+\_\+fft\+\_\+length} & Number of STFT samples for this specific part of audio waveform is equal to N = 2$^\wedge$\{nth\+\_\+power\+\_\+of\+\_\+two\}\\
+\hline
+{\em window} & Window that is applied on tthis specific part of audio waveform.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+All STFT values of \textquotesingle{}g\textquotesingle{} waveform.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a62a053058d3550b5967486dfc3dc61a5}\label{class_song_chords_recognizer_1_1_fourier_transform_1_1_fourier_transform_a62a053058d3550b5967486dfc3dc61a5}} 
+\index{SongChordsRecognizer.FourierTransform.FourierTransform@{SongChordsRecognizer.FourierTransform.FourierTransform}!STFT@{STFT}}
+\index{STFT@{STFT}!SongChordsRecognizer.FourierTransform.FourierTransform@{SongChordsRecognizer.FourierTransform.FourierTransform}}
+\doxysubsubsection{\texorpdfstring{STFT()}{STFT()}}
+{\footnotesize\ttfamily static Complex \mbox{[}$\,$\mbox{]} Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Fourier\+Transform.\+STFT (\begin{DoxyParamCaption}\item[{double\mbox{[}$\,$\mbox{]}}]{g,  }\item[{int}]{offset,  }\item[{int}]{log2\+\_\+fft\+\_\+length,  }\item[{\mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window}{IWindow}}}]{window }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Short Time Fourier Transform. Uses FFT to compute frequency intensities from part of function \textquotesingle{}g\textquotesingle{} multiplied by \textquotesingle{}window\textquotesingle{} function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em g} & Waveform of some music sample.\\
+\hline
+{\em offset} & Starting index of \textquotesingle{}g\textquotesingle{} of this specific part of audio waveform.\\
+\hline
+{\em log2\+\_\+fft\+\_\+length} & Number of STFT samples for this specific part of audio waveform is equal to N = 2$^\wedge$\{nth\+\_\+power\+\_\+of\+\_\+two\}\\
+\hline
+{\em window} & Window that is applied on tthis specific part of audio waveform.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+STFT part for specified parameters.
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Web\+Song\+Chords\+Recognizer/\+Song\+Chords\+Recognizer/\+Fourier\+Transform/\mbox{\hyperlink{_fourier_transform_8cs}{Fourier\+Transform.\+cs}}\end{DoxyCompactItemize}

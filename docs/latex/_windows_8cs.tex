@@ -1,0 +1,24 @@
+\hypertarget{_windows_8cs}{}\doxysection{Web\+Song\+Chords\+Recognizer/\+Song\+Chords\+Recognizer/\+Fourier\+Transform/\+Windows.cs File Reference}
+\label{_windows_8cs}\index{WebSongChordsRecognizer/SongChordsRecognizer/FourierTransform/Windows.cs@{WebSongChordsRecognizer/SongChordsRecognizer/FourierTransform/Windows.cs}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+interface \mbox{\hyperlink{interface_song_chords_recognizer_1_1_fourier_transform_1_1_i_window}{Song\+Chords\+Recognizer.\+Fourier\+Transform.\+IWindow}}
+\begin{DoxyCompactList}\small\item\em Interface for all STFT window functions. Each of window should contain function \textquotesingle{}Apply\textquotesingle{} that returns result of multiplication of two functions\+: the specific part of audio waveform and the specific window function \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_song_chords_recognizer_1_1_fourier_transform_1_1_rectangular_window}{Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Rectangular\+Window}}
+\begin{DoxyCompactList}\small\item\em Window function, in shape of rectangle. w\mbox{[}n\mbox{]} = 1 \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_song_chords_recognizer_1_1_fourier_transform_1_1_triangular_window}{Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Triangular\+Window}}
+\begin{DoxyCompactList}\small\item\em Window function, in shape of triangle. w\mbox{[}n\mbox{]} = 1 -\/ $\vert$ (n -\/ N/2) / (N/2) $\vert$, where N is length of window (or also \textquotesingle{}g\textquotesingle{} part) \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_song_chords_recognizer_1_1_fourier_transform_1_1_parzen_window}{Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Parzen\+Window}}
+\begin{DoxyCompactList}\small\item\em window function in shape of narrow hill. (n shuffled to left by N/2, N is length of window (or also \textquotesingle{}g\textquotesingle{} part)) for $\vert$n$\vert$ between 0 and (N-\/1)/4\+: w\mbox{[}n\mbox{]} = 1 -\/ 6 $\ast$ ($\vert$n$\vert$/(N/2))$^\wedge$\{2\} + 6 $\ast$ ($\vert$n$\vert$/(N/2))$^\wedge$\{3\} for $\vert$n$\vert$ between (N-\/1)/4 and (N-\/1)/2\+: w\mbox{[}n\mbox{]} = 2 $\ast$ (1 -\/ ($\vert$n$\vert$/(N/2))$^\wedge$\{3\} \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_song_chords_recognizer_1_1_fourier_transform_1_1_welch_window}{Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Welch\+Window}}
+\begin{DoxyCompactList}\small\item\em Window function, in shape of wide hill. w\mbox{[}n\mbox{]} = 1 -\/ ((n -\/ N/2) / (N/2))$^\wedge$\{2\}, where N is length of window (or also \textquotesingle{}g\textquotesingle{} part) \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_song_chords_recognizer_1_1_fourier_transform_1_1_nuttall_window}{Song\+Chords\+Recognizer.\+Fourier\+Transform.\+Nuttall\+Window}}
+\begin{DoxyCompactList}\small\item\em Window function, in shape of narrow hill, simular to Parzen window. w\mbox{[}n\mbox{]} = a0 -\/ a1 $\ast$ cos(2$\ast$pi$\ast$n/N) + a2 $\ast$ cos(4$\ast$pi$\ast$n/N) -\/ a3 $\ast$ cos(6$\ast$pi$\ast$n/N), where N is length of window (or also \textquotesingle{}g\textquotesingle{} part) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_song_chords_recognizer}{Song\+Chords\+Recognizer}}
+\item 
+namespace \mbox{\hyperlink{namespace_song_chords_recognizer_1_1_fourier_transform}{Song\+Chords\+Recognizer.\+Fourier\+Transform}}
+\end{DoxyCompactItemize}
