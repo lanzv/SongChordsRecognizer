@@ -484,7 +484,7 @@ class IsophonicsDataset(Dataset):
 
         # Save all three np arrays generated in this function .. data, chords, gold_targets aka chord changes
         with lzma.open(dest, "wb") as dataset_file:
-            pickle.dump((np.array(data), np.array(chords), np.array(gold_targets)), dataset_file)
+            pickle.dump((data, chords, gold_targets), dataset_file)
 
         print("[INFO] The Isophonics segmentation samples was saved successfully.")
 
