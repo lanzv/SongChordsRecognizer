@@ -78,7 +78,10 @@ class SegmentationCRNN():
             validation_data=(dev_data, dev_changes_targets)
         )
         print("[INFO] The CRNN model was successfully trained.")
-    
+
+
+    def predict(self, data):
+        return self.model.predict(data)
 
     @staticmethod
     def labels2changes(targets):
@@ -101,13 +104,16 @@ class SegmentationCRNN():
     @staticmethod
     def get_change_points(target_changes, sequence_length_ms):
         change_points = []
-        _, n_frames, _ = target_changes.shape
-        for sequence in target_changes:
+        _, n_frames = target_changes.shape
+        for i, sequence in enumerate(target_changes):
             change_points.append(
-                np.where(sequence == 1) * (sequence_length_ms / n_frames)
+                np.squeeze(
+                    i*sequence_length_ms + (sequence_length_ms / n_frames) * np.array(np.where(np.array(sequence) == 1)),
+                    axis=0
+                )
             )
 
-        return change_points
+        return np.concatenate(change_points)
 
     def score(self, data, targets):
         # Get chord changes from chord labels
@@ -121,6 +127,6 @@ class SegmentationCRNN():
         plt.plot(self.history.history['val_accuracy'], label = 'val_accuracy')
         plt.xlabel('Epoch')
         plt.ylabel('Accuracy')
-        plt.ylim([0.0, 1])
+        plt.ylim([0.9, 1])
         plt.legend(loc='lower right')
         plt.show()
