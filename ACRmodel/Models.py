@@ -9,6 +9,7 @@ from sklearn.metrics import confusion_matrix
 import numpy as np
 import sklearn.pipeline
 import sklearn.preprocessing
+from SegmentationModels import SegmentationCRNN
 
 
 
@@ -534,3 +535,74 @@ class BassVsThird():
             )
         disp.plot(xticks_rotation='vertical', include_values=False)
         plt.show()
+
+
+
+
+class SegmentationVotingMLP():
+    """
+
+    """
+    def __init__(self, input_shape):
+        self.model = CRNN_1(input_shape=input_shape, output_classes=25)
+        self.segmentation_model = SegmentationCRNN(input_shape=input_shape)
+        print("[INFO] The MLP model was successfully created.")
+
+    def fit(self, data, targets, dev_data, dev_targets):
+        self.model.fit(data, targets)
+        self.segmentation_model.fit(data, targets, dev_data, dev_targets)
+        print("[INFO] The MLP model was successfully trained.")
+
+    @staticmethod
+    def vote(segmentations, chords):
+        chords_to_vote = np.zeros(25)
+        voted_chords = []
+        start = 0
+        # Iterate over all time stamps
+        for ind, change, chord in enumerate(zip(segmentations, chords)):
+            # If there is a chord change
+            if change == 1:
+                winner = np.argmax(voted_chords)
+                for _ in range(start, ind):
+                    voted_chords.append(winner)
+                chords_to_vote = np.zeros(25)
+                start = ind
+            # Add chord occurence
+            chords_to_vote[chord] = chords_to_vote[chord] + 1
+
+        return voted_chords
+
+    def predict(self, data, targets):
+        # Predict chords and segmentations and basses
+        chords = self.model.predict(data)
+        segmentations = self.segmentation_model.predict(data)
+
+        # Change chords in segments as a most common segment's chord
+        predictions = SegmentationVotingMLP.vote(np.concatenate(chords), np.concatenate(segmentations))
+
+        return np.array(predictions)
+
+
+    def score(self, data, targets):
+        # Predict targets
+        predictions = self.predict(data, targets)
+
+        return sklearn.metrics.accuracy_score(np.concatenate(targets), predictions)
+
+
+    def display_confusion_matrix(self, data, targets):
+        # Define labels
+        display_labels = np.array(["N", "C", "C:min", "C#", "C#:min", "D", "D:min", "D#", "D#:min", "E", "E:min", "F", "F:min", "F#", "F#:min", "G", "G:min", "G#", "G#:min", "A", "A:min", "A#", "A#:min", "B", "B:min"])
+        labels = np.array([i for i in range(len(display_labels))])
+
+        # Generate predictions
+        predictions = self.predict(data, targets)
+
+        # Set and display confusion matrix
+        disp = ConfusionMatrixDisplay(
+            confusion_matrix=confusion_matrix(np.concatenate(targets), predictions, labels=labels, normalize='all'),
+            display_labels=display_labels
+            )
+        disp.plot(xticks_rotation='vertical', include_values=False)
+        plt.show()
+
