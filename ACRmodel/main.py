@@ -3,20 +3,25 @@ import argparse
 
 from Datasets import BillboardDataset, IsophonicsDataset
 import sys
-from Spectrograms import cqt_spectrogram, log_mel_spectrogram
+from Spectrograms import cqt_spectrogram, log_mel_spectrogram, cqt_chromagram, stft_chromagram
 import pickle
 import lzma
 
 def save_preprocessed_Isophonics(args):
     # Get spectrogram type
-    if args.spectrogram_type == "cqt":
+    if args.feature_type == "cqt_spec":
         spectrogram = cqt_spectrogram
-    elif args.spectrogram_type == "log_mel":
+    elif args.feature_type == "log_mel_spec":
         spectrogram = log_mel_spectrogram
+    elif args.feature_type == "cqt_chrom":
+        spectrogram = cqt_chromagram
+    elif args.feature_type == "stft_chrom":
+        spectrogram = stft_chromagram
 
     # Prepare and Save Isophonics dataset
     #data = IsophonicsDataset(args.isophonics_audio_directory, args.isophonics_annotations_directory, sample_rate=args.sample_rate)
     data = IsophonicsDataset.load_dataset("./SavedDatasets/Isophonics_22050.ds")
+    #data.save_segmentation_samples(dest="./Segmentations/Isophonics1000",hop_length=args.hop_length, norm_to_C=args.norm_to_C, spectrogram_generator=spectrogram, n_frames=args.n_frames)
     data.save_preprocessed_dataset(dest=args.isophonics_prep_dest, hop_length=args.hop_length, norm_to_C=args.norm_to_C, spectrogram_generator=spectrogram, n_frames=args.n_frames)
     #with lzma.open(args.isophonics_prep_dest, "wb") as dataset_file:
     #    pickle.dump((data.preprocess_single_chords_list(args.window_size, args.flattened_window, args.hop_length, args.to_skip, args.norm_to_C, spectrogram)), dataset_file)
@@ -46,7 +51,7 @@ parser.add_argument("--window_size", default=5, type=int, help="Spectrograms on 
 parser.add_argument("--flattened_window", default=True, type=bool, help="Whether the spectrogram window should be flatten to one array or it sould be array of spectrograms.")
 parser.add_argument("--to_skip", default=1, type=int, help="How many spectrogram we want to skip when creating spectrogram window.")
 parser.add_argument("--norm_to_C", default=True, type=bool, help="Whether we want to transpose all songs to C key (or D dorian, .. A minor, ...)")
-parser.add_argument("--spectrogram_type", default="log_mel", type=str, help="Spectrogram types, {cqt,log_mel}")
+parser.add_argument("--feature_type", default="cqt_spec", type=str, help="Spectrogram types, {cqt_spec,log_mel_spec,cqt_chrom,stft_chrom}")
 #           Billboard
 parser.add_argument("--n_frames", default=1000, type=int, help="Length of song subsequence we are consinder when predicting chords to keep some context.")
 
