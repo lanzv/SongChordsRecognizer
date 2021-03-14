@@ -2,7 +2,7 @@
 from sklearn.metrics._plot.confusion_matrix import ConfusionMatrixDisplay
 import tensorflow
 from sklearn.neural_network import MLPClassifier
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 from sklearn.metrics import plot_confusion_matrix
 from sklearn.metrics import confusion_matrix
 import numpy as np
@@ -175,3 +175,33 @@ def chord_graphical_segmentations(output_shape, targets):
         segmented_targets.append(segmented_sequence)
 
     return segmented_targets
+
+
+
+def print_graphical_segmentation_demo():
+    chords = []
+    for i in range(0, 5):
+        sequence = []
+        for j in range(0, 500):
+            if j < 50:
+                sequence.append(5)
+            elif j < 100:
+                sequence.append(10)
+            elif j < 190:
+                sequence.append(23)
+            elif j < 280:
+                sequence.append(8)
+            elif j < 350:
+                sequence.append(2)
+            elif j < 450:
+                sequence.append(8)
+            else:
+                sequence.append(10)
+        chords.append(sequence)
+
+    output_shape = (500, 100)
+    segmentation = np.array(chord_graphical_segmentations(output_shape, chords))
+    print(segmentation.shape)
+
+    plt.imshow(segmentation[0].T)
+    plt.show()
