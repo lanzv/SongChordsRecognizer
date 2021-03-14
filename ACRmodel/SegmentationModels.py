@@ -130,3 +130,48 @@ class SegmentationCRNN():
         plt.ylim([0.9, 1])
         plt.legend(loc='lower right')
         plt.show()
+
+
+
+
+
+def chord_graphical_segmentations(output_shape, targets):
+    """
+    Get chord sequence, maybe data features, return
+    |\|\|\|\|
+    |/|/|/|/|
+    graph, where | denotes chord change and \/ denotes how far is the situation from the moment that the chord was changed
+    """
+    n_frames, n_features = output_shape
+    segmented_targets = []
+    for sequence in targets:
+        actual_chord = 0
+        start = 0
+        segmented_sequence = []
+        for chord_ind, chord in enumerate(sequence):
+            if not actual_chord == chord:
+                for i in range(start, chord_ind):
+                    n_ones = (int)(n_features - (n_features)*(((i-start)/(chord_ind-start))**(1/2)))
+                    n_zeros = (int)((n_features - n_ones)/2)
+                    segmented_sequence.append(
+                        np.concatenate((
+                            np.zeros((n_zeros)),
+                            np.ones((n_ones)),
+                            np.zeros((int)(max(n_features-(n_ones+n_zeros), 0)))
+                        ))
+                    )
+                start = chord_ind
+                actual_chord = chord
+        for i in range(start, len(sequence)):
+            n_ones = (int)(n_features - (n_features)*(((i - start)/(len(sequence)-start))**(1/2)))
+            n_zeros = (int)((n_features - n_ones)/2)
+            segmented_sequence.append(
+                np.concatenate((
+                    np.zeros((n_zeros)),
+                    np.ones((n_ones)),
+                    np.zeros((int)(max(n_features-(n_ones+n_zeros), 0)))
+                ))
+            )
+        segmented_targets.append(segmented_sequence)
+
+    return segmented_targets
