@@ -588,6 +588,7 @@ class BillboardDataset(Dataset):
 
 
 
+
     def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_BillboardDataset.ds", n_frames=1000):
         """
         Save preprocessed data from this dataset to destination path 'dest' by default as a .ds file.
@@ -626,3 +627,75 @@ class BillboardDataset(Dataset):
 
         print("[INFO] The Preprocessed Billboard Dataset was loaded successfully.")
         return dataset
+
+
+
+
+    def save_segmentation_samples(self, dest="./Datasets/BillboardSegmentation.seg", song_indices=[0, 10, 20, 30, 40, 50, 60, 70], n_frames=500):
+        """
+        Save preprocessed data from this dataset with its target and chord changes to destination path 'dest' by default as a .seg file.
+
+        Parameters
+        ----------
+        dest : str
+            path to preprocessed data
+        song_indices : list of integers
+            list of song indices as representing samples
+        norm_to_C : bool
+            True if we want to transpose all songs to C key
+        n_frames : int
+             how many frames should be included in a subsequence of a song
+        """
+        data = []
+        chords = []
+        gold_targets = []
+        # Iterate over all song indices on the input
+        for song_ind in song_indices:
+
+            # Convert data and chord targets to sequences
+            data_in_seqs, targets_in_seqs = Dataset.songs_to_sequences(
+                FEATURESs=[self.DATA[song_ind].CHROMA],
+                CHORDs=[self.CHORDS[song_ind]],
+                TIME_BINSs=[self.DATA[song_ind].TIME_BINS],
+                KEYs=self.DESC[song_ind].TONIC,
+                n_frames=n_frames,
+                norm_to_C=False
+            )
+
+            # Add song's sequences to lists as a new element
+            data.append(data_in_seqs)
+            chords.append(targets_in_seqs)
+            gold_targets.append(SegmentationCRNN.labels2changes(targets = chords[-1]))
+
+        # Save all three np arrays generated in this function .. data, chords, gold_targets aka chord changes
+        with lzma.open(dest, "wb") as dataset_file:
+            pickle.dump((data, chords, gold_targets), dataset_file)
+
+        print("[INFO] The Billboard segmentation samples was saved successfully.")
+
+
+
+    @staticmethod
+    def load_segmentation_samples(dest = "./Datasets/BillboardSegmentation.seg") -> tuple:
+        """
+        Load preprocessed data and targets with its chord changes points from destination path 'dest'. This kind of data are stored by default as a .seg file.
+
+        Parameters
+        ----------
+        dest : str
+            path to segmentation samples
+        Returns
+        -------
+        prep_data : np array
+            sequences of song's chroma vectors separated to n_frames frames
+        prep_chords : np array
+            array of n_frame long sequences of integers of chord labels
+        prep_chord_changes : np array
+            array of n_frame long sequences of 0s and 1s where 0 means 'not chord change' and 1 means 'chord change'
+        """
+        with lzma.open(dest, "rb") as segmentation_samles:
+            loaded_samples = pickle.load(segmentation_samles)
+
+        print("[INFO] The Billboard segmentation samples was loaded successfully.")
+        return loaded_samples
+
