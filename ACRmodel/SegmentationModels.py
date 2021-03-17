@@ -135,6 +135,76 @@ class SegmentationCRNN():
 
 
 
+class EncoderDecoderSegmentation():
+    """
+    Encoder from spectrogram sequence, decoder to segmentation graph:
+    |\|\|\|\|\|
+    |/|/|/|/|/|
+    """
+    def __init__(self, input_shape = (100, 128, 3)):
+        model = tensorflow.keras.models.Sequential()
+
+        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=64,kernel_size=(3,3),input_shape=input_shape, padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Activation('relu'))
+        model.add(tensorflow.keras.layers.MaxPooling2D(pool_size=(2,2)))
+
+        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=128,kernel_size=(3,3),padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Activation('relu'))
+        model.add(tensorflow.keras.layers.MaxPooling2D(pool_size=(2,2)))
+
+        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=256,kernel_size=(3,3), padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Activation('relu'))
+        model.add(tensorflow.keras.layers.MaxPooling2D(pool_size=(2,2)))
+
+        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=512,kernel_size=(3,3), padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Activation('relu'))
+
+        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=512,kernel_size=(3,3), padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Activation('relu'))
+
+        model.add(tensorflow.keras.layers.UpSampling2D((2,2)))
+        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=256,kernel_size=(3,3), padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Activation('relu'))
+
+        model.add(tensorflow.keras.layers.UpSampling2D((2,2)))
+        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=128,kernel_size=(3,3), padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Activation('relu'))
+
+        model.add(tensorflow.keras.layers.UpSampling2D((2,2)))
+        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=64,kernel_size=(3,3), padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Activation('relu'))
+
+        model.add(tensorflow.keras.layers.convolutional.Convolution2D(3, (3, 3), padding='same'))
+        model.add(tensorflow.keras.layers.Activation('tanh'))
+
+        adam = tensorflow.keras.optimizers.Adam(lr=0.01, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+        model.compile(optimizer=adam,loss='mse',metrics=['mae'])
+
+
+        model.summary()
+        self.model = model
+        print("[INFO] The segmentation model was successfully created.")
+
+
+    def fit(self, data, targets, dev_data, dev_targets, epochs):
+        self.model.fit(
+            data, targets, epochs=epochs,
+            validation_data=(dev_data, dev_targets)
+        )
+
+    def predict(self, data):
+        return self.model.predict(data)
+
+
+
 def chord_graphical_segmentations(output_shape, targets):
     """
     Get chord sequence, maybe data features, return
