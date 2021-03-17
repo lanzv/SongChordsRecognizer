@@ -246,15 +246,18 @@ def chord_graphical_segmentations(output_shape, targets):
 
     return segmented_targets
 
-def colorize_spectrograms(data):
+def colorize_spectrograms(data, channels=3, transpose=True):
     """
-    Clip images and add 3 channels.
+    Clip images and add 'channels' channels.
     """
     # transpose
-    transposed_data = np.array(data).swapaxes(1,2)
+    if transpose:
+        transposed_data = np.array(data).swapaxes(1,2)
+    else:
+        transposed_data = data
 
     # add three channels
-    colorized_data = np.repeat(transposed_data[..., np.newaxis], 3, -1)
+    colorized_data = np.repeat(transposed_data[..., np.newaxis], channels, -1)
     return colorized_data
 
 
