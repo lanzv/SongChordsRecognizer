@@ -144,49 +144,47 @@ class EncoderDecoderSegmentation():
     def __init__(self, input_shape = (100, 128, 3)):
         model = tensorflow.keras.models.Sequential()
 
-        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=64,kernel_size=(3,3),input_shape=input_shape, padding='same'))
+        # Encoder
+        model.add(tensorflow.keras.layers.Conv2D(filters=64,kernel_size=(3,3),input_shape=input_shape, padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Activation('relu'))
         model.add(tensorflow.keras.layers.MaxPooling2D(pool_size=(2,2)))
-
-        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=128,kernel_size=(3,3),padding='same'))
+        model.add(tensorflow.keras.layers.Conv2D(filters=128,kernel_size=(3,3),padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Activation('relu'))
         model.add(tensorflow.keras.layers.MaxPooling2D(pool_size=(2,2)))
-
-        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=256,kernel_size=(3,3), padding='same'))
+        model.add(tensorflow.keras.layers.Conv2D(filters=256,kernel_size=(3,3), padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Activation('relu'))
         model.add(tensorflow.keras.layers.MaxPooling2D(pool_size=(2,2)))
-
-        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=512,kernel_size=(3,3), padding='same'))
+        model.add(tensorflow.keras.layers.Conv2D(filters=512,kernel_size=(3,3), padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Activation('relu'))
 
-        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=512,kernel_size=(3,3), padding='same'))
+        # Decoder
+        model.add(tensorflow.keras.layers.Conv2D(filters=512,kernel_size=(3,3), padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Activation('relu'))
-
         model.add(tensorflow.keras.layers.UpSampling2D((2,2)))
-        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=256,kernel_size=(3,3), padding='same'))
+        model.add(tensorflow.keras.layers.Conv2D(filters=256,kernel_size=(3,3), padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Activation('relu'))
-
         model.add(tensorflow.keras.layers.UpSampling2D((2,2)))
-        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=128,kernel_size=(3,3), padding='same'))
+        model.add(tensorflow.keras.layers.Conv2D(filters=128,kernel_size=(3,3), padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Activation('relu'))
-
         model.add(tensorflow.keras.layers.UpSampling2D((2,2)))
-        model.add(tensorflow.keras.layers.convolutional.Convolution2D(filters=64,kernel_size=(3,3), padding='same'))
+        model.add(tensorflow.keras.layers.Conv2D(filters=64,kernel_size=(3,3), padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Activation('relu'))
-
-        model.add(tensorflow.keras.layers.convolutional.Convolution2D(3, (3, 3), padding='same'))
+        model.add(tensorflow.keras.layers.Conv2D(3, (3, 3), padding='same'))
         model.add(tensorflow.keras.layers.Activation('tanh'))
 
-        adam = tensorflow.keras.optimizers.Adam(lr=0.01, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
-        model.compile(optimizer=adam,loss='mse',metrics=['mae'])
+        model.compile(
+            optimizer=tensorflow.keras.optimizers.Adam(),
+            loss='mse',
+            metrics=['mae']
+        )
 
 
         model.summary()
@@ -199,9 +197,11 @@ class EncoderDecoderSegmentation():
             data, targets, epochs=epochs,
             validation_data=(dev_data, dev_targets)
         )
+        print("[INFO] The segmentation model was successfully trained.")
 
     def predict(self, data):
         return self.model.predict(data)
+
 
 
 
@@ -219,6 +219,8 @@ def chord_graphical_segmentations(output_shape, targets):
         start = 0
         segmented_sequence = []
         for chord_ind, chord in enumerate(sequence):
+            if chord_ind == n_frames:
+               break
             if not actual_chord == chord:
                 for i in range(start, chord_ind):
                     n_ones = (int)(n_features - (n_features)*(((i-start)/(chord_ind-start))**(1/2)))
@@ -232,8 +234,8 @@ def chord_graphical_segmentations(output_shape, targets):
                     )
                 start = chord_ind
                 actual_chord = chord
-        for i in range(start, len(sequence)):
-            n_ones = (int)(n_features - (n_features)*(((i - start)/(len(sequence)-start))**(1/2)))
+        for i in range(start, n_frames):
+            n_ones = (int)(n_features - (n_features)*(((i - start)/(n_frames-start))**(1/2)))
             n_zeros = (int)((n_features - n_ones)/2)
             segmented_sequence.append(
                 np.concatenate((
