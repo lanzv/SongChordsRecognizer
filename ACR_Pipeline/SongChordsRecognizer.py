@@ -3,8 +3,9 @@ import argparse
 import numpy as np
 from ACR_Training.Models import MLP_scalered
 from ACR_Training.Datasets import IsophonicsDataset, Dataset
+from ACR_Training.Spectrograms import log_mel_spectrogram
 from KeyRecognizer import KeyRecognizer
-from DataPreprocessor import DataPreprocessor
+from ACR_Pipeline.DataPreprocessor import DataPreprocessor
 from ChordVoter import ChordVoter
 
 parser = argparse.ArgumentParser()
@@ -23,6 +24,7 @@ def main(args):
     window_size = 5
     waveform = args.waveform
     sample_rate = args.sample_rate
+    spectrogram_type = log_mel_spectrogram
 
 
     # Load models
@@ -32,7 +34,14 @@ def main(args):
 
 
     # Preprocess Data
-    x = DataPreprocessor.flatten_preprocess(waveform=waveform, sample_rate=sample_rate, hop_length=hop_length, window_size=window_size)
+    x = DataPreprocessor.flatten_preprocess(
+        waveform=waveform,
+        sample_rate=sample_rate,
+        hop_length=hop_length,
+        window_size=window_size,
+        spectrogram_generator=spectrogram_type,
+        norm_to_C=False
+    )
 
     # Get list of played chords
     baisc_chord_prediction = basic_mlp.predict(x)
@@ -43,7 +52,15 @@ def main(args):
     key = KeyRecognizer.estimate_key(chord_counts)
 
     # Tranapose Song to a C major
-    x_transposed = DataPreprocessor.flatten_transpose_preprocess(waveform=waveform, sample_rate=sample_rate, hop_length=hop_length, window_size=window_size, key=key)
+    x_transposed = DataPreprocessor.flatten_preprocess(
+        waveform=waveform,
+        sample_rate=sample_rate,
+        hop_length=hop_length,
+        window_size=window_size,
+        spectrogram_generator=spectrogram_type,
+        norm_to_C=True,
+        key=key
+    )
 
     # Get chord sequence of a song
     transposed_chord_prediction = C_transposed_mlp.predict(x_transposed)

@@ -50,7 +50,6 @@ class Dataset():
             n_steps = -(to_shift%12) if to_shift%12 < 7 else 12-(to_shift%12)
         else:
             n_steps = 0
-            print("why am i here ?!")
         # Simplify chord label
         chord = re.sub('6|7|9|11|13|maj|\/[0-9]|\/\#[0-9]|\/b[0-9]|\(.*\)', '', chord)
         chord = re.sub(':$', '', chord)
@@ -324,7 +323,6 @@ class IsophonicsDataset(Dataset):
             n_steps = -(to_shift%12) if to_shift%12 < 7 else 12-(to_shift%12)
         else:
             n_steps = 0
-            print("why am i here ?!")
         # transpose song to C
         waveform_shifted = librosa.effects.pitch_shift(waveform, sample_rate, n_steps=n_steps)
         # Get spectrogram
