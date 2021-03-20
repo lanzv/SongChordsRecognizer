@@ -21,8 +21,8 @@ def save_preprocessed_Isophonics(args):
     # Prepare and Save Isophonics dataset
     #data = IsophonicsDataset(args.isophonics_audio_directory, args.isophonics_annotations_directory, sample_rate=args.sample_rate)
     data = IsophonicsDataset.load_dataset("./SavedDatasets/Isophonics_22050.ds")
-    #data.save_segmentation_samples(dest="./Segmentations/Isophonics1000",hop_length=args.hop_length, norm_to_C=args.norm_to_C, spectrogram_generator=spectrogram, n_frames=args.n_frames)
-    data.save_preprocessed_dataset(dest=args.isophonics_prep_dest, hop_length=args.hop_length, norm_to_C=args.norm_to_C, spectrogram_generator=spectrogram, n_frames=args.n_frames)
+    data.save_segmentation_samples(dest="./Segmentations/Isophonics50.seg",hop_length=args.hop_length, norm_to_C=args.norm_to_C, spectrogram_generator=spectrogram, n_frames=args.n_frames)
+    #data.save_preprocessed_dataset(dest=args.isophonics_prep_dest, hop_length=args.hop_length, norm_to_C=args.norm_to_C, spectrogram_generator=spectrogram, n_frames=args.n_frames)
     #with lzma.open(args.isophonics_prep_dest, "wb") as dataset_file:
     #    pickle.dump((data.preprocess_single_chords_list(args.window_size, args.flattened_window, args.hop_length, args.to_skip, args.norm_to_C, spectrogram)), dataset_file)
     #print("[INFO] The Dataset was saved successfully.")
@@ -30,7 +30,8 @@ def save_preprocessed_Isophonics(args):
 def save_preprocessed_Billboard(args):
     # Prepare and Save Billboard dataset
     data = BillboardDataset(audio_directory=args.billboard_audio_directory, annotations_directory=args.billboard_annotations_directory)
-    data.save_preprocessed_dataset(dest=args.billboard_prep_dest, n_frames=args.n_frames)
+    #data.save_preprocessed_dataset(dest=args.billboard_prep_dest, n_frames=args.n_frames)
+    data.save_segmentation_samples(dest="./Segmentations/Billboard1000.seg", n_frames=500)
 
 
 parser = argparse.ArgumentParser()
@@ -46,14 +47,14 @@ parser.add_argument("--billboard_prep_dest", default="./PreprocessedDatasets/bil
 parser.add_argument("--dataset", default="isophonics", type=str, help="Dataset we want to preprocess, {isophonics, billboard}")
 #           Isophonics
 parser.add_argument("--sample_rate", default=22050, type=int, help="Sample rate for each song.")
-parser.add_argument("--hop_length", default=512, type=int, help="10*(sample_rate/hop_length) is a number of miliseconds between two frames.")
+parser.add_argument("--hop_length", default=11008, type=int, help="10*(sample_rate/hop_length) is a number of miliseconds between two frames.")
 parser.add_argument("--window_size", default=5, type=int, help="Spectrograms on left, and also spectrogram on right of the time bin -> window_size*2 + 1 spectrograms grouped together.")
 parser.add_argument("--flattened_window", default=True, type=bool, help="Whether the spectrogram window should be flatten to one array or it sould be array of spectrograms.")
 parser.add_argument("--to_skip", default=1, type=int, help="How many spectrogram we want to skip when creating spectrogram window.")
 parser.add_argument("--norm_to_C", default=True, type=bool, help="Whether we want to transpose all songs to C key (or D dorian, .. A minor, ...)")
-parser.add_argument("--feature_type", default="cqt_spec", type=str, help="Spectrogram types, {cqt_spec,log_mel_spec,cqt_chrom,stft_chrom}")
+parser.add_argument("--feature_type", default="log_mel_spec", type=str, help="Spectrogram types, {cqt_spec,log_mel_spec,cqt_chrom,stft_chrom}")
 #           Billboard
-parser.add_argument("--n_frames", default=1000, type=int, help="Length of song subsequence we are consinder when predicting chords to keep some context.")
+parser.add_argument("--n_frames", default=50, type=int, help="Length of song subsequence we are consinder when predicting chords to keep some context.")
 
 # Training args
 parser.add_argument("--test_size", default=0.3, type=lambda x:int(x) if x.isdigit() else float(x), help="Test set size.")
