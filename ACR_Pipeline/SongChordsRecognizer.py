@@ -6,7 +6,7 @@ from ACR_Training.Datasets import IsophonicsDataset, Dataset
 from ACR_Training.Spectrograms import log_mel_spectrogram
 from KeyRecognizer import KeyRecognizer
 from ACR_Pipeline.DataPreprocessor import DataPreprocessor
-from ChordVoter import ChordVoter
+from ACR_Pipeline.ChordVoter import ChordVoter
 
 parser = argparse.ArgumentParser()
 # Song Chords Recognizer arguments
@@ -66,7 +66,11 @@ def main(args):
     transposed_chord_prediction = C_transposed_mlp.predict(x_transposed)
 
     # Chord voting for each beat
-    chord_sequence = ChordVoter.vote_for_beats(chord_sequence=transposed_chord_prediction, waveform=waveform, sample_rate=sample_rate)
+    chord_sequence = ChordVoter.vote_for_beats(
+        chord_sequence=transposed_chord_prediction,
+        waveform=waveform, sample_rate=sample_rate,
+        hop_length=hop_length
+    )
 
     return chord_sequence
 
