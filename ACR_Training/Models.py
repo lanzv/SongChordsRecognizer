@@ -13,6 +13,7 @@ from ACR_Training.SegmentationModels import SegmentationCRNN
 import lzma
 import os
 import pickle
+from sklearn.model_selection import cross_val_score
 
 
 class MLP():
@@ -49,6 +50,10 @@ class MLP():
         with lzma.open(model_path, "rb") as model_file:
             model = pickle.load(model_file)
         return model
+
+    def print_cross_val_score(self, X, y):
+        score = cross_val_score(self.model, X, y)
+        print("Cross validation score: ", 100*score, " | Average score: ", 100*np.mean(score))
 
     @staticmethod
     def mir_score(x, y):
