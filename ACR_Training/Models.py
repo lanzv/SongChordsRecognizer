@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix
 import numpy as np
 import sklearn.pipeline
 import sklearn.preprocessing
-from SegmentationModels import SegmentationCRNN
+from ACR_Training.SegmentationModels import SegmentationCRNN
 
 
 

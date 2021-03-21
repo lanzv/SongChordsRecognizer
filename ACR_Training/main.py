@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import argparse
 
-from Datasets import BillboardDataset, IsophonicsDataset
+from ACR_Training.Datasets import BillboardDataset, IsophonicsDataset
 import sys
-from Spectrograms import cqt_spectrogram, log_mel_spectrogram, cqt_chromagram, stft_chromagram
+from ACR_Training.Spectrograms import cqt_spectrogram, log_mel_spectrogram, cqt_chromagram, stft_chromagram
 import pickle
 import lzma
 
