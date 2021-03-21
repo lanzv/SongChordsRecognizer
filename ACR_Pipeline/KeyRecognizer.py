@@ -33,6 +33,29 @@ class KeyRecognizer():
     @staticmethod
     def estimate_key(chord_counts):
         """
+        Function will estimate key based on the chord counts predicted (with not that high accuracy) from the audio.
+        All estimated keys are in Ionian modus. The function doesn't estimate the modus (dorian, phrygian, lydian, ...).
+
+        Parameters
+        ----------
+        chord_counts : dictionary, key: int, value: int
+            dictionary of chord counts in the song, a key indicates the chord index, a value indicates its count in the audio
+        Returns
+        -------
+        key : np array
+            flattened window of spectrograms arround specific time point
         """
-        key = 0
+        scores = {}
+        # Iterate over all keys
+        for key in KeyRecognizer.key_chords:
+            score = 0
+            # Sum number of chords that fits the key
+            for chord_ind in KeyRecognizer.key_chords[key]:
+                if chord_ind in chord_counts:
+                    score = score + chord_counts[chord_ind]
+            scores[key] = score
+        
+        # Get the most common key with the highest score
+        key = max(scores, key=scores.get).split("/")[0]
         return key
+        

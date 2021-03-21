@@ -47,7 +47,7 @@ def main(args):
     chords, counts = np.unique(baisc_chord_prediction, return_counts=True)
     chord_counts = dict(zip(chords, counts))
 
-    # Get song's key (not really tonic, A moll is same as a C major or D dorian)
+    # Get song's key (not really tonic, A minor/ailoian is same as a C major or D dorian)
     key = KeyRecognizer.estimate_key(chord_counts)
 
     # Tranapose Song to a C major
