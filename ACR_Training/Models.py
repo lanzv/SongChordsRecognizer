@@ -10,7 +10,9 @@ import numpy as np
 import sklearn.pipeline
 import sklearn.preprocessing
 from ACR_Training.SegmentationModels import SegmentationCRNN
-
+import lzma
+import os
+import pickle
 
 
 class MLP():
@@ -36,7 +38,17 @@ class MLP():
             normalize='all', xticks_rotation='vertical', include_values=False)  
         plt.show()  
 
+    def save(self, model_path="./model.model"):
+        # Save this model.
+        with lzma.open(model_path, "wb") as model_file:
+            pickle.dump(self, model_file)
 
+    @staticmethod
+    def load(model_path="./mode.model") -> 'MLP':
+        # Load MLP model
+        with lzma.open(model_path, "rb") as model_file:
+            model = pickle.load(model_file)
+        return model
 
     @staticmethod
     def mir_score(x, y):
