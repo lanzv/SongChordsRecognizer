@@ -2,9 +2,8 @@
 import argparse
 import numpy as np
 from ACR_Training.Models import MLP_scalered
-from ACR_Training.Datasets import IsophonicsDataset, Dataset
 from ACR_Training.Spectrograms import log_mel_spectrogram
-from KeyRecognizer import KeyRecognizer
+from ACR_Pipeline.KeyRecognizer import KeyRecognizer
 from ACR_Pipeline.DataPreprocessor import DataPreprocessor
 from ACR_Pipeline.ChordVoter import ChordVoter
 
