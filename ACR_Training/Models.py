@@ -51,7 +51,7 @@ class MLP():
             model = pickle.load(model_file)
         return model
 
-    def print_cross_val_score(self, X, y):
+    def display_cross_val_score(self, X, y):
         score = cross_val_score(self.model, X, y)
         print("Cross validation score: ", 100*score, " | Average score: ", 100*np.mean(score))
 
