@@ -27,7 +27,7 @@ class ChordVoter():
 
         voted_chords = []
 
-        for i in range(beats):
+        for i in range(len(beats)):
             if i+1 < len(beats):
                 voted_chords.append(
                     np.bincount(chord_sequence[beats[i]:beats[i+1]]).argmax()

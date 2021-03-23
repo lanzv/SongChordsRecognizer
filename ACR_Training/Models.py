@@ -28,6 +28,9 @@ class MLP():
         self.model.fit(data, targets)
         print("[INFO] The MLP model was successfully trained.")
 
+    def predict(self, data):
+        return (self.model.predict(data))
+
     def score(self, data, targets):
         return self.model.score(data, targets)
     
