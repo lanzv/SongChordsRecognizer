@@ -27,8 +27,8 @@ def main(args):
 
 
     # Load models
-    basic_mlp = MLP_scalered.load('./models/basic_mlp.model')
-    C_transposed_mlp = MLP_scalered.load('./models/C_transposed_mlp.model')
+    basic_mlp = MLP_scalered.load('./ACR_Pipeline/models/basic_mlp.model')
+    C_transposed_mlp = MLP_scalered.load('./ACR_Pipeline/models/C_transposed_mlp.model')
 
 
 
@@ -71,7 +71,14 @@ def main(args):
         hop_length=hop_length
     )
 
-    return chord_sequence
+    # Transpose to the original sequence
+    original_chord_sequence = DataPreprocessor.transpose(
+        chord_sequence=chord_sequence,
+        from_key = 'C',
+        to_key = key
+    )
+
+    return DataPreprocessor.chord_indices_to_notations(original_chord_sequence)
 
 if __name__ == "__main__":
     args = parser.parse_args([] if "__file__" not in globals() else None)
