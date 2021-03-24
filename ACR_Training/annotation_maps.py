@@ -1,4 +1,8 @@
 
+N_CHORDS = 25
+N_KEYS = 12
+N_KEY_MODES = 12
+
 keys_map = {
     "C" : 0,        "S" : 0,                "N" : 0,
     "C#" : 1,       "Db" : 1,

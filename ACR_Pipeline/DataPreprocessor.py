@@ -1,7 +1,7 @@
 import numpy as np
 from ACR_Training.Spectrograms import log_mel_spectrogram
 from ACR_Training.Datasets import IsophonicsDataset
-from ACR_Training.annotation_maps import keys_map, chords_map
+from ACR_Training.annotation_maps import keys_map, chords_map, N_CHORDS, N_KEYS
 
 class DataPreprocessor():
 
@@ -68,14 +68,16 @@ class DataPreprocessor():
         """
         from_ind = keys_map[from_key]
         to_ind = keys_map[to_key]
-        diff = (to_ind + len(keys_map) - from_ind) % len(keys_map)
+        diff = (to_ind + N_KEYS - from_ind) % N_KEYS
 
         transposed_sequence = []
         for chord in chord_sequence:
-            if (chord + 2*diff < len(chords_map)):
+            if chord == 0: # chord is unknown -> N
+                transposed_sequence.append(chord)
+            elif (chord + 2*diff < N_CHORDS):
                 transposed_sequence.append(chord+2*diff)
             else:
-                transposed_sequence.append((chord+2*diff)%len(chords_map) + 1)
+                transposed_sequence.append((chord+2*diff)%N_CHORDS + 1)
 
         return transposed_sequence
 
