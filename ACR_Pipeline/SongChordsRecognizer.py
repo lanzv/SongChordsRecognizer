@@ -19,11 +19,12 @@ parser.add_argument("--seed", default=42, type=int, help="Random seed.")
 
 def main(args):
     # Arguments
-    hop_length = 512
+    hop_length = 1024
     window_size = 5
     waveform = args.waveform
-    sample_rate = args.sample_rate
+    sample_rate = 44100
     spectrogram_type = log_mel_spectrogram
+    skip_coef=22
 
 
     # Load models
@@ -39,7 +40,8 @@ def main(args):
         hop_length=hop_length,
         window_size=window_size,
         spectrogram_generator=spectrogram_type,
-        norm_to_C=False
+        norm_to_C=False,
+        skip_coef=skip_coef
     )
 
     # Get list of played chords
@@ -58,7 +60,8 @@ def main(args):
         window_size=window_size,
         spectrogram_generator=spectrogram_type,
         norm_to_C=True,
-        key=key
+        key=key,
+        skip_coef=skip_coef
     )
 
     # Get chord sequence of a song

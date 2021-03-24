@@ -1,3 +1,4 @@
+from typing import Sequence
 import numpy as np
 from ACR_Training.Spectrograms import log_mel_spectrogram
 from ACR_Training.Datasets import IsophonicsDataset
@@ -6,7 +7,7 @@ from ACR_Training.annotation_maps import keys_map, chords_map, N_CHORDS, N_KEYS
 class DataPreprocessor():
 
     @staticmethod
-    def flatten_preprocess(waveform, sample_rate=44100, hop_length=512, nfft=2*14, window_size=5, spectrogram_generator=log_mel_spectrogram, norm_to_C=False, key='C'):
+    def flatten_preprocess(waveform, sample_rate=44100, hop_length=512, nfft=2*14, window_size=5, spectrogram_generator=log_mel_spectrogram, norm_to_C=False, key='C', skip_coef=1):
         """
         Preprocess function that prepares data features as a spectrogram array flattened with context arround.
 
@@ -24,6 +25,8 @@ class DataPreprocessor():
             how many spectrograms on left and on right we should take 
         spectrogram_generator : method from Spectrograms.py
             function that generates spectrogram
+        skip_coef : int
+            coeficient that multiplies window shifts -> some spectrogram are skipped in the flattened window
         Returns
         -------
         prep_data : np array
@@ -33,20 +36,66 @@ class DataPreprocessor():
         # Iterate over all audio files
         # Get spectrogram
         spectrogram = IsophonicsDataset.preprocess_audio(waveform=waveform, sample_rate=sample_rate, spectrogram_generator=spectrogram_generator, nfft=nfft, hop_length=hop_length, norm_to_C=norm_to_C, key=key)
+        spectrogram = np.array(spectrogram)
         spec_length, num_samples = spectrogram.shape
 
         # Collect data for each spectrogram sample
         for i in range(num_samples):
             # Get data window with zero margin
+            n_pre_zeros, window_indices, n_post_zeros = DataPreprocessor.__get_flatten_indices(actual_index=i, num_samples=num_samples, skip_coef=skip_coef, window_size=window_size)
             prep_data.append(
                 np.concatenate((
-                    np.zeros((abs(min(0, i-window_size)), spec_length)),
-                    np.array(spectrogram[:, max(0, i-window_size):min(i+window_size+1, num_samples)]).swapaxes(0,1),
-                    np.zeros((abs(min(0, (num_samples)-(i+window_size+1))), spec_length))
+                    np.zeros((n_pre_zeros, spec_length)),
+                    np.array(spectrogram[:, window_indices]).swapaxes(0,1),
+                    np.zeros((n_post_zeros, spec_length))
                 ), axis = 0).flatten()
             )
 
         return np.array(prep_data)
+
+
+
+    @staticmethod
+    def __get_flatten_indices(actual_index, num_samples, skip_coef=1, window_size=5):
+        """
+        Find indices of spectrogram included in the window.
+
+        Parameters
+        ----------
+        actual_index : int
+            index of acutal spectrogram that we are creating a window arround
+        num_samples : int
+            number of spectrogram samples, the maximum index
+        skip_coef : int
+            coeficient that multiplies window shifts -> some spectrogram are skipped in the flattened window
+        window_size : int
+            how many spectrograms on left and on right we should take
+        Returns
+        -------
+        n_pre_zeros : int
+            number of zeros before spectrogram in the flattened window
+        window_indices : int list
+            indices of spectrogram included in the flattened window
+        n_post_zeros : int
+            number of zeros after spectrogram in the flattened window
+        """
+        n_pre_zeros = 0
+        window_indices = []
+        n_post_zeros = 0
+        for i in range(window_size * 2 + 1):
+            if (actual_index - window_size*skip_coef) + i*skip_coef >= 0 and (actual_index - window_size*skip_coef) + i*skip_coef <  num_samples: 
+                window_indices.append((actual_index - window_size*skip_coef) + i*skip_coef)
+            elif (actual_index - window_size*skip_coef) + i*skip_coef < 0 :
+                n_pre_zeros = n_pre_zeros + 1
+            elif (actual_index - window_size*skip_coef) + i*skip_coef >= num_samples:
+                n_post_zeros = n_post_zeros + 1
+            else:
+                raise Exception("DataPreprocessor __get_flatten_indices faced to unexptected situation.")
+
+        return n_pre_zeros, window_indices, n_post_zeros
+
+
+
 
     @staticmethod
     def transpose(chord_sequence, from_key='C', to_key='C'):
