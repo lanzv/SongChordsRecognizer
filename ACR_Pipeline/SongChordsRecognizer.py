@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 import argparse
 import numpy as np
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), "..\\"))
 from ACR_Training.Models import MLP_scalered
 from ACR_Training.Spectrograms import log_mel_spectrogram
 from ACR_Pipeline.KeyRecognizer import KeyRecognizer
 from ACR_Pipeline.DataPreprocessor import DataPreprocessor
 from ACR_Pipeline.ChordVoter import ChordVoter
+
 
 parser = argparse.ArgumentParser()
 # Song Chords Recognizer arguments
