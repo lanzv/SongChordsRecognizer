@@ -46,9 +46,10 @@ class MLP():
         # Save this model.
         with lzma.open(model_path, "wb") as model_file:
             pickle.dump(self, model_file)
+        print("[INFO] The MLP model was saved successfully")
 
     @staticmethod
-    def load(model_path="./mode.model") -> 'MLP':
+    def load(model_path="./model.model") -> 'MLP':
         # Load MLP model
         with lzma.open(model_path, "rb") as model_file:
             model = pickle.load(model_file)
@@ -137,6 +138,21 @@ class CRNN():
         plt.ylim([0.0, 1])
         plt.legend(loc='lower right')
         plt.show()
+
+
+    def save(self, model_path="./model.model"):
+        # Save this model.
+        with lzma.open(model_path, "wb") as model_file:
+            pickle.dump(self, model_file)
+        print("[INFO] The CRNN model was saved successfully")
+
+    @staticmethod
+    def load(model_path="./model.model") -> 'CRNN':
+        # Load MLP model
+        with lzma.open(model_path, "rb") as model_file:
+            model = pickle.load(model_file)
+        return model
+
 
     def display_confusion_matrix(self, data, targets):
         # Define labels
