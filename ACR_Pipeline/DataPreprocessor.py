@@ -22,7 +22,7 @@ class DataPreprocessor():
         nfft : int
             length of FFT, power of 2
         n_frames : int
-             how many frames should be included in a subsequence of a song
+            how many frames should be included in a subsequence of a song
         spectrogram_generator : method from Spectrograms.py
             function that generates spectrogram
         norm_to_C : bool
@@ -36,7 +36,16 @@ class DataPreprocessor():
         """
         prep_data = []
 
-        spectrogram = IsophonicsDataset.preprocess_audio(waveform=waveform, sample_rate=sample_rate, spectrogram_generator=spectrogram_generator, nfft=nfft, hop_length=hop_length, norm_to_C=norm_to_C, key=key)
+        spectrogram = IsophonicsDataset.preprocess_audio(
+            waveform=waveform,
+            sample_rate=sample_rate,
+            spectrogram_generator=spectrogram_generator,
+            nfft=nfft,
+            hop_length=hop_length,
+            norm_to_C=norm_to_C,
+            key=key
+            ).swapaxes(0,1)
+
 
         for i in range((int)(spectrogram.shape[0]/n_frames)):
             # Get chroma
@@ -52,7 +61,12 @@ class DataPreprocessor():
             ), axis=0 )
         )
 
-        return np.array(prep_data)
+        # Add channel
+        prep_data = np.array(prep_data)
+        a1, a2, a3 = prep_data.shape
+        prep_data = prep_data.reshape((a1,a2,a3,1))
+
+        return prep_data
 
 
     @staticmethod

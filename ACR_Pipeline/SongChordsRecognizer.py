@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 import argparse
 import numpy as np
+import librosa
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), "..\\"))
-from ACR_Training.Models import MLP_scalered
-from ACR_Training.Spectrograms import log_mel_spectrogram
+from ACR_Training.Models import MLP_scalered, CRNN
+from ACR_Training.Spectrograms import log_mel_spectrogram, cqt_spectrogram
 from ACR_Pipeline.KeyRecognizer import KeyRecognizer
 from ACR_Pipeline.DataPreprocessor import DataPreprocessor
 from ACR_Pipeline.ChordVoter import ChordVoter
@@ -31,8 +32,9 @@ def main(args):
 
 
     # Load models
-    basic_mlp = MLP_scalered.load('./ACR_Pipeline/models/original.model')
-    C_transposed_mlp = MLP_scalered.load('./ACR_Pipeline/models/transposed.model')
+    basic_mlp = MLP_scalered.load('./ACR_Pipeline/models/original_mlp.model')
+    C_transposed_crnn = CRNN()
+    C_transposed_crnn.load('./ACR_Pipeline/models/transposed_crnn.h5')
 
 
 
@@ -56,19 +58,20 @@ def main(args):
     key = KeyRecognizer.estimate_key(chord_counts)
 
     # Tranapose Song to a C major
-    x_transposed = DataPreprocessor.flatten_preprocess(
-        waveform=waveform,
-        sample_rate=sample_rate,
-        hop_length=hop_length,
-        window_size=window_size,
-        spectrogram_generator=spectrogram_type,
+    resampled_waveform = librosa.resample(waveform, sample_rate, 22050)
+    x_transposed = DataPreprocessor.sequence_preprocess(
+        waveform=resampled_waveform,
+        sample_rate=22050,
+        hop_length=512,
+        n_frames=1000,
+        spectrogram_generator=cqt_spectrogram,
         norm_to_C=True,
         key=key,
-        skip_coef=skip_coef
     )
 
     # Get chord sequence of a song
-    transposed_chord_prediction = C_transposed_mlp.predict(x_transposed)
+    transposed_chord_prediction = C_transposed_crnn.predict(x_transposed).argmax(axis=2).flatten()
+
 
     # Chord voting for each beat
     chord_sequence = ChordVoter.vote_for_beats(

@@ -89,8 +89,9 @@ class CRNN():
     """
     Very basic CRNN model, maybe not working, who knows.
     """
-    def __init__(self, input_shape, output_classes):
-        n_frames, n_features, chanells = input_shape
+    def __init__(self,):
+        input_shape = (1000, 252, 1)
+        output_classes = 25
         # Create model
         model = tensorflow.keras.models.Sequential()
 
@@ -113,10 +114,7 @@ class CRNN():
             metrics=['accuracy']
         )
 
-
-        model.summary()
         self.model = model
-        print("[INFO] The CRNN model was successfully created.")
 
     def fit(self, data, targets, dev_data, dev_targets, epochs=50):
         # Train model
@@ -129,7 +127,10 @@ class CRNN():
     def score(self, data, targets):
         _, test_acc = self.model.evaluate(data, targets, verbose=2)
         return test_acc
-    
+
+    def predict(self, data):
+        return self.model.predict(data)
+
     def display_training_progress(self):
         plt.plot(self.history.history['accuracy'], label='accuracy')
         plt.plot(self.history.history['val_accuracy'], label = 'val_accuracy')
