@@ -142,16 +142,13 @@ class CRNN():
 
     def save(self, model_path="./model.model"):
         # Save this model.
-        with lzma.open(model_path, "wb") as model_file:
-            pickle.dump(self, model_file)
+        self.model.save(model_path)
         print("[INFO] The CRNN model was saved successfully")
 
-    @staticmethod
-    def load(model_path="./model.model") -> 'CRNN':
-        # Load MLP model
-        with lzma.open(model_path, "rb") as model_file:
-            model = pickle.load(model_file)
-        return model
+
+    def load(self, model_path="./model.model"):
+        # Load tensorflow model
+        self.model = tensorflow.keras.models.load_model(model_path)
 
 
     def display_confusion_matrix(self, data, targets):
