@@ -31,8 +31,8 @@ def main(args):
 
 
     # Load models
-    basic_mlp = MLP_scalered.load('./ACR_Pipeline/models/basic_mlp.model')
-    C_transposed_mlp = MLP_scalered.load('./ACR_Pipeline/models/C_transposed_mlp.model')
+    basic_mlp = MLP_scalered.load('./ACR_Pipeline/models/original.model')
+    C_transposed_mlp = MLP_scalered.load('./ACR_Pipeline/models/transposed.model')
 
 
 
