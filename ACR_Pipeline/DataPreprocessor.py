@@ -7,6 +7,55 @@ from ACR_Training.annotation_maps import keys_map, chords_map, N_CHORDS, N_KEYS
 class DataPreprocessor():
 
     @staticmethod
+    def sequence_preprocess(waveform, sample_rate=44100, hop_length=512, nfft=2*14, n_frames=1000, spectrogram_generator=log_mel_spectrogram, norm_to_C=False, key='C'):
+        """
+        Preprocess function that prepares data features as a spectrogram sequences of n_frames frames.
+
+        Parameters
+        ----------
+        waveform : list of floats
+            data of audio waveform
+        sample_rate : int
+            audio sample rate
+        hop_length : int
+            number of samples between successive spectrogram columns
+        nfft : int
+            length of FFT, power of 2
+        n_frames : int
+             how many frames should be included in a subsequence of a song
+        spectrogram_generator : method from Spectrograms.py
+            function that generates spectrogram
+        norm_to_C : bool
+            True if we want to transpose all songs to C key
+        key : string
+            label of audio music key
+        Returns
+        -------
+        prep_data : np array
+            sequences of song's chroma vectors separated to n_frames frames
+        """
+        prep_data = []
+
+        spectrogram = IsophonicsDataset.preprocess_audio(waveform=waveform, sample_rate=sample_rate, spectrogram_generator=spectrogram_generator, nfft=nfft, hop_length=hop_length, norm_to_C=norm_to_C, key=key)
+
+        for i in range((int)(spectrogram.shape[0]/n_frames)):
+            # Get chroma
+            prep_data.append(spectrogram[i*n_frames:(i+1)*n_frames])
+
+        # Embed zero chromas to fill n_frames frames
+        last_ind = (int)(spectrogram.shape[0]/n_frames)
+        _, n_features = spectrogram.shape
+        prep_data.append(
+            np.concatenate((
+                np.array(spectrogram[last_ind*n_frames:]),
+                np.zeros((n_frames - (len(spectrogram) - last_ind*n_frames), n_features))
+            ), axis=0 )
+        )
+
+        return np.array(prep_data)
+
+
+    @staticmethod
     def flatten_preprocess(waveform, sample_rate=44100, hop_length=512, nfft=2*14, window_size=5, spectrogram_generator=log_mel_spectrogram, norm_to_C=False, key='C', skip_coef=1):
         """
         Preprocess function that prepares data features as a spectrogram array flattened with context arround.
@@ -25,6 +74,10 @@ class DataPreprocessor():
             how many spectrograms on left and on right we should take 
         spectrogram_generator : method from Spectrograms.py
             function that generates spectrogram
+        norm_to_C : bool
+            True if we want to transpose all songs to C key
+        key : string
+            label of audio music key
         skip_coef : int
             coeficient that multiplies window shifts -> some spectrogram are skipped in the flattened window
         Returns
