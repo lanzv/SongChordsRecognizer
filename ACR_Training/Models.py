@@ -140,13 +140,13 @@ class CRNN():
         plt.show()
 
 
-    def save(self, model_path="./model.model"):
+    def save(self, model_path="./model.h5"):
         # Save this model.
         self.model.save(model_path)
         print("[INFO] The CRNN model was saved successfully")
 
 
-    def load(self, model_path="./model.model"):
+    def load(self, model_path="./model.h5"):
         # Load tensorflow model
         self.model = tensorflow.keras.models.load_model(model_path)
 

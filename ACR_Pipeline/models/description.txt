@@ -1,4 +1,8 @@
 sample_rate = 44100, hop_length = 1024, window_size = 5, skip_coef = 22, spectrogram = log_mel_spec
 
-original.model ... original keys
-transposed.model ... all songs transposed to C major (ionian)
+    original_mlp.model ... original keys
+
+
+sample_rate = 22050, hop_length = 512, n_frames = 1000, spectrogram = cqt_spectrogram
+
+    transposed_crnn.model ... all songs transposed to C major (ionian) in 23s long sequences
