@@ -12,7 +12,7 @@ namespace SongChordsRecognizer.Parsers
         #region Public core methods
 
         /// <summary>
-        /// Parse stft window argument or throw exception.
+        /// Parse stft window argument. If the arugment is not recognized, return null.
         /// </summary>
         /// <param name="stftWindow">STFT window type in string.</param>
         /// <returns>IWindow object that corresponds to stftWindow string.</returns>
@@ -31,14 +31,14 @@ namespace SongChordsRecognizer.Parsers
                 case "Nuttall":
                     return new NuttallWindow();
                 default:
-                    throw new Exception(ErrorMessages.ErrorMessages.Program_NotKnownSTFTWindowType);
+                    return null;
             }
         }
 
 
 
         /// <summary>
-        /// Parse spectrogram filtration argument or throw exception.
+        /// Parse spectrogram filtration argument. If the arugment is not recognized, return null.
         /// </summary>
         /// <param name="filtration">Spectrogram filtration type in string.</param>
         /// <returns>ISpectrogramFiltration object that corresponds to filtration string.</returns>
@@ -55,7 +55,7 @@ namespace SongChordsRecognizer.Parsers
                 case "FNH":
                     return new FilterNthHarmonics();
                 default:
-                    throw new Exception(ErrorMessages.ErrorMessages.Program_NotKnownFiltrationType);
+                    return null;
             }
         }
 

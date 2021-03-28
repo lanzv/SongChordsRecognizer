@@ -102,21 +102,20 @@ namespace WebSongChordsRecognizer.Controllers
         [HttpPost]
         public IActionResult VisualizeTemplateVoter(IFormFile audio, String windowArg, String filtrationArg, int sampleLengthLevel, int bpm)
         {
-            IWindow window;
-            ISpectrogramFiltration filtration;
+            IWindow window = InputArgsParser.ParseSTFTWindow(windowArg);
+            ISpectrogramFiltration filtration = InputArgsParser.ParseFiltration(filtrationArg);
             TemplateVoterResponse response;
 
             // Handle exceptions on input
             if (audio == null) { return RedirectToAction("IncorrectInputFormat", new { message = ErrorMessages.RecognizerController_MissingAudio }); }
             else if (!(bpm >= 5 && bpm <= 350)) { return RedirectToAction("IncorrectInputFormat", new { message = ErrorMessages.RecognizerController_InvalidSampleLengthLevel }); }
             else if (!(sampleLengthLevel >= 10 && sampleLengthLevel <= 18)) { return RedirectToAction("IncorrectInputFormat", new { message = ErrorMessages.RecognizerController_InvalidSampleLengthLevel }); }
+            else if (window == null) { return RedirectToAction("IncorrectInputFormat", new { message = ErrorMessages.Program_NotKnownSTFTWindowType }); }
+            else if (filtration == null) { return RedirectToAction("IncorrectInputFormat", new { message = ErrorMessages.Program_NotKnownFiltrationType }); }
             else
             {
                 try
                 {
-                    window = InputArgsParser.ParseSTFTWindow(windowArg);
-                    filtration = InputArgsParser.ParseFiltration(filtrationArg);
-
                     // process audio, generate chord sequence
                     response = templateVoter.GetChords(audio, window, filtration, sampleLengthLevel, bpm);
                 }
