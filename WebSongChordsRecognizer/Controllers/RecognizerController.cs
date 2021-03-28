@@ -8,6 +8,7 @@ using SongChordsRecognizer.Parsers;
 using System;
 using System.Diagnostics;
 using WebSongChordsRecognizer.Models;
+using WebSongChordsRecognizer.Service;
 
 namespace WebSongChordsRecognizer.Controllers
 {
@@ -20,6 +21,9 @@ namespace WebSongChordsRecognizer.Controllers
 
         private readonly ILogger<RecognizerController> _logger;
 
+        private readonly StatisticalModel statisticalModel;
+
+        private readonly TemplateVoter templateVoter;
 
 
         #endregion
@@ -30,6 +34,8 @@ namespace WebSongChordsRecognizer.Controllers
         public RecognizerController(ILogger<RecognizerController> logger)
         {
             _logger = logger;
+            statisticalModel = new StatisticalModel();
+            templateVoter = new TemplateVoter();
         }
 
 
@@ -57,41 +63,70 @@ namespace WebSongChordsRecognizer.Controllers
         /// It can be runned from Recognizer's Index page via upload form.
         /// </summary>
         /// <param name="audio">IFormFile audio file in WAV format.</param>
+        /// <returns>IActionResult, HTML View of a chord sequence, or error page.</returns>
+        [HttpPost]
+        public IActionResult VisualizeStatisticalModel(IFormFile audio)
+        {
+            StatisticalModelResponse response;
+            // Handle exceptions on input
+            if (audio == null) { return RedirectToAction("IncorrectInputFormat", new { message = ErrorMessages.RecognizerController_MissingAudio }); }
+            else
+            {
+                try
+                {
+                    // process audio, generate chord sequence
+                    response = statisticalModel.GetChords(audio);
+                }
+                catch (Exception e)
+                {
+                    return RedirectToAction("IncorrectInputFormat", new { message = e.Message });
+                }
+            }
+
+            return View(response);
+        }
+
+
+
+        /// <summary>
+        /// The visualization page.
+        /// There is a chord sequence that was generated from uploaded audio file.
+        /// It can be runned from Recognizer's Index page via upload form.
+        /// </summary>
+        /// <param name="audio">IFormFile audio file in WAV format.</param>
         /// <param name="windowArg">String argument for one of the provided convolutional windows.</param>
         /// <param name="filtrationArg">String argument for one of the provided spectrogram filtrations.</param>
         /// <param name="sampleLengthLevel">Int argument of logarithm of fourier transform length.</param>
         /// <param name="bpm">Int argument of beats per minute</param>
         /// <returns>IActionResult, HTML View of a chord sequence, or error page.</returns>
         [HttpPost]
-        public IActionResult VisualizeChordSequence(IFormFile audio, String windowArg, String filtrationArg, int sampleLengthLevel, int bpm)
+        public IActionResult VisualizeTemplateVoter(IFormFile audio, String windowArg, String filtrationArg, int sampleLengthLevel, int bpm)
         {
             IWindow window;
             ISpectrogramFiltration filtration;
-            RecognizerModel model = new RecognizerModel();
+            TemplateVoterResponse response;
 
             // Handle exceptions on input
-            try
+            if (audio == null) { return RedirectToAction("IncorrectInputFormat", new { message = ErrorMessages.RecognizerController_MissingAudio }); }
+            else if (!(bpm >= 5 && bpm <= 350)) { return RedirectToAction("IncorrectInputFormat", new { message = ErrorMessages.RecognizerController_InvalidSampleLengthLevel }); }
+            else if (!(sampleLengthLevel >= 10 && sampleLengthLevel <= 18)) { return RedirectToAction("IncorrectInputFormat", new { message = ErrorMessages.RecognizerController_InvalidSampleLengthLevel }); }
+            else
             {
-                if (audio == null)
-                    throw new Exception(ErrorMessages.RecognizerController_MissingAudio);
-                if (!(bpm >= 5 && bpm <= 350))
-                    throw new Exception(ErrorMessages.RecognizerController_InvalidSampleLengthLevel);
-                if (!(sampleLengthLevel >= 10 && sampleLengthLevel <= 18))
-                    throw new Exception(ErrorMessages.RecognizerController_InvalidSampleLengthLevel);
+                try
+                {
+                    window = InputArgsParser.ParseSTFTWindow(windowArg);
+                    filtration = InputArgsParser.ParseFiltration(filtrationArg);
 
-                window = InputArgsParser.ParseSTFTWindow(windowArg);
-                filtration = InputArgsParser.ParseFiltration(filtrationArg);
-
-                // process audio, generate chord sequence
-                model.ProcessAudio(audio, window, filtration, sampleLengthLevel, bpm);
-            }
-            catch (Exception e)
-            {
-                return RedirectToAction("IncorrectInputFormat", new { message = e.Message });
+                    // process audio, generate chord sequence
+                    response = templateVoter.GetChords(audio, window, filtration, sampleLengthLevel, bpm);
+                }
+                catch (Exception e)
+                {
+                    return RedirectToAction("IncorrectInputFormat", new { message = e.Message });
+                }
             }
 
-
-            return View(model);
+            return View(response);
         }
 
 

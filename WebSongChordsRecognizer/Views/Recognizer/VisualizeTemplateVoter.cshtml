@@ -1,4 +1,4 @@
-﻿@model WebSongChordsRecognizer.Models.RecognizerModel;
+﻿@model WebSongChordsRecognizer.Models.TemplateVoterResponse;
 @{
     ViewData["Title"] = "ChordSequence";
 }
@@ -9,7 +9,7 @@
 }
 
 <!-- content part -->
-@if (Model.ChordsPrepared)
+@if (Model.ChordSequence != null)
 {
     <!-- chord sequence -->
     <div class="chordsequence">
