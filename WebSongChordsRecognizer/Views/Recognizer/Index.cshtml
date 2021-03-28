@@ -15,84 +15,114 @@
 }
 
 <!-- content part -->
-<div class="upload-form">
-    <h4>Upload Audio File - WAV format</h4>
-    <form asp-controller="Recognizer" asp-action="VisualizeChordSequence"
-          enctype="multipart/form-data" method="post">
-        
-        <!-- upload file button -->
-        <div class="upload_file-div">
-            <input type="file" name="audio" />
-        </div>
+<div class="process-forms">
 
-        <div class="options w-100">
+    <!-- change model type buttons -->
+    <div class="change-forms">
+        <button id="statistical_model">STATISTICAL MODEL - recommended</button>
+        <button id="template_voter">SIMPLE TEMPLATE VOTER</button>
+    </div>
 
-            <h4 class="w-100">Options</h4>
 
-            <!-- convolutional window select field -->
-            <div class="window-div form-options w-50 w-sm-down-100">
-                <label class="col-sm-4" for="windows">
-                    <div class="help">
-                        (?)
-                        <span class="tooltiptext">STFT Window is a function that is applied on waveform and modifies its shape. We are using it in order to have Fourier Transform more accurate.</span>
-                    </div>
-                    STFT convolution window type
-                </label>
-                <select class="col-sm-8" value="Triangular" id="windows" name="windowArg">
-                    <option value="Rectangular">Rectangular window</option>
-                    <option value="Triangular" selected>Triangular window</option>
-                    <option value="Parzen">Parzen window</option>
-                    <option value="Welch">Welch window</option>
-                    <option value="Nuttall">Nuttall window</option>
-                </select>
+    <!-- form for statistical model, deep learning based -->
+    <div id="statistical_model-form" class="upload-form">
+        <form asp-controller="Recognizer" asp-action="VisualizeStatisticalModel"
+              enctype="multipart/form-data" method="post">
+
+            <h4>Upload Audio File - WAV format</h4>
+
+            <!-- upload file button -->
+            <div class="upload_file-div">
+                <input type="file" name="audio" />
             </div>
 
-            <!-- filtration type select field -->
-            <div class="filtration-div form-options w-50 w-sm-down-100">
-                <label class="col-sm-4" for="filtrations">
-                    <div class="help">
-                        (?)
-                        <span class="tooltiptext">Spectrogram filtration type to filtrate unplayed frequencies.</span>
-                    </div>
-                    Spectrogram filtration types
-                </label>
+            <!-- submit button -->
+            <button type="submit">Process!</button>
+        </form>
+    </div>
 
-                <select class="col-sm-8" value="Identity" id="filtrations" name="filtrationArg">
-                    <option value="Identity" selected>Identity</option>
-                    <option value="AFAM">Accompaniment Frequency Area Mask</option>
-                    <option value="WO">Weighted Octaves</option>
-                    <option value="FNH">Filter Nth Harmonics</option>
-                </select>
+
+    <!-- form for template voter model -->
+    <div id="template_voter-form" class="upload-form">
+        <form asp-controller="Recognizer" asp-action="VisualizeTemplateVoter"
+              enctype="multipart/form-data" method="post">
+
+            <h4>Upload Audio File - WAV format</h4>
+
+            <!-- upload file button -->
+            <div class="upload_file-div">
+                <input type="file" name="audio" />
             </div>
 
-            <!-- Furier sample length input field -->
-            <div class="lengthLevel-div form-options w-50 w-sm-down-100">
-                <label class="col-sm-4" for="lengthLevel">
-                    <div class="help">
-                        (?)
-                        <span class="tooltiptext">The STFT length_in_seconds = (2^(SampleLengthLevel))/(SampleRate)</span>
-                    </div>
-                    Sample Length Level
-                </label>
-                <input class="col-sm-8" type="number" id="lengthLevel" name="sampleLengthLevel" min="10" max="18" value="14">
+            <div class="options w-100">
+
+                <h4 class="w-100">Options</h4>
+
+                <!-- convolutional window select field -->
+                <div class="window-div form-options w-50 w-sm-down-100">
+                    <label class="col-sm-4" for="windows">
+                        <div class="help">
+                            (?)
+                            <span class="tooltiptext">STFT Window is a function that is applied on waveform and modifies its shape. We are using it in order to have Fourier Transform more accurate.</span>
+                        </div>
+                        STFT convolution window type
+                    </label>
+                    <select class="col-sm-8" value="Triangular" id="windows" name="windowArg">
+                        <option value="Rectangular">Rectangular window</option>
+                        <option value="Triangular" selected>Triangular window</option>
+                        <option value="Parzen">Parzen window</option>
+                        <option value="Welch">Welch window</option>
+                        <option value="Nuttall">Nuttall window</option>
+                    </select>
+                </div>
+
+                <!-- filtration type select field -->
+                <div class="filtration-div form-options w-50 w-sm-down-100">
+                    <label class="col-sm-4" for="filtrations">
+                        <div class="help">
+                            (?)
+                            <span class="tooltiptext">Spectrogram filtration type to filtrate unplayed frequencies.</span>
+                        </div>
+                        Spectrogram filtration types
+                    </label>
+
+                    <select class="col-sm-8" value="Identity" id="filtrations" name="filtrationArg">
+                        <option value="Identity" selected>Identity</option>
+                        <option value="AFAM">Accompaniment Frequency Area Mask</option>
+                        <option value="WO">Weighted Octaves</option>
+                        <option value="FNH">Filter Nth Harmonics</option>
+                    </select>
+                </div>
+
+                <!-- Furier sample length input field -->
+                <div class="lengthLevel-div form-options w-50 w-sm-down-100">
+                    <label class="col-sm-4" for="lengthLevel">
+                        <div class="help">
+                            (?)
+                            <span class="tooltiptext">The STFT length_in_seconds = (2^(SampleLengthLevel))/(SampleRate)</span>
+                        </div>
+                        Sample Length Level
+                    </label>
+                    <input class="col-sm-8" type="number" id="lengthLevel" name="sampleLengthLevel" min="10" max="18" value="14">
+                </div>
+
+                <!-- bpm input field -->
+                <div class="bpm-div form-options w-50 w-sm-down-100">
+                    <label class="col-sm-4" for="bpm">
+                        <div class="help">
+                            (?)
+                            <span class="tooltiptext">Beats per minute, how many beats are included in one minute.</span>
+                        </div>
+                        Beats per minute
+                    </label>
+                    <input class="col-sm-8" type="number" id="bpm" name="bpm" min="20" max="250" value="120">
+                </div>
             </div>
 
-            <!-- bpm input field -->
-            <div class="bpm-div form-options w-50 w-sm-down-100">
-                <label class="col-sm-4" for="bpm">
-                    <div class="help">
-                        (?)
-                        <span class="tooltiptext">Beats per minute, how many beats are included in one minute.</span>
-                    </div>
-                    Beats per minute
-                </label>
-                <input class="col-sm-8" type="number" id="bpm" name="bpm" min="20" max="250" value="120">
-            </div>
-        </div>
-
-        <!-- submit button -->
-        <button type="submit">Process!</button>
-    </form>
+            <!-- submit button -->
+            <button type="submit">Process!</button>
+        </form>
+    </div>
 </div>
 
 <br />

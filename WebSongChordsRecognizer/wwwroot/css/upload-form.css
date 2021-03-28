@@ -1,10 +1,42 @@
 ﻿
-/*general form styles*/
+/*change form buttons styles*/
 
+button#statistical_model {
+    margin-right: 1.5px;
+    background-color: #010056;
+    color: #d0d0d0;
+}
+
+button#template_voter {
+    margin-left: 1.5px;
+}
+
+.change-forms {
+    margin-top: 75px;
+    width: 100%;
+    display: inline-flex;
+}
+
+.change-forms button {
+    width: 100%;
+}
+
+div#statistical_model-form {
+    display: block;
+}
+
+div#template_voter-form{
+    display: none;
+}
+
+/*general form styles*/
 .upload-form {
     text-align: center;
-    padding-top: 75px;
     color: #7d7d7d;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid;
+    border-radius: 5px;
 }
 
 .upload-form h4 {
@@ -58,7 +90,7 @@
 
 /*form buttons, process button*/
 
-.upload-form button {
+.upload-form button, .change-forms button {
     border: 1px solid;
     border-radius: 5px;
     padding: 8px 90px;
