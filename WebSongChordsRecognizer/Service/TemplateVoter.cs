@@ -43,9 +43,9 @@ namespace WebSongChordsRecognizer.Service
                 // Generate CHROMAGRAM
                 Chromagram chromagram = new Chromagram(spectrogram, filtration);
                 // Classify chords
-                List<Chord> ChordSequence = ChordClassifier.GetChords(chromagram, bpm);
+                List<Chord> chordSequence = ChordClassifier.GetChords(chromagram, bpm);
 
-                response.ChordSequence = ChordSequence;
+                response.ChordSequence = chordSequence;
             }
 
             return response;
