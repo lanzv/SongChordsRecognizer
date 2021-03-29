@@ -14,7 +14,7 @@ namespace WebSongChordsRecognizer.Service
 {
     public class TemplateVoter
     {
-        #region Service Public Methods
+        #region Service public methods
 
         /// <summary>
         /// Whole process of the Song Chords Recognizer algorithm based on the template voting (the .NET part).

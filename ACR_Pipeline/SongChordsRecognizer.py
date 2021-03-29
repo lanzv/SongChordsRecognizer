@@ -96,10 +96,12 @@ def main(args, waveform, sample_rate):
     )
 
 
-    # Print data on the standard output
-    print(key)
-    print(bpm)
-    print(DataPreprocessor.chord_indices_to_notations(original_chord_sequence))
+    # Print data on the standard output in JSON format
+    print("{")
+    print(" \"Key\": \"", key, "\",")
+    print(" \"BPM\": \"", bpm, "\",")
+    print(" \"ChordSequence\": \"", DataPreprocessor.chord_indices_to_notations(original_chord_sequence), "\"")
+    print("}")
 
 if __name__ == "__main__":
     args = parser.parse_args([] if "__file__" not in globals() else None)

@@ -27,7 +27,7 @@ namespace WebSongChordsRecognizer.Models
         /// <summary>
         /// Beats per minute value.
         /// </summary>
-        public int BPM;
+        public String BPM;
 
 
 

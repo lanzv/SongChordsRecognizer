@@ -50,6 +50,29 @@ namespace SongChordsRecognizer.MusicFeatures
 
 
         /// <summary>
+        /// Function generates dictionary of all possible triad chords with its string description as a value.
+        /// Overall there are 48 chords, 12 possible root (12 chroma) and for each root we have
+        /// major, minor, augmented and diminished chord.
+        /// One chord has String description, root chroma, third chroma and fifth chroma.
+        /// </summary>
+        /// <returns>The dictionary of all 48 triad chords mapped with their string descriptions.</returns>
+        public static Dictionary<String, Triad> GetDictionaryOfTriads()
+        {
+            Dictionary<String, Triad> chords = new Dictionary<String, Triad>();
+
+            List<Triad> triadList = GetListOfTriads();
+
+            foreach(Triad triad in triadList)
+            {
+                chords.Add(triad.Description, triad);
+            }
+
+            return chords;
+        }
+
+
+
+        /// <summary>
         /// Function generates list of all possible Seventh chords.
         /// Overall there are 84 chords, 12 possible root (12 chroma) and for each root we have
         /// major seventh, minor seventh, dominant sevneth, diminished seventh, half-diminished seventh, 

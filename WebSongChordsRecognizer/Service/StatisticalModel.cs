@@ -7,8 +7,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using WebSongChordsRecognizer.Models;
 
 namespace WebSongChordsRecognizer.Service
@@ -34,7 +37,7 @@ namespace WebSongChordsRecognizer.Service
         #endregion
 
 
-        #region Service Public Methods
+        #region Service public methods
 
         /// <summary>
         /// Whole process of the Song Chords Recognizer algorithm based on the deep learning (the python part).
@@ -74,7 +77,7 @@ namespace WebSongChordsRecognizer.Service
 
 
                 // Execute process
-                string results = "";
+                string json_response = "";
                 string errors = "";
                 using (Process process = Process.Start(python_SongChordRecognizer))
                 {
@@ -84,7 +87,7 @@ namespace WebSongChordsRecognizer.Service
                     // Send sample rate
                     streamWriter.WriteLine(sample_rate);
                     // Get the output, chord sequence
-                    results = process.StandardOutput.ReadToEnd();
+                    json_response = process.StandardOutput.ReadToEnd();
                     errors = process.StandardError.ReadToEnd();
                 }
                 if(errors != "")
@@ -97,7 +100,7 @@ namespace WebSongChordsRecognizer.Service
 
 
                 // Parse console output
-                (response.ChordSequence, response.Key, response.BPM) = parseConsoleOutput(results);
+                (response.ChordSequence, response.Key, response.BPM) = parseConsoleOutput(json_response);
             }
 
             return response;
@@ -108,19 +111,54 @@ namespace WebSongChordsRecognizer.Service
         #endregion
 
 
-        #region Private Methods
+        #region Private methods
 
         /// <summary>
-        /// 
+        /// Parse Console Output from python ACR Pipeline in a json format.
         /// </summary>
-        /// <param name="results"></param>
-        /// <returns></returns>
-        private static (List<Chord>, string, int) parseConsoleOutput(String results)
+        /// <param name="json_response">JSON string that contains Key, BPM and ChordSequence keys.</param>
+        /// <returns>List of played chords, song's key and the bpm value.</returns>
+        private static (List<Chord>, string, string) parseConsoleOutput(String json_response)
         {
+            // Initialization
             List<Chord> chordSequence = new List<Chord>();
             String key = "";
-            int bpm = 0;
-            // ToDo
+            String bpm = "";
+
+            // Parse Json response
+            var jsonReader = JsonReaderWriterFactory.CreateJsonReader(
+                Encoding.UTF8.GetBytes(json_response),
+                new System.Xml.XmlDictionaryReaderQuotas()
+                );
+
+            // Get Json values
+            var root = XElement.Load(jsonReader);
+            key = root.XPathSelectElement("//Key").Value;
+            bpm = root.XPathSelectElement("//BPM").Value;
+            String chordSequenceStr = root.XPathSelectElement("//ChordSequence").Value;
+
+
+            // Get chord dictionary and add the None chord to it.
+            Dictionary<String, Triad> allChords = ChordsGenerator.GetDictionaryOfTriads();
+            allChords.Add("N", new Triad() { Description = "" });
+
+            // Parse and process chords
+            foreach (String notParsedChord in chordSequenceStr.Split(','))
+            {
+                // Parse chord annotation, trim the mess arround
+                String parsedChord = notParsedChord.Replace(" ", "");
+                parsedChord = parsedChord.Replace(",", "");
+                parsedChord = parsedChord.Replace("\'", "");
+                parsedChord = parsedChord.Replace("\"", "");
+                parsedChord = parsedChord.Replace("[", "");
+                parsedChord = parsedChord.Replace("]", "");
+                parsedChord = parsedChord.Replace(":min", "m");
+
+                // Add chord to a chordSequence list, if N is found, take the last predicted chord.
+                chordSequence.Add(allChords[parsedChord]);
+            }
+
+
             return (chordSequence, key, bpm);
         }
 
