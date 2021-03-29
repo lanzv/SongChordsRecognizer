@@ -22,8 +22,10 @@ class ChordVoter():
         -------
         voted_chords : int array
             sequence of chords corresponding to each beat
+        bpm : int
+            beats per minute value
         """
-        _, beats = librosa.beat.beat_track(y=waveform, sr=sample_rate, hop_length=hop_length)
+        bpm, beats = librosa.beat.beat_track(y=waveform, sr=sample_rate, hop_length=hop_length)
 
         voted_chords = []
 
@@ -37,4 +39,4 @@ class ChordVoter():
                     np.bincount(chord_sequence[beats[i]:-1]).argmax()
                 )
 
-        return voted_chords
+        return voted_chords, bpm
