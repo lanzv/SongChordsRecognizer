@@ -140,7 +140,7 @@ namespace WebSongChordsRecognizer.Service
 
             // Get chord dictionary and add the None chord to it.
             Dictionary<String, Triad> allChords = ChordsGenerator.GetDictionaryOfTriads();
-            allChords.Add("N", new Triad() { Description = "" });
+            allChords.Add("N", new Triad() { Description = "N" });
 
             // Parse and process chords
             foreach (String notParsedChord in chordSequenceStr.Split(','))

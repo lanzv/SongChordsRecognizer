@@ -11,6 +11,18 @@
 <!-- content part -->
 @if (Model.ChordSequence != null)
 {
+    <div class="song-description">
+        <!-- song's key -->
+        <div class="songskey">
+            <h4>Key: @Model.Key </h4> (in an ionian mode or its mode alternatives)
+        </div>
+
+        <!-- song's bpm -->
+        <div class="songsbpm">
+            <h4>BPM Value: @Model.BPM</h4>
+        </div>
+    </div>
+
     <!-- chord sequence -->
     <div class="chordsequence">
         @{
@@ -18,9 +30,12 @@
             for (int i = 0; i < Model.ChordSequence.Count; i = i + nonSeparablePartLength)
             {
                 <div class="bar">
-                    @for (int j = 0; j < nonSeparablePartLength && i + j < Model.ChordSequence.Count; j++)
+                    @for (int j = 0; j < nonSeparablePartLength; j++)
                     {
-                        <div class="chord">@Model.ChordSequence[i + j].Description</div>
+                        if (i + j < Model.ChordSequence.Count)
+                        {
+                            <div class="chord">@Model.ChordSequence[i + j].Description</div>
+                        }
                     }
                 </div>
             }
