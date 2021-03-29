@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SongChordsRecognizer.AudioSource;
 using SongChordsRecognizer.ErrorMessages;
 using SongChordsRecognizer.MusicFeatures;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using WebSongChordsRecognizer.Models;
 
@@ -50,7 +52,9 @@ namespace WebSongChordsRecognizer.Service
                 // Get audio data
                 audio.CopyTo(ms);
                 Byte[] audioBytes = ms.ToArray();
-
+                AudioSourceWav wav = new AudioSourceWav(audioBytes, audio.FileName);
+                string waveform = String.Join(";", wav.GetMonoWaveform());
+                double sample_rate = wav.SampleRate;
 
                 // Initialize Process
                 ProcessStartInfo python_SongChordRecognizer = new ProcessStartInfo();
@@ -64,6 +68,7 @@ namespace WebSongChordsRecognizer.Service
                 // Python process configuration
                 python_SongChordRecognizer.UseShellExecute = false;
                 python_SongChordRecognizer.CreateNoWindow = true;
+                python_SongChordRecognizer.RedirectStandardInput = true;
                 python_SongChordRecognizer.RedirectStandardOutput = true;
                 python_SongChordRecognizer.RedirectStandardError = true;
 
@@ -74,13 +79,18 @@ namespace WebSongChordsRecognizer.Service
                 using (Process process = Process.Start(python_SongChordRecognizer))
                 {
                     StreamWriter streamWriter = process.StandardInput;
-                    streamWriter.Write(audioBytes);
+                    // Send audio waveform
+                    streamWriter.WriteLine(waveform);
+                    // Send sample rate
+                    streamWriter.WriteLine(sample_rate);
+                    // Get the output, chord sequence
                     results = process.StandardOutput.ReadToEnd();
                     errors = process.StandardError.ReadToEnd();
                 }
                 if(errors != "")
                 {
                     // ToDo Better python executing error handling.
+                    Console.WriteLine(errors);
                     throw new Exception(ErrorMessages.StatisticalModel_ExecutingError);
                 }
 
