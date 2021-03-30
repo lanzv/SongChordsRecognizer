@@ -5,18 +5,19 @@ Song Chords Recognizer based on Deep Learning and statistical models coded and [
 ### Prerequisites
  - Python 3.8
  - python libraries - sklearn, tensorflow, librosa, mir_eval
- - [ACR_Training folder](../)
+ - [ACR_Training folder](../ACR_Training/ReadMe.md)
 
 
 
 
 
 ## Usage
+You can check the [Jupiter Notebook Demo](./Bachelor%20Research%20-%20Demo.ipynb).
 ### Shell 
 ```shell
 python SongChordsRecognizer.py
 ```
- - Standard Output -> 
+ - Standard Input ->
     ```
     [SONG's WAVEFORM IN STRING SEPARATED BY ';']
     [WAVEFORM's SAMPLE RATE]
@@ -26,7 +27,7 @@ python SongChordsRecognizer.py
         0.3215;0.1235;0.6213;-0.941;0.523
         44100
         ```
- - Standard Input -> 
+ - Standard Output ->
     ```
     {
         "Key": "C",
