@@ -41,6 +41,7 @@ Two well known datasets are included.
 ### Dataset issues
  1. No audio files provided.
  1. Not consistent chord annotations - sometimes B chord means Hes, sometimes B chord means H.
+ 1. Sometimes not correctly annotated chords (Something by Beatles).
  1. When the audio files exist, the dataset is too large.
 
 
@@ -51,11 +52,11 @@ Datasets have functions for data preprocessing. The audio waveform is parsed and
 
 ### MLP Preprocessing
 
-The function will generated the moving window of spectrograms flattened as a one feature set. Optionally, data can be transposed to C major key (and its mode alternatives).
+The function will generate the moving window of spectrograms flattened as a one feature set. Optionally, data can be transposed to C major key (and its mode alternatives).
 
 ### CRNN Preprocessing
 
-The function will generated the sequence of spectrograms as a one feature set.Optionally, data can be transposed to C major key (and its mode alternatives).
+The function will generate the sequence of spectrograms as a one feature set.Optionally, data can be transposed to C major key (and its mode alternatives).
 
 
 
