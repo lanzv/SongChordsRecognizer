@@ -573,19 +573,20 @@ class BassVsThird():
 
 
 
-class SegmentationVotingMLP():
+class SegmentationVoting():
     """
-
+    Two models, one predicting chords, one predicting harmony segments.
+    After the training single models, chord predictions of some predicted segments are taken and the most frequent chord is choosed for whole segment. 
     """
     def __init__(self, input_shape):
         self.model = CRNN_1(input_shape=input_shape, output_classes=25)
         self.segmentation_model = SegmentationCRNN(input_shape=input_shape)
-        print("[INFO] The MLP model was successfully created.")
+        print("[INFO] The SegmentationVoting model was successfully created.")
 
     def fit(self, data, targets, dev_data, dev_targets):
         self.model.fit(data, targets)
         self.segmentation_model.fit(data, targets, dev_data, dev_targets)
-        print("[INFO] The MLP model was successfully trained.")
+        print("[INFO] The SegmentationVoting model was successfully trained.")
 
     @staticmethod
     def vote(segmentations, chords):
@@ -612,7 +613,7 @@ class SegmentationVotingMLP():
         segmentations = self.segmentation_model.predict(data)
 
         # Change chords in segments as a most common segment's chord
-        predictions = SegmentationVotingMLP.vote(np.concatenate(chords), np.concatenate(segmentations))
+        predictions = SegmentationVoting.vote(np.concatenate(chords), np.concatenate(segmentations))
 
         return np.array(predictions)
 
