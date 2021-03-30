@@ -19,10 +19,10 @@ warnings.warn = warn
 
 parser = argparse.ArgumentParser()
 # Song Chords Recognizer arguments
-parser.add_argument("--sample_rate_mlp", default=44100, type=int, help="")
-parser.add_argument("--hop_length_mlp", default=1024, type=int, help="")
-parser.add_argument("--sample_rate_crnn", default=22050, type=int, help="")
-parser.add_argument("--hop_length_crnn", default=512, type=int, help="")
+parser.add_argument("--sample_rate_original", default=22050, type=int, help="")
+parser.add_argument("--hop_length_original", default=512, type=int, help="")
+parser.add_argument("--sample_rate_transposed", default=22050, type=int, help="")
+parser.add_argument("--hop_length_transposed", default=512, type=int, help="")
 parser.add_argument("--window_size", default=5, type=int, help="")
 parser.add_argument("--n_frames", default=1000, type=int, help="")
 parser.add_argument("--skip_coef", default=22, type=int, help="")
@@ -35,18 +35,23 @@ parser.add_argument("--seed", default=42, type=int, help="Random seed.")
 
 def main(args, waveform, sample_rate):
     # Resample the waveform
-    waveform = librosa.resample(waveform, sample_rate, args.sample_rate_mlp)
+    waveform = librosa.resample(waveform, sample_rate, args.sample_rate_original)
 
 
 
     # Load models
+    """ MLP Part, not accurate
     basic_mlp = MLP_scalered.load('C:\\Users\\vojte\\source\\repos\\SongChordsRecognizer\\ACR_Pipeline\\models\\original_mlp.model')
+    """
+    basic_crnn = CRNN()
+    basic_crnn.load('C:\\Users\\vojte\\source\\repos\\SongChordsRecognizer\\ACR_Pipeline\\models\\original_crnn.h5')
     C_transposed_crnn = CRNN()
     C_transposed_crnn.load('C:\\Users\\vojte\\source\\repos\\SongChordsRecognizer\\ACR_Pipeline\\models\\transposed_crnn.h5')
 
 
 
     # Preprocess Data
+    """ MLP Part, not that accurate
     x = DataPreprocessor.flatten_preprocess(
         waveform=waveform,
         sample_rate=args.sample_rate_mlp,
@@ -56,9 +61,21 @@ def main(args, waveform, sample_rate):
         norm_to_C=False,
         skip_coef=args.skip_coef
     )
+    """
+    x = DataPreprocessor.sequence_preprocess(
+        waveform=waveform,
+        sample_rate=args.sample_rate_original,
+        hop_length=args.hop_length_original,
+        n_frames=args.n_frames,
+        spectrogram_generator=cqt_spectrogram,
+        norm_to_C=False,
+    )
 
     # Get list of played chords
-    baisc_chord_prediction = basic_mlp.predict(x)
+    """ MLP Part, not that accurate
+    baisc_chord_prediction = basic_crnn.predict(x)
+    """
+    baisc_chord_prediction = basic_crnn.predict(x).argmax(axis=2).flatten()
     chords, counts = np.unique(baisc_chord_prediction, return_counts=True)
     chord_counts = dict(zip(chords, counts))
 
@@ -66,11 +83,11 @@ def main(args, waveform, sample_rate):
     key = KeyRecognizer.estimate_key(chord_counts)
 
     # Tranapose Song to a C major
-    resampled_waveform = librosa.resample(waveform, args.sample_rate_mlp, args.sample_rate_crnn)
+    resampled_waveform = librosa.resample(waveform, args.sample_rate_original, args.sample_rate_transposed) # In case that the transposed model has different sample_rate
     x_transposed = DataPreprocessor.sequence_preprocess(
         waveform=resampled_waveform,
-        sample_rate=args.sample_rate_crnn,
-        hop_length=args.hop_length_crnn,
+        sample_rate=args.sample_rate_transposed,
+        hop_length=args.hop_length_transposed,
         n_frames=args.n_frames,
         spectrogram_generator=cqt_spectrogram,
         norm_to_C=True,
@@ -84,8 +101,8 @@ def main(args, waveform, sample_rate):
     # Chord voting for each beat
     chord_sequence, bpm = ChordVoter.vote_for_beats(
         chord_sequence=transposed_chord_prediction,
-        waveform=resampled_waveform, sample_rate=args.sample_rate_crnn,
-        hop_length=args.hop_length_crnn
+        waveform=resampled_waveform, sample_rate=args.sample_rate_transposed,
+        hop_length=args.hop_length_transposed
     )
 
     # Transpose to the original sequence
