@@ -19,13 +19,13 @@ warnings.warn = warn
 
 parser = argparse.ArgumentParser()
 # Song Chords Recognizer arguments
-parser.add_argument("--sample_rate_original", default=22050, type=int, help="")
-parser.add_argument("--hop_length_original", default=512, type=int, help="")
-parser.add_argument("--sample_rate_transposed", default=22050, type=int, help="")
-parser.add_argument("--hop_length_transposed", default=512, type=int, help="")
-parser.add_argument("--window_size", default=5, type=int, help="")
-parser.add_argument("--n_frames", default=1000, type=int, help="")
-parser.add_argument("--skip_coef", default=22, type=int, help="")
+parser.add_argument("--sample_rate_original", default=22050, type=int, help="Sample rate of songs that the original model was trained on.")
+parser.add_argument("--hop_length_original", default=512, type=int, help="Hop length of songs that the original model was trained on.")
+parser.add_argument("--sample_rate_transposed", default=22050, type=int, help="Sample rate of songs that the transposed model was trained on.")
+parser.add_argument("--hop_length_transposed", default=512, type=int, help="Hop length of songs that the original transposed was trained on.")
+parser.add_argument("--window_size", default=5, type=int, help="In case that the MLP model is used, the size of the spectrogram window used as a features.")
+parser.add_argument("--n_frames", default=1000, type=int, help="In case that the CRNN model is used, the length of the chord sequence that is the model trained on.")
+parser.add_argument("--skip_coef", default=22, type=int, help="In case that the MLP model is used, the coeficient that next spectrogram index is multiplied by when creating the window.")
 
 
 # Training args
