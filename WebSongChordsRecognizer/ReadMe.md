@@ -4,7 +4,7 @@
 
 #### ***/index***
 
-Default index page where you can upload and process and audio file with any of provided models.
+Default index page where you can upload and process an audio file with any of provided models.
 
 - Method: GET
 - Arguments: None
@@ -13,7 +13,7 @@ Default index page where you can upload and process and audio file with any of p
 
 
 #### ***/VisualizeStatisticalModel***
-Outcome of [Song Chords Recognizer](../ACR_Pipeline/ReadMe.md) based on Deep Learning with its key and bpm.
+Outcome of [Song Chords Recognizer](../ACR_Pipeline/ReadMe.md) model based on Deep Learning with its key and bpm.
 
 - Method: POST
 - Arguments: IFormFile audio
@@ -22,7 +22,7 @@ Outcome of [Song Chords Recognizer](../ACR_Pipeline/ReadMe.md) based on Deep Lea
 
 
 #### ***/VisualizeTemplateVoter***
-Outcome of [Song Chords Recognizer](./SongChordsRecognizer/ReadMe.md) based on simple template voting from generated and filtrated spectrogram.
+Outcome of [Song Chords Recognizer](./SongChordsRecognizer/ReadMe.md) model based on the simple template voting from generated and filtered spectrograms.
 
 - Method: POST
 - Arguments: IFormFile audio, String windowArg, String filtrationArg, int sampleLengthLevel, int bpm
@@ -40,7 +40,7 @@ Basic information about the project with the GitHub link.
 
 
 #### */IncorrectInputFormat*
-Error message when some error occures.
+An error message when some error occures.
 
 - Method: GET
 - Arguments: String messages
