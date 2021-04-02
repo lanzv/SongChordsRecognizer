@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using SongChordsRecognizer.Logger;
+using System;
 using System.IO;
 
 namespace SongChordsRecognizer.AudioSource
@@ -16,22 +18,31 @@ namespace SongChordsRecognizer.AudioSource
         /// Audio waveform of AudioSource, where first index indicates number of channel, second one indicates number of sample.
         /// </summary>
         public double[,] AudioWaveform { get; protected set; }
+
         /// <summary>
         /// Time duration of one waveform sample in seconds.
         /// </summary>
         public double SampleLength { get; protected set; }
+
         /// <summary>
         /// Number of waveform samples for each channel.
         /// </summary>
         public int NumberOfSamples { get; protected set; }
+
         /// <summary>
         /// Absolute path to your music file.
         /// </summary>
         protected String audioPath { get; }
+
         /// <summary>
         /// Content of the music file in bytes.
         /// </summary>
         protected byte[] AudioData { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly ILogger _logger = ApplicationLogging.CreateLogger<AudioSource>();
 
 
 
@@ -51,7 +62,7 @@ namespace SongChordsRecognizer.AudioSource
             AudioData = File.ReadAllBytes(audioPath);
             ParseAudioData();
             // log
-            Console.WriteLine("[INFO] The AudioSource of file \"" + audioPath.Split('\\')[audioPath.Split('\\').Length - 1] + "\" was successfuly parsed.");
+            _logger.LogInformation("The AudioSource of file \"" + audioPath.Split('\\')[audioPath.Split('\\').Length - 1] + "\" was successfuly parsed.");
         }
 
 
@@ -69,7 +80,7 @@ namespace SongChordsRecognizer.AudioSource
             AudioData = audioData;
             ParseAudioData();
             // log
-            Console.WriteLine("[INFO] The AudioSource of file \"" + audioName + "\" was successfuly parsed.");
+            _logger.LogInformation("The AudioSource of file \"" + audioName + "\" was successfuly parsed.");
         }
 
 

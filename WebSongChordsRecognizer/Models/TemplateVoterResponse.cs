@@ -50,7 +50,6 @@ namespace WebSongChordsRecognizer.Models
             {
                 result = "There is no processed audio.";
             }
-            Console.WriteLine(result);
             return result;
         }
 

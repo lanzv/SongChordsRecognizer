@@ -1,4 +1,6 @@
-﻿using SongChordsRecognizer.MusicFeatures;
+﻿using Microsoft.Extensions.Logging;
+using SongChordsRecognizer.Logger;
+using SongChordsRecognizer.MusicFeatures;
 using System;
 using System.Collections.Generic;
 
@@ -25,6 +27,11 @@ namespace SongChordsRecognizer.Graphs
         /// Time duration of one chromagram sample in seconds.
         /// </summary>
         public readonly double SampleLength;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly ILogger _logger = ApplicationLogging.CreateLogger<Chromagram>();
 
 
 
@@ -105,7 +112,7 @@ namespace SongChordsRecognizer.Graphs
             SampleLength = spectrogram.SampleLength;
 
             // log
-            Console.WriteLine("[INFO] The chromagram was successfuly generated.");
+            _logger.LogInformation("The chromagram was successfuly generated.");
         }
 
 
@@ -149,7 +156,8 @@ namespace SongChordsRecognizer.Graphs
                 indicesToPrint.Add((i, chroma[i].Description));
             }
             printer.Print(this.GetData(), startingSample, length, indicesToPrint, this.SampleLength);
-            Console.WriteLine("[INFO] Chromagram graph was printed.");
+
+            _logger.LogInformation("Chromagram graph was printed.");
         }
 
 

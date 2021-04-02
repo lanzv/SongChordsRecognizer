@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using SongChordsRecognizer.ErrorMessages;
 using SongChordsRecognizer.FourierTransform;
 using SongChordsRecognizer.Graphs;
+using SongChordsRecognizer.Logger;
 using SongChordsRecognizer.Parsers;
 using System;
 using System.Diagnostics;
@@ -19,11 +20,21 @@ namespace WebSongChordsRecognizer.Controllers
     {
         #region Fields
 
-        private readonly ILogger<RecognizerController> _logger;
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly ILogger _logger = ApplicationLogging.CreateLogger<RecognizerController>();
 
+        /// <summary>
+        /// 
+        /// </summary>
         private readonly StatisticalModel statisticalModel;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private readonly TemplateVoter templateVoter;
+
 
 
         #endregion
@@ -31,9 +42,8 @@ namespace WebSongChordsRecognizer.Controllers
 
         #region Initialization
 
-        public RecognizerController(ILogger<RecognizerController> logger)
+        public RecognizerController()
         {
-            _logger = logger;
             statisticalModel = new StatisticalModel();
             templateVoter = new TemplateVoter();
         }

@@ -1,4 +1,6 @@
-﻿using SongChordsRecognizer.FourierTransform;
+﻿using Microsoft.Extensions.Logging;
+using SongChordsRecognizer.FourierTransform;
+using SongChordsRecognizer.Logger;
 using SongChordsRecognizer.MusicFeatures;
 using System;
 using System.Collections.Generic;
@@ -48,6 +50,11 @@ namespace SongChordsRecognizer.Graphs
         /// </summary>
         private readonly double[] Waveform;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly ILogger _logger = ApplicationLogging.CreateLogger<Spectrogram>();
+
 
 
         #endregion
@@ -75,7 +82,7 @@ namespace SongChordsRecognizer.Graphs
                 .GetFrequencyIntensitiesAsync(source.GetMonoWaveform(), log2_waveform_length_for_sample, STFTwindow)
                 .GetAwaiter().GetResult();
             // log
-            Console.WriteLine("[INFO] The spectrogram was successfuly generated.");
+            _logger.LogInformation("The spectrogram was successfuly generated.");
         }
 
 
@@ -132,7 +139,8 @@ namespace SongChordsRecognizer.Graphs
                 indicesToPrint.Add(((int)(tone.Frequency * FrequencyToBinConst), tone.Description));
             }
             printer.Print(this.GetData(), startingSample, length, indicesToPrint, this.SampleLength);
-            Console.WriteLine("[INFO] Spectrogram graph was printed.");
+
+            _logger.LogInformation("Spectrogram graph was printed.");
         }
 
 

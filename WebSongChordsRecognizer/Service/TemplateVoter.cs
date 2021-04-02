@@ -3,11 +3,8 @@ using SongChordsRecognizer.AudioSource;
 using SongChordsRecognizer.FourierTransform;
 using SongChordsRecognizer.Graphs;
 using SongChordsRecognizer.MusicFeatures;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using WebSongChordsRecognizer.Models;
 
 namespace WebSongChordsRecognizer.Service
