@@ -21,20 +21,19 @@ namespace WebSongChordsRecognizer.Controllers
         #region Fields
 
         /// <summary>
-        /// 
-        /// </summary>
-        private readonly ILogger _logger = ApplicationLogging.CreateLogger<RecognizerController>();
-
-        /// <summary>
-        /// 
+        /// StatisticalModel service class that will process the audio with the Statistical Model.
         /// </summary>
         private readonly StatisticalModel statisticalModel;
 
         /// <summary>
-        /// 
+        /// TemplateVoter service class that will process the audio with the Template Voter Model.
         /// </summary>
         private readonly TemplateVoter templateVoter;
 
+        /// <summary>
+        /// Logger of the RecognizerController class.
+        /// </summary>
+        private readonly ILogger _logger = ApplicationLogging.CreateLogger<RecognizerController>();
 
 
         #endregion

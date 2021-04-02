@@ -50,8 +50,15 @@ namespace SongChordsRecognizer.Graphs
         /// </summary>
         private readonly double[] Waveform;
 
+
+
+        #endregion
+
+
+        #region Fields
+
         /// <summary>
-        /// 
+        /// Logger of the Spectrogram class.
         /// </summary>
         private readonly ILogger _logger = ApplicationLogging.CreateLogger<Spectrogram>();
 

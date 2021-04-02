@@ -27,9 +27,16 @@ namespace SongChordsRecognizer.Graphs
         /// Time duration of one chromagram sample in seconds.
         /// </summary>
         public readonly double SampleLength;
-        
+
+
+
+        #endregion
+
+
+        #region Fields
+
         /// <summary>
-        /// 
+        /// Logger of the Chromagram class.
         /// </summary>
         private readonly ILogger _logger = ApplicationLogging.CreateLogger<Chromagram>();
 

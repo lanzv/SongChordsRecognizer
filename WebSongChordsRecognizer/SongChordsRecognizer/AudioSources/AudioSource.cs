@@ -39,8 +39,15 @@ namespace SongChordsRecognizer.AudioSource
         /// </summary>
         protected byte[] AudioData { get; }
 
+
+
+        #endregion
+
+
+        #region Fields
+
         /// <summary>
-        /// 
+        /// Logger of the AudioSource class.
         /// </summary>
         private readonly ILogger _logger = ApplicationLogging.CreateLogger<AudioSource>();
 
