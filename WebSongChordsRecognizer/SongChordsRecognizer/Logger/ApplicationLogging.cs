@@ -3,23 +3,23 @@
 namespace SongChordsRecognizer.Logger
 {
     /// <summary>
-    /// Static class that provides ILogger and ILoggerFactory generations.
+    /// Static class that provides ILogger and ILoggerFactory creations.
     /// </summary>
     public static class ApplicationLogging
     {
-        #region Factory methods
+        #region Factory
 
-        public static ILoggerFactory LoggerFactory { get; } = new LoggerFactory();
+        public static ILoggerFactory Factory { get; } = LoggerFactory.Create(builder => builder.AddConsole().AddDebug());
 
 
 
         #endregion
 
 
-        #region Logger methods
+        #region Logger
 
         public static ILogger CreateLogger<T>() =>
-          LoggerFactory.CreateLogger<T>();
+          Factory.CreateLogger<T>();
 
 
 
