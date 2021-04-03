@@ -3,6 +3,7 @@ import argparse
 import numpy as np
 import librosa
 import sys, os
+import json
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 sys.path.append(os.path.join(os.path.dirname(__file__), "..\\"))
 from ACR_Training.Models import MLP_scalered, CRNN
@@ -114,17 +115,20 @@ def main(args, waveform, sample_rate):
 
 
     # Print data on the standard output in JSON format
-    print("{")
-    print(" \"Key\": \"", key, "\",")
-    print(" \"BPM\": \"", bpm, "\",")
-    print(" \"ChordSequence\": \"", DataPreprocessor.chord_indices_to_notations(original_chord_sequence), "\"")
-    print("}")
+    json_out = {}
+    json_out["Key"] = key
+    json_out["BPM"] = bpm
+    json_out["ChordSequence"] = DataPreprocessor.chord_indices_to_notations(original_chord_sequence)
+    print(json.dumps(json_out))
 
 if __name__ == "__main__":
     args = parser.parse_args([] if "__file__" not in globals() else None)
 
     # Get input data from standard input
-    waveform = np.array(sys.stdin.readline().split(';')).astype(np.float)
-    sample_rate = float(sys.stdin.readline())
+    json_in = json.load(sys.stdin)
+
+    # Parse input data
+    waveform = np.array(json_in["Waveform"])
+    sample_rate = float(json_in["SampleRate"])
 
     main(args, waveform, sample_rate)

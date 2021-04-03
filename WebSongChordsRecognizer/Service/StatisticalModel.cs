@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using SongChordsRecognizer.AudioSource;
 using SongChordsRecognizer.Configuration;
 using SongChordsRecognizer.ErrorMessages;
@@ -23,12 +24,12 @@ namespace WebSongChordsRecognizer.Service
         /// <summary>
         /// Destination of the ACR SongChordRecognizer python pipeline script.
         /// </summary>
-        private static string script;
+        private static string script_path;
 
         /// <summary>
         /// Destionation of the python.exe file.
         /// </summary>
-        private static string python;
+        private static string python_path;
 
         /// <summary>
         /// Configuration file that contains data from appsettings.json config file.
@@ -48,8 +49,8 @@ namespace WebSongChordsRecognizer.Service
         /// </summary>
         public StatisticalModel()
         {
-            script = Path.GetFullPath(configuration["StatisticalModel:ACRScriptPath"]);
-            python = Path.GetFullPath(configuration["StatisticalModel:PythonPath"]);
+            script_path = Path.GetFullPath(configuration["StatisticalModel:ACRScriptPath"]);
+            python_path = Path.GetFullPath(configuration["StatisticalModel:PythonPath"]);
         }
 
 
@@ -76,16 +77,16 @@ namespace WebSongChordsRecognizer.Service
                 audio.CopyTo(ms);
                 Byte[] audioBytes = ms.ToArray();
                 AudioSourceWav wav = new AudioSourceWav(audioBytes, audio.FileName);
-                string waveform = String.Join(";", wav.GetMonoWaveform());
+                double[] waveform = wav.GetMonoWaveform();
                 double sample_rate = wav.SampleRate;
 
                 // Initialize Process
                 ProcessStartInfo python_SongChordRecognizer = new ProcessStartInfo();
-                python_SongChordRecognizer.FileName = python;
+                python_SongChordRecognizer.FileName = python_path;
 
 
                 // Prepare command with arguments
-                python_SongChordRecognizer.Arguments = script;
+                python_SongChordRecognizer.Arguments = script_path;
 
 
                 // Python process configuration
@@ -102,11 +103,10 @@ namespace WebSongChordsRecognizer.Service
                 using (Process process = Process.Start(python_SongChordRecognizer))
                 {
                     StreamWriter streamWriter = process.StandardInput;
-                    // Send audio waveform
-                    streamWriter.WriteLine(waveform);
-                    // Send sample rate
-                    streamWriter.WriteLine(sample_rate);
-                    // Get the output, chord sequence
+                    // Send Json request
+                    streamWriter.WriteLine(createJsonRequestBody(waveform, sample_rate));
+                    streamWriter.Close();
+                    // Get Json response
                     json_response = process.StandardOutput.ReadToEnd();
                     errors = process.StandardError.ReadToEnd();
                 }
@@ -120,7 +120,7 @@ namespace WebSongChordsRecognizer.Service
 
 
                 // Parse console output
-                (response.ChordSequence, response.Key, response.BPM) = parseConsoleOutput(json_response);
+                (response.ChordSequence, response.Key, response.BPM) = parseJsonResponse(json_response);
             }
 
             return response;
@@ -134,48 +134,60 @@ namespace WebSongChordsRecognizer.Service
         #region Private methods
 
         /// <summary>
-        /// Parse Console Output from python ACR Pipeline in a json format.
+        /// Create Json Request for python ACR Pipeline.
+        /// </summary>
+        /// <param name="waveform">Waveform of audio we want to process.</param>
+        /// <param name="sample_rate">Sample rate of audio we want to process.</param>
+        /// <returns>Json body.</returns>
+        private static string createJsonRequestBody(double[] waveform, double sample_rate)
+        {
+            // Serialize waveform and sample rate
+            string json = JsonConvert.SerializeObject(new {
+                Waveform = waveform,
+                SampleRate = sample_rate
+            });
+
+            return json;
+        }
+
+
+
+        /// <summary>
+        /// Parse Json Response from python ACR Pipeline.
         /// </summary>
         /// <param name="json_response">JSON string that contains Key, BPM and ChordSequence keys.</param>
         /// <returns>List of played chords, song's key and the bpm value.</returns>
-        private static (List<Chord>, string, string) parseConsoleOutput(String json_response)
+        private static (List<Chord>, string, string) parseJsonResponse(string json_response)
         {
             // Initialization
             List<Chord> chordSequence = new List<Chord>();
-            String key = "";
-            String bpm = "";
+            string[] chordSequenceStr;
+            string key;
+            string bpm;
 
             // Parse Json response
-            var jsonReader = JsonReaderWriterFactory.CreateJsonReader(
-                Encoding.UTF8.GetBytes(json_response),
-                new System.Xml.XmlDictionaryReaderQuotas()
-                );
+            var acrDefinition = new
+            {
+                Key = "",
+                BPM = "",
+                ChordSequence = new string[] { }
+            };
+            var acrObj = JsonConvert.DeserializeAnonymousType(json_response, acrDefinition);
 
             // Get Json values
-            var root = XElement.Load(jsonReader);
-            key = root.XPathSelectElement("//Key").Value;
-            bpm = root.XPathSelectElement("//BPM").Value;
-            String chordSequenceStr = root.XPathSelectElement("//ChordSequence").Value;
-
+            key = acrObj.Key;
+            bpm = acrObj.BPM;
+            chordSequenceStr = acrObj.ChordSequence;
 
             // Get chord dictionary and add the None chord to it.
             Dictionary<String, Triad> allChords = ChordsGenerator.GetDictionaryOfTriads();
             allChords.Add("N", new Triad() { Description = "N" });
 
             // Parse and process chords
-            foreach (String notParsedChord in chordSequenceStr.Split(','))
+            foreach (string chordStr in chordSequenceStr)
             {
-                // Parse chord annotation, trim the mess arround
-                String parsedChord = notParsedChord.Replace(" ", "");
-                parsedChord = parsedChord.Replace(",", "");
-                parsedChord = parsedChord.Replace("\'", "");
-                parsedChord = parsedChord.Replace("\"", "");
-                parsedChord = parsedChord.Replace("[", "");
-                parsedChord = parsedChord.Replace("]", "");
-                parsedChord = parsedChord.Replace(":min", "m");
-
                 // Add chord to a chordSequence list, if N is found, take the last predicted chord.
-                chordSequence.Add(allChords[parsedChord]);
+                chordSequence.Add(allChords[chordStr.Replace(":min", "m")]);
             }
 
 

@@ -18,38 +18,49 @@ You can check the [Jupiter Notebook Demo](./Bachelor%20Research%20-%20Demo.ipynb
 python SongChordsRecognizer.py
 ```
  - Standard Input ->
-    ```
-    [SONG's WAVEFORM IN STRING SEPARATED BY ';']
-    [WAVEFORM's SAMPLE RATE]
+    ```shell
+    {
+        "Waveform": [SONGs WAVEFORM],
+        "SampleRate": [WAVEFORMs SAMPLE RATE]
+    }
     ``` 
-   - for example,
+   - Example
         ```shell
-        0.3215;0.1235;0.6213;-0.941;0.523
-        44100
+        {
+            "Waveform": [0.3215, 0.1235, 0.6213, -0.941, 0.523],
+            "SampleRate": 44100
+        }
         ```
  - Standard Output ->
-    ```
+    ```shell
     {
-        "Key": "C",
-        "BPM": "120.323",
-        "ChordSequence": "['A', 'B', 'A', 'A', 'C']"
+        "Key": [KEY DESCRIPTION],
+        "BPM": [BPM VALUE],
+        "ChordSequence": [LIST OF CHORDS]
     }
     ```
+    - Example
+        ```shell
+        {
+            "Key": "C",
+            "BPM": "120.323",
+            "ChordSequence": "['A', 'B', 'A', 'A', 'C']"
+        }
+        ```
 
 
 ### .NET
 ```csharp
 // Prepare Audio Wav Input
 AudioSourceWav wav = new AudioSourceWav(audioBytes, audio.FileName);
-string waveform = String.Join(";", wav.GetMonoWaveform());
-double sample_rate = wav.SampleRate;
+string json_request = createJsonRequestBody(wav.GetMonoWaveform(), wav.SampleRate)
 
 // Initialize Process
 ProcessStartInfo python_SongChordRecognizer = new ProcessStartInfo();
-python_SongChordRecognizer.FileName = python;
+python_SongChordRecognizer.FileName = python_path;
 
 // Prepare command with arguments
-python_SongChordRecognizer.Arguments = script;
+python_SongChordRecognizer.Arguments = script_path;
 
 // Python process configuration
 python_SongChordRecognizer.UseShellExecute = false;
@@ -64,11 +75,10 @@ string errors = "";
 using (Process process = Process.Start(python_SongChordRecognizer))
 {
     StreamWriter streamWriter = process.StandardInput;
-    // Send audio waveform
-    streamWriter.WriteLine(waveform);
-    // Send sample rate
-    streamWriter.WriteLine(sample_rate);
-    // Get the output, chord sequence
+    // Send Json request
+    streamWriter.WriteLine(json_request);
+    streamWriter.Close();
+    // Get Json response
     json_response = process.StandardOutput.ReadToEnd();
     errors = process.StandardError.ReadToEnd();
 }
