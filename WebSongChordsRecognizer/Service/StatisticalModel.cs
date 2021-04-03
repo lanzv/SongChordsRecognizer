@@ -1,18 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SongChordsRecognizer.AudioSource;
 using SongChordsRecognizer.Configuration;
 using SongChordsRecognizer.ErrorMessages;
+using SongChordsRecognizer.Logger;
 using SongChordsRecognizer.MusicFeatures;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using System.Xml.Linq;
-using System.Xml.XPath;
 using WebSongChordsRecognizer.Models;
 
 namespace WebSongChordsRecognizer.Service
@@ -35,6 +33,11 @@ namespace WebSongChordsRecognizer.Service
         /// Configuration file that contains data from appsettings.json config file.
         /// </summary>
         private static readonly IConfiguration configuration = ApplicationConfiguring.CreateConfiguration();
+
+        /// <summary>
+        /// Logger of the StatisticalModel class.
+        /// </summary>
+        private readonly ILogger _logger = ApplicationLogging.CreateLogger<StatisticalModel>();
 
 
 
@@ -113,7 +116,7 @@ namespace WebSongChordsRecognizer.Service
                 if(errors != "")
                 {
                     // ToDo Better python executing error handling.
-                    Console.WriteLine(errors);
+                    _logger.LogError(errors);
                     throw new Exception(ErrorMessages.StatisticalModel_ExecutingError);
                 }
 
