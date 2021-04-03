@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using SongChordsRecognizer.Configuration;
 
 namespace SongChordsRecognizer.Logger
 {
@@ -7,6 +9,18 @@ namespace SongChordsRecognizer.Logger
     /// </summary>
     public static class ApplicationLogging
     {
+        #region Fields
+
+        /// <summary>
+        /// Configuration file that contains data from appsettings.json config file. For instance, information about Logger levels ect..
+        /// </summary>
+        private static readonly IConfiguration configuration = ApplicationConfiguring.CreateConfiguration();
+
+
+
+        #endregion
+
+
         #region Factory
 
         public static ILoggerFactory Factory { get; } = LoggerFactory.Create(builder => builder.AddConsole().AddDebug());

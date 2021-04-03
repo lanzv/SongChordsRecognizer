@@ -1,5 +1,13 @@
 # Song Chords Recognizer - Web ASP.NET Application
 
+## Configuration
+Edit ```appsettings.json``` config file.
+
+!! Fill the ```StatisticalModel.PythonPath``` parameter by the path to your python.exe !!
+
+Other parameters are optional.
+
+
 ## Recognizer Controller
 
 #### ***/index***

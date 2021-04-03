@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using SongChordsRecognizer.AudioSource;
+using SongChordsRecognizer.Configuration;
 using SongChordsRecognizer.ErrorMessages;
 using SongChordsRecognizer.MusicFeatures;
 using System;
@@ -21,14 +23,34 @@ namespace WebSongChordsRecognizer.Service
         /// <summary>
         /// Destination of the ACR SongChordRecognizer python pipeline script.
         /// </summary>
-        private static readonly string script = @"C:\Users\vojte\source\repos\SongChordsRecognizer\ACR_Pipeline\SongChordsRecognizer.py";
-
-
+        private static string script;
 
         /// <summary>
         /// Destionation of the python.exe file.
         /// </summary>
-        private static readonly string python = @"C:\Users\vojte\AppData\Local\Microsoft\WindowsApps\python.exe";
+        private static string python;
+
+        /// <summary>
+        /// Configuration file that contains data from appsettings.json config file.
+        /// </summary>
+        private static readonly IConfiguration configuration = ApplicationConfiguring.CreateConfiguration();
+
+
+
+        #endregion
+
+
+        #region Initialization
+
+        /// <summary>
+        /// StatisticalModel constructor that loads path to the script of StatisticalModel SongChordsRecognizer python pipeline
+        /// and path to the python.exe file from appsettings.json config file.
+        /// </summary>
+        public StatisticalModel()
+        {
+            script = Path.GetFullPath(configuration["StatisticalModel:ACRScriptPath"]);
+            python = Path.GetFullPath(configuration["StatisticalModel:PythonPath"]);
+        }
 
 
 
