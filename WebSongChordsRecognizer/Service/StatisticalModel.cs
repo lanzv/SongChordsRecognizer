@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using WebSongChordsRecognizer.Models;
 
 namespace WebSongChordsRecognizer.Service
@@ -123,7 +124,7 @@ namespace WebSongChordsRecognizer.Service
 
 
                 // Parse console output
-                (response.ChordSequence, response.Key, response.BPM) = parseJsonResponse(json_response);
+                (response.ChordSequence, response.BeatTimes, response.Key, response.BPM) = parseJsonResponse(json_response);
             }
 
             return response;
@@ -160,10 +161,11 @@ namespace WebSongChordsRecognizer.Service
         /// </summary>
         /// <param name="json_response">JSON string that contains Key, BPM and ChordSequence keys.</param>
         /// <returns>List of played chords, song's key and the bpm value.</returns>
-        private static (List<Chord>, string, string) parseJsonResponse(string json_response)
+        private static (List<Chord>, List<double>, string, string) parseJsonResponse(string json_response)
         {
             // Initialization
             List<Chord> chordSequence = new List<Chord>();
+            List<double> beatTimes = new List<double>();
             string[] chordSequenceStr;
             string key;
             string bpm;
@@ -173,7 +175,8 @@ namespace WebSongChordsRecognizer.Service
             {
                 Key = "",
                 BPM = "",
-                ChordSequence = new string[] { }
+                ChordSequence = new string[] {},
+                BeatTimes = new double[] {}
             };
             var acrObj = JsonConvert.DeserializeAnonymousType(json_response, acrDefinition);
 
@@ -181,6 +184,7 @@ namespace WebSongChordsRecognizer.Service
             key = acrObj.Key;
             bpm = acrObj.BPM;
             chordSequenceStr = acrObj.ChordSequence;
+            beatTimes.AddRange(acrObj.BeatTimes);
 
             // Get chord dictionary and add the None chord to it.
             Dictionary<String, Triad> allChords = ChordsGenerator.GetDictionaryOfTriads();
@@ -194,7 +198,7 @@ namespace WebSongChordsRecognizer.Service
             }
 
 
-            return (chordSequence, key, bpm);
+            return (chordSequence, beatTimes, key, bpm);
         }
 
 

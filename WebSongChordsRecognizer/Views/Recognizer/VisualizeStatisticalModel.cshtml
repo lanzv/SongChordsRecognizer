@@ -37,7 +37,7 @@
                     {
                         if (i + j < Model.ChordSequence.Count)
                         {
-                            <div class="chord">@Model.ChordSequence[i + j].Description</div>
+                            <div class="chord">@Model.ChordSequence[i + j].Description <br /> @Math.Round(Model.BeatTimes[i+j], 2)</div>
                         }
                     }
                 </div>

@@ -100,7 +100,7 @@ def main(args, waveform, sample_rate):
 
 
     # Chord voting for each beat
-    chord_sequence, bpm = ChordVoter.vote_for_beats(
+    chord_sequence, bpm, beat_times = ChordVoter.vote_for_beats(
         chord_sequence=transposed_chord_prediction,
         waveform=resampled_waveform, sample_rate=args.sample_rate_transposed,
         hop_length=args.hop_length_transposed
@@ -119,6 +119,7 @@ def main(args, waveform, sample_rate):
     json_out["Key"] = key
     json_out["BPM"] = bpm
     json_out["ChordSequence"] = DataPreprocessor.chord_indices_to_notations(original_chord_sequence)
+    json_out["BeatTimes"] = beat_times.tolist()
     print(json.dumps(json_out))
 
 if __name__ == "__main__":

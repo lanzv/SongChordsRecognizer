@@ -15,14 +15,15 @@ namespace WebSongChordsRecognizer.Models
         /// </summary>
         public List<Chord> ChordSequence;
 
-
+        /// <summary>
+        /// Times of beats in ChordSequence list.
+        /// </summary>
+        public List<double> BeatTimes;
 
         /// <summary>
         /// Key in Ionian form of the song.
         /// </summary>
         public String Key;
-
-
 
         /// <summary>
         /// Beats per minute value.

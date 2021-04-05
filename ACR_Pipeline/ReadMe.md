@@ -36,7 +36,8 @@ python SongChordsRecognizer.py
     {
         "Key": [KEY DESCRIPTION],
         "BPM": [BPM VALUE],
-        "ChordSequence": [LIST OF CHORDS]
+        "ChordSequence": [LIST OF CHORDS],
+        "BeatTimes": [LIST OF BEAT TIMES IN SECONDS]
     }
     ```
     - Example
@@ -44,7 +45,8 @@ python SongChordsRecognizer.py
         {
             "Key": "C",
             "BPM": "120.323",
-            "ChordSequence": "['A', 'B', 'A', 'A', 'C']"
+            "ChordSequence": ['A', 'B', 'A', 'A', 'C'], 
+            "BeatTimes": [0.123, 0.32, 0.4, 0.55]
         }
         ```
 
