@@ -31,6 +31,16 @@ namespace WebSongChordsRecognizer.Service
         private static string python_path;
 
         /// <summary>
+        /// Destionation of the model predicting original songs.
+        /// </summary>
+        private static string original_model_path;
+
+        /// <summary>
+        /// Destionation of the model predicting transposed songs.
+        /// </summary>
+        private static string transposed_model_path;
+
+        /// <summary>
         /// Configuration file that contains data from appsettings.json config file.
         /// </summary>
         private static readonly IConfiguration configuration = ApplicationConfiguring.CreateConfiguration();
@@ -55,6 +65,8 @@ namespace WebSongChordsRecognizer.Service
         {
             script_path = Path.GetFullPath(configuration["StatisticalModel:ACRScriptPath"]);
             python_path = Path.GetFullPath(configuration["StatisticalModel:PythonPath"]);
+            original_model_path = Path.GetFullPath(configuration["StatisticalModel:OriginalModelPath"]);
+            transposed_model_path = Path.GetFullPath(configuration["StatisticalModel:TransposedModelPath"]);
         }
 
 
@@ -90,7 +102,9 @@ namespace WebSongChordsRecognizer.Service
 
 
                 // Prepare command with arguments
-                python_SongChordRecognizer.Arguments = script_path;
+                python_SongChordRecognizer.Arguments = script_path +
+                    " --original_model_path=" + original_model_path +
+                    " --transposed_model_path=" + transposed_model_path;
 
 
                 // Python process configuration

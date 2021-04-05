@@ -27,7 +27,8 @@ parser.add_argument("--hop_length_transposed", default=512, type=int, help="Hop 
 parser.add_argument("--window_size", default=5, type=int, help="In case that the MLP model is used, the size of the spectrogram window used as a features.")
 parser.add_argument("--n_frames", default=1000, type=int, help="In case that the CRNN model is used, the length of the chord sequence that is the model trained on.")
 parser.add_argument("--skip_coef", default=22, type=int, help="In case that the MLP model is used, the coeficient that next spectrogram index is multiplied by when creating the window.")
-
+parser.add_argument("--original_model_path", default="./ACR_Pipeline/models/original_crnn.h5", type=str, help="Path to the model predicting original songs.")
+parser.add_argument("--transposed_model_path", default="./ACR_Pipeline/models/transposed_crnn.h5", type=str, help="Path to the model predicting songs transposed to C.")
 
 # Training args
 parser.add_argument("--seed", default=42, type=int, help="Random seed.")
@@ -45,9 +46,9 @@ def main(args, waveform, sample_rate):
     basic_mlp = MLP_scalered.load('C:\\Users\\vojte\\source\\repos\\SongChordsRecognizer\\ACR_Pipeline\\models\\original_mlp.model')
     """
     basic_crnn = CRNN()
-    basic_crnn.load('C:\\Users\\vojte\\source\\repos\\SongChordsRecognizer\\ACR_Pipeline\\models\\original_crnn.h5')
+    basic_crnn.load(args.original_model_path)
     C_transposed_crnn = CRNN()
-    C_transposed_crnn.load('C:\\Users\\vojte\\source\\repos\\SongChordsRecognizer\\ACR_Pipeline\\models\\transposed_crnn.h5')
+    C_transposed_crnn.load(args.transposed_model_path)
 
 
 
