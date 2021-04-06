@@ -44,3 +44,37 @@ class ChordVoter():
                 )
 
         return voted_chords, bpm, beat_times
+
+    @staticmethod
+    def _encode_sequence_to_counts(sequence):
+        """
+        The function will covert the chord sequence [1, 2, 2, 2, 2, 1, 1, 2, 6, 6 ]
+        To the sequence of counts [(1, 1), (2, 4), (1, 2), (1, 6)]
+
+        Parameters
+        ----------
+        sequence : int list
+            list of chord indeces
+        Returns
+        -------
+        counts : list of tuples (chord index, count)
+            sequence of chords without repeating but with its count
+        """
+        counts = []
+
+        acutal_element = -1
+        counter = 0
+        for i in sequence:
+            if acutal_element == i:
+                counter = counter + 1
+            elif counter != 0:
+                counts.append((acutal_element, counter))
+                counter = 1
+                acutal_element = i
+            else:
+                counter = 1
+                acutal_element = i
+        if counter != 0:
+            counts.append((acutal_element, counter))
+
+        return counts
