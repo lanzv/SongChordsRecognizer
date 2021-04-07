@@ -48,7 +48,7 @@ class ChordVoter():
     @staticmethod
     def _encode_sequence_to_counts(sequence):
         """
-        The function will covert the chord sequence [1, 2, 2, 2, 2, 1, 1, 2, 6, 6 ]
+        The function will convert the chord sequence [1, 2, 2, 2, 2, 1, 1, 2, 6, 6 ]
         To the sequence of counts [(1, 1), (2, 4), (1, 2), (1, 6)]
 
         Parameters
@@ -78,3 +78,26 @@ class ChordVoter():
             counts.append((acutal_element, counter))
 
         return counts
+
+    @staticmethod
+    def beat_harmony_estimation(one_beat_elements, count_encoded_sequence):
+        """
+        The function will take the length of same chord subsequence and will estimate how many beats could be that.
+        The number of beats coressponding to the chord duration is the number how many times the chord is added to 
+        the final result list of chords .. chord_beats.
+
+        Parameters
+        ----------
+        one_beat_elements : int
+            how many sequence elements coressponds to one beat by the simple BPM estimation 
+        Returns
+        -------
+        chord_beats : int list
+            sequence of chords mapped to each beat
+        """
+        chord_beats = []
+        for (chord, count) in count_encoded_sequence:
+            for _ in range(round(count/one_beat_elements)):
+                chord_beats.append(chord)
+
+        return chord_beats
