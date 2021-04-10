@@ -36,9 +36,10 @@ class ChordVoter():
             ChordVoter._encode_sequence_to_counts(chord_sequence)
         )
 
+        fixed_chord_sequence, beats  = ChordVoter._chord_sequence_fixer(voted_chords, beats, n_quarters_for_bar)
         beat_times = librosa.frames_to_time(beats, sr=sample_rate, hop_length=hop_length)
 
-        return voted_chords, bpm, beat_times
+        return fixed_chord_sequence, bpm, beat_times
 
     @staticmethod
     def _encode_sequence_to_counts(sequence):
@@ -110,7 +111,7 @@ class ChordVoter():
             counts = counts + count
 
         # Find the most common number of quarters in one sequence
-        n_quarters_for_bar = four_quarters if four_quarters >= three_quarters else three_quarters
+        n_quarters_for_bar = 4 if four_quarters >= three_quarters else 3
 
         return chord_beats, beats, n_quarters_for_bar
 
@@ -209,18 +210,18 @@ class ChordVoter():
                     count = count - 4
                     for _ in range(4):
                         fixed_chord_sequence.append(chord)
-                        fixed_beats.append(beats[beat_index + i])
+                        fixed_beats.append(beats[min(beat_index + i, len(beats) - 1)])
                         i = i + 1
                 # Add fourth to three beats, Ignore zero and one beat
                 if count%4 == 3:
                     for _ in range(4):
                         fixed_chord_sequence.append(chord)
-                        fixed_beats.append(beats[beat_index + i])
+                        fixed_beats.append(beats[min(beat_index + i, len(beats) - 1)])
                         i = i + 1
                 elif count%4 == 2:
                     for _ in range(2):
                         fixed_chord_sequence.append(chord)
-                        fixed_beats.append(beats[beat_index + i])
+                        fixed_beats.append(beats[min(beat_index + i, len(beats) - 1)])
                         i = i + 1
             elif n_quarters_for_bar == 3:
                 # Create 3 quarters bars until there is no 3 beat chords
@@ -228,18 +229,18 @@ class ChordVoter():
                     count = count - 3
                     for _ in range(3):
                         fixed_chord_sequence.append(chord)
-                        fixed_beats.append(beats[beat_index + i])
+                        fixed_beats.append(beats[min(beat_index + i, len(beats) - 1)])
                         i = i + 1
                 # TODO, heuristic not specified
                 if count%3 == 2:
                     for _ in range(2):
                         fixed_chord_sequence.append(chord)
-                        fixed_beats.append(beats[beat_index + i])
+                        fixed_beats.append(beats[min(beat_index + i, len(beats) - 1)])
                         i = i + 1
                 elif count%3 == 1:
                     for _ in range(1):
                         fixed_chord_sequence.append(chord)
-                        fixed_beats.append(beats[beat_index + i])
+                        fixed_beats.append(beats[min(beat_index + i, len(beats) - 1)])
                         i = i + 1
             else:
                 raise Exception("Vote Fixer doesn't support ", n_quarters_for_bar, "quarters for bar.")
