@@ -175,41 +175,75 @@ class ChordVoter():
         return n_beat_elements
 
     @staticmethod
-    def _chord_sequence_fixer(chord_sequence, n_quarters_for_bar):
+    def _chord_sequence_fixer(chord_sequence, beats, n_quarters_for_bar):
         """
+        The function will add or remove chords from sequence to have standard number of same chords 
+        in a bar. Only 4/4 bar is supported. 3/4 is prepared and rest of tempo signature is not common.
+
+        Parameters
+        ----------
+        chord_sequence : int list
+            sequence of chord indices
+        beats : int list
+            sequence of beats
+        n_quarters_for_bar : int
+            the number of quarter tones in one bar, ToDo - support more than 3/4 or 4/4
+        Returns
+        -------
+        fixed_chord_sequence : int
+            sequence of chords after additions/removes not common chords
+        fixed_beats : int
+            beats corresponding to the fixed chord sequence
         """
         chord_counts = ChordVoter._encode_sequence_to_counts(chord_sequence)
         fixed_chord_sequence = []
+        fixed_beats = []
+        beat_index = 0
 
         for (chord, count) in chord_counts:
+            count_copy = count
+            i = 0
             if n_quarters_for_bar == 4:
                 # Create 4 quarters bars until there is no 4 beat chords
                 while (count/4 >= 1):
                     count = count - 4
                     for _ in range(4):
                         fixed_chord_sequence.append(chord)
+                        fixed_beats.append(beats[beat_index + i])
+                        i = i + 1
                 # Add fourth to three beats, Ignore zero and one beat
                 if count%4 == 3:
                     for _ in range(4):
                         fixed_chord_sequence.append(chord)
+                        fixed_beats.append(beats[beat_index + i])
+                        i = i + 1
                 elif count%4 == 2:
                     for _ in range(2):
                         fixed_chord_sequence.append(chord)
+                        fixed_beats.append(beats[beat_index + i])
+                        i = i + 1
             elif n_quarters_for_bar == 3:
                 # Create 3 quarters bars until there is no 3 beat chords
                 while (count/3 >= 1):
                     count = count - 3
                     for _ in range(3):
                         fixed_chord_sequence.append(chord)
+                        fixed_beats.append(beats[beat_index + i])
+                        i = i + 1
                 # TODO, heuristic not specified
                 if count%3 == 2:
                     for _ in range(2):
                         fixed_chord_sequence.append(chord)
+                        fixed_beats.append(beats[beat_index + i])
+                        i = i + 1
                 elif count%3 == 1:
                     for _ in range(1):
                         fixed_chord_sequence.append(chord)
+                        fixed_beats.append(beats[beat_index + i])
+                        i = i + 1
             else:
                 raise Exception("Vote Fixer doesn't support ", n_quarters_for_bar, "quarters for bar.")
 
+            beat_index = beat_index + count_copy
 
-        return fixed_chord_sequence
+        return fixed_chord_sequence, fixed_beats
