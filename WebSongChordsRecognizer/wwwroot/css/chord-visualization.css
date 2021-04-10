@@ -5,7 +5,7 @@
     display:inline-flex;
 }
 
-.songsbpm, .songskey {
+.songsbpm, .songskey, .songstempo {
     margin: 10px;
     padding: 4px;
     border: 2px solid;
