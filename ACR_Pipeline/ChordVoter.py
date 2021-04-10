@@ -31,7 +31,7 @@ class ChordVoter():
         #voted_chords = ChordVoter._beat_chord_bpm_estimation(beats, chord_sequence)
         bpm, _ = librosa.beat.beat_track(y=waveform, sr=sample_rate, hop_length=hop_length)
 
-        voted_chords, beats = ChordVoter._beat_chord_harmony_estimation(
+        voted_chords, beats, n_quarters_for_bar = ChordVoter._beat_chord_harmony_estimation(
             ChordVoter._get_n_of_beat_elements(bpm, sample_rate, hop_length),
             ChordVoter._encode_sequence_to_counts(chord_sequence)
         )
@@ -93,17 +93,26 @@ class ChordVoter():
             sequence of chords mapped to each beat
         beats : int list
             beat points
+        n_quarters_for_bar : int
+            the number of quarter tones in one bar, ToDo - support more than 3/4 or 4/4
         """
-        chord_beats = []
-        beats = []
-        counts = 0
+        chord_beats, beats = [], []
+        counts, three_quarters, four_quarters = 0, 0, 0
+
         for (chord, count) in count_encoded_sequence:
+            # Add number of occurences of the bar quarters in the sequence
+            if round(count/one_beat_elements)%4 == 0: four_quarters = four_quarters + round(count/one_beat_elements)/4
+            if round(count/one_beat_elements)%3 == 0: three_quarters = three_quarters + round(count/one_beat_elements)/3
+            # Iterate over all beats, add one chord and beat time for each
             for i in range(round(count/one_beat_elements)):
                 chord_beats.append(chord)
                 beats.append(counts + i * one_beat_elements)
             counts = counts + count
 
-        return chord_beats, beats
+        # Find the most common number of quarters in one sequence
+        n_quarters_for_bar = four_quarters if four_quarters >= three_quarters else three_quarters
+
+        return chord_beats, beats, n_quarters_for_bar
 
     @staticmethod
     def _beat_chord_bpm_estimation(beats, chord_sequence):
@@ -164,3 +173,43 @@ class ChordVoter():
         n_beat_elements = n_minute_elements/bpm
 
         return n_beat_elements
+
+    @staticmethod
+    def _chord_sequence_fixer(chord_sequence, n_quarters_for_bar):
+        """
+        """
+        chord_counts = ChordVoter._encode_sequence_to_counts(chord_sequence)
+        fixed_chord_sequence = []
+
+        for (chord, count) in chord_counts:
+            if n_quarters_for_bar == 4:
+                # Create 4 quarters bars until there is no 4 beat chords
+                while (count/4 >= 1):
+                    count = count - 4
+                    for _ in range(4):
+                        fixed_chord_sequence.append(chord)
+                # Add fourth to three beats, Ignore zero and one beat
+                if count%4 == 3:
+                    for _ in range(4):
+                        fixed_chord_sequence.append(chord)
+                elif count%4 == 2:
+                    for _ in range(2):
+                        fixed_chord_sequence.append(chord)
+            elif n_quarters_for_bar == 3:
+                # Create 3 quarters bars until there is no 3 beat chords
+                while (count/3 >= 1):
+                    count = count - 3
+                    for _ in range(3):
+                        fixed_chord_sequence.append(chord)
+                # TODO, heuristic not specified
+                if count%3 == 2:
+                    for _ in range(2):
+                        fixed_chord_sequence.append(chord)
+                elif count%3 == 1:
+                    for _ in range(1):
+                        fixed_chord_sequence.append(chord)
+            else:
+                raise Exception("Vote Fixer doesn't support ", n_quarters_for_bar, "quarters for bar.")
+
+
+        return fixed_chord_sequence
