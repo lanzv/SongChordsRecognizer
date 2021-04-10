@@ -26,6 +26,8 @@ class ChordVoter():
             beats per minute value
         beat_times : float array
             list of time points in seconds of beats
+        n_quarters_for_bar : int
+            the number of quarter tones in one bar, ToDo - support more than 3/4 or 4/4
         """
         #bpm, beats = librosa.beat.beat_track(y=waveform, sr=sample_rate, hop_length=hop_length)
         #voted_chords = ChordVoter._beat_chord_bpm_estimation(beats, chord_sequence)
@@ -39,7 +41,7 @@ class ChordVoter():
         fixed_chord_sequence, beats  = ChordVoter._chord_sequence_fixer(voted_chords, beats, n_quarters_for_bar)
         beat_times = librosa.frames_to_time(beats, sr=sample_rate, hop_length=hop_length)
 
-        return fixed_chord_sequence, bpm, beat_times
+        return fixed_chord_sequence, bpm, beat_times, n_quarters_for_bar
 
     @staticmethod
     def _encode_sequence_to_counts(sequence):

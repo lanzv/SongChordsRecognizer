@@ -30,6 +30,11 @@ namespace WebSongChordsRecognizer.Models
         /// </summary>
         public String BPM;
 
+        /// <summary>
+        /// Number of quarters in one bar.
+        /// </summary>
+        /// <returns></returns>
+        public int BarQuarters;
 
 
         #endregion

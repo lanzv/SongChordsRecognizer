@@ -37,7 +37,8 @@ python SongChordsRecognizer.py
         "Key": [KEY DESCRIPTION],
         "BPM": [BPM VALUE],
         "ChordSequence": [LIST OF CHORDS],
-        "BeatTimes": [LIST OF BEAT TIMES IN SECONDS]
+        "BeatTimes": [LIST OF BEAT TIMES IN SECONDS],
+        "BarQuarters": [NUMBER OF QUARTERS IN ONE BAR]
     }
     ```
     - Example
@@ -46,7 +47,8 @@ python SongChordsRecognizer.py
             "Key": "C",
             "BPM": "120.323",
             "ChordSequence": ['A', 'B', 'A', 'A', 'C'], 
-            "BeatTimes": [0.123, 0.32, 0.4, 0.55]
+            "BeatTimes": [0.123, 0.32, 0.4, 0.55],
+            "BarQuarters": 4
         }
         ```
 
@@ -106,4 +108,11 @@ Based on already predicted chords, the key with the most fitting chords is choos
 
 ### Beats Voting
 
-This part uses librosa library to get the BPM value and the Beats list. Each beat duration is summarized and the most common chord si the one mapped to this beat.
+This part uses librosa library to get the BPM value and the Beats list.
+We use two approaches
+
+1. Each beat duration is summarized and the most common chord is the one mapped to this beat.
+1. The BPM is used to estimate how many chords correspond to one beat. After that we precreate first draft of beat chord sequence where each chord corresponds to some beat. This sequence is used for the tempo signature estimation. After that we supply or remove missing chords or single chords to complete full bar of the same chord. 
+
+We proceed with the second approach that seems to be more accurate.
+

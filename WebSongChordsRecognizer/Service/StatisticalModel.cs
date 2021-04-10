@@ -138,7 +138,7 @@ namespace WebSongChordsRecognizer.Service
 
 
                 // Parse console output
-                (response.ChordSequence, response.BeatTimes, response.Key, response.BPM) = parseJsonResponse(json_response);
+                (response.ChordSequence, response.BeatTimes, response.Key, response.BPM, response.BarQuarters) = parseJsonResponse(json_response);
             }
 
             return response;
@@ -174,8 +174,8 @@ namespace WebSongChordsRecognizer.Service
         /// Parse Json Response from python ACR Pipeline.
         /// </summary>
         /// <param name="json_response">JSON string that contains Key, BPM and ChordSequence keys.</param>
-        /// <returns>List of played chords, song's key and the bpm value.</returns>
-        private static (List<Chord>, List<double>, string, string) parseJsonResponse(string json_response)
+        /// <returns>List of played chords with times, song's key, the bpm value and number of quarter tones in one bar.</returns>
+        private static (List<Chord>, List<double>, string, string, int) parseJsonResponse(string json_response)
         {
             // Initialization
             List<Chord> chordSequence = new List<Chord>();
@@ -183,6 +183,7 @@ namespace WebSongChordsRecognizer.Service
             string[] chordSequenceStr;
             string key;
             string bpm;
+            int barQuarters;
 
             // Parse Json response
             var acrDefinition = new
@@ -190,7 +191,8 @@ namespace WebSongChordsRecognizer.Service
                 Key = "",
                 BPM = "",
                 ChordSequence = new string[] {},
-                BeatTimes = new double[] {}
+                BeatTimes = new double[] {},
+                BarQuarters = 0
             };
             var acrObj = JsonConvert.DeserializeAnonymousType(json_response, acrDefinition);
 
@@ -199,6 +201,7 @@ namespace WebSongChordsRecognizer.Service
             bpm = acrObj.BPM;
             chordSequenceStr = acrObj.ChordSequence;
             beatTimes.AddRange(acrObj.BeatTimes);
+            barQuarters = acrObj.BarQuarters;
 
             // Get chord dictionary and add the None chord to it.
             Dictionary<String, Triad> allChords = ChordsGenerator.GetDictionaryOfTriads();
@@ -212,7 +215,7 @@ namespace WebSongChordsRecognizer.Service
             }
 
 
-            return (chordSequence, beatTimes, key, bpm);
+            return (chordSequence, beatTimes, key, bpm, barQuarters);
         }
 
 
