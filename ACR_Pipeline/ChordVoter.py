@@ -27,11 +27,16 @@ class ChordVoter():
         beat_times : float array
             list of time points in seconds of beats
         """
-        bpm, beats = librosa.beat.beat_track(y=waveform, sr=sample_rate, hop_length=hop_length)
+        #bpm, beats = librosa.beat.beat_track(y=waveform, sr=sample_rate, hop_length=hop_length)
+        #voted_chords = ChordVoter._beat_chord_bpm_estimation(beats, chord_sequence)
+        bpm, _ = librosa.beat.beat_track(y=waveform, sr=sample_rate, hop_length=hop_length)
+
+        voted_chords, beats = ChordVoter._beat_chord_harmony_estimation(
+            ChordVoter._get_n_of_beat_elements(bpm, sample_rate, hop_length),
+            ChordVoter._encode_sequence_to_counts(chord_sequence)
+        )
+
         beat_times = librosa.frames_to_time(beats, sr=sample_rate, hop_length=hop_length)
-
-
-        voted_chords = ChordVoter._beat_chord_bpm_estimation(beats, chord_sequence)
 
         return voted_chords, bpm, beat_times
 
@@ -86,13 +91,19 @@ class ChordVoter():
         -------
         chord_beats : int list
             sequence of chords mapped to each beat
+        beats : int list
+            beat points
         """
         chord_beats = []
+        beats = []
+        counts = 0
         for (chord, count) in count_encoded_sequence:
-            for _ in range(round(count/one_beat_elements)):
+            for i in range(round(count/one_beat_elements)):
                 chord_beats.append(chord)
+                chord_beats.append(counts + i * one_beat_elements)
+            counts = counts + count
 
-        return chord_beats
+        return chord_beats, beats
 
     @staticmethod
     def _beat_chord_bpm_estimation(beats, chord_sequence):
@@ -123,3 +134,33 @@ class ChordVoter():
                 )
 
         return chord_beats
+
+    @staticmethod
+    def _get_n_of_beat_elements(bpm, sample_rate, hop_length):
+        """
+        The function will compute the number of elements of one beat.
+
+        Parameters
+        ----------
+        bpm : int
+            beats per minute value
+        sample_rate : int
+            audio sample rate
+        hop_length : int
+            number of samples between successive spectrogram columns
+        Returns
+        -------
+        n_beat_elements : int
+            the number of elements of one beat
+        """
+        # Get sample time ~ nth_element
+        nth_sample_element = 3000
+        times = librosa.frames_to_time([nth_sample_element], sr=sample_rate, hop_length=hop_length)
+
+        # How many elements are in one minute
+        n_minute_elements =  nth_sample_element / (times[0] / 60)
+
+        # How many elements are in one beat
+        n_beat_elements = n_minute_elements/bpm
+
+        return n_beat_elements
