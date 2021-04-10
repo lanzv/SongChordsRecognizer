@@ -100,7 +100,7 @@ class ChordVoter():
         for (chord, count) in count_encoded_sequence:
             for i in range(round(count/one_beat_elements)):
                 chord_beats.append(chord)
-                chord_beats.append(counts + i * one_beat_elements)
+                beats.append(counts + i * one_beat_elements)
             counts = counts + count
 
         return chord_beats, beats

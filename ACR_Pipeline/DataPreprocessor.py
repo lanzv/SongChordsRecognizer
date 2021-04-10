@@ -188,6 +188,8 @@ class DataPreprocessor():
 
         transposed_sequence = []
         for chord in chord_sequence:
+            if chord > N_CHORDS:
+                raise Exception("Unknown chord with index ", chord)
             if chord == 0: # chord is unknown -> N
                 transposed_sequence.append(chord)
             elif (chord + 2*diff < N_CHORDS):
