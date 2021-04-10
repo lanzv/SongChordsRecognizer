@@ -29,11 +29,11 @@ class ChordVoter():
         """
         #bpm, beats = librosa.beat.beat_track(y=waveform, sr=sample_rate, hop_length=hop_length)
         #voted_chords = ChordVoter._beat_chord_bpm_estimation(beats, chord_sequence)
-        bpm, _ = librosa.beat.beat_track(y=waveform, sr=sample_rate, hop_length=hop_length)
+        bpm, beats = librosa.beat.beat_track(y=waveform, sr=sample_rate, hop_length=hop_length)
 
         voted_chords, beats, n_quarters_for_bar = ChordVoter._beat_chord_harmony_estimation(
             ChordVoter._get_n_of_beat_elements(bpm, sample_rate, hop_length),
-            ChordVoter._encode_sequence_to_counts(chord_sequence)
+            ChordVoter._encode_sequence_to_counts(chord_sequence[:beats[-1]])
         )
 
         fixed_chord_sequence, beats  = ChordVoter._chord_sequence_fixer(voted_chords, beats, n_quarters_for_bar)
