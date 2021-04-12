@@ -41,7 +41,9 @@ def save_preprocessed_Billboard(args):
 
     # Prepare and Save Billboard dataset
     data = BillboardDataset(audio_directory=args.billboard_audio_directory, annotations_directory=args.billboard_annotations_directory, audio = args.billboard_audio)
-    data.save_preprocessed_dataset(dest=args.billboard_prep_dest, hop_length=args.hop_length, norm_to_C=args.norm_to_C, spectrogram_generator=spectrogram, n_frames=args.n_frames)
+    with lzma.open(args.isophonics_prep_dest, "wb") as dataset_file:
+        pickle.dump((data.preprocess_single_chords_list(args.window_size, args.flattened_window, args.hop_length, args.to_skip, args.norm_to_C, spectrogram, args.skip_coef)), dataset_file)
+    #data.save_preprocessed_dataset(dest=args.billboard_prep_dest, hop_length=args.hop_length, norm_to_C=args.norm_to_C, spectrogram_generator=spectrogram, n_frames=args.n_frames)
     #data.save_segmentation_samples(dest="./ACR_Training/Segmentations/Billboard1000.seg", n_frames=500)
 
 
@@ -57,13 +59,13 @@ parser.add_argument("--billboard_prep_dest", default="./ACR_Training/Preprocesse
 # Dataset preprocessing args
 parser.add_argument("--dataset", default="billboard", type=str, help="Dataset we want to preprocess, {isophonics, billboard}")
 #           Isophonics
-parser.add_argument("--sample_rate", default=22050, type=int, help="Sample rate for each song.")
-parser.add_argument("--hop_length", default=512, type=int, help="10*(sample_rate/hop_length) is a number of miliseconds between two frames.")
+parser.add_argument("--sample_rate", default=44100, type=int, help="Sample rate for each song.")
+parser.add_argument("--hop_length", default=22050, type=int, help="10*(sample_rate/hop_length) is a number of miliseconds between two frames.")
 parser.add_argument("--window_size", default=5, type=int, help="Spectrograms on left, and also spectrogram on right of the time bin -> window_size*2 + 1 spectrograms grouped together.")
 parser.add_argument("--flattened_window", default=True, type=bool, help="Whether the spectrogram window should be flatten to one array or it sould be array of spectrograms.")
 parser.add_argument("--to_skip", default=1, type=int, help="How many spectrogram we want to skip when creating spectrogram window.")
 parser.add_argument("--norm_to_C", default=True, type=bool, help="Whether we want to transpose all songs to C key (or D dorian, .. A minor, ...)")
-parser.add_argument("--skip_coef", default=22, type=int, help="Spectrogram shifts in the window are multiplayed by this ceofs -> we have window with indices 0, 5, 10, 15, 20, .. instead of 8,9,10,11,12")
+parser.add_argument("--skip_coef", default=1, type=int, help="Spectrogram shifts in the window are multiplayed by this ceofs -> we have window with indices 0, 5, 10, 15, 20, .. instead of 8,9,10,11,12")
 parser.add_argument("--feature_type", default="cqt_spec", type=str, help="Spectrogram types, {cqt_spec,log_mel_spec,cqt_chrom,stft_chrom}")
 #           Billboard
 parser.add_argument("--n_frames", default=1000, type=int, help="Length of song subsequence we are consinder when predicting chords to keep some context.")

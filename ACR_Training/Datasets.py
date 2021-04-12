@@ -646,6 +646,82 @@ class BillboardDataset(Dataset):
 
 
 
+    def preprocess_single_chords_list(self, window_size=5, flattened_window=True, hop_length=4410, to_skip=5, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, skip_coef=1) -> tuple:
+        """
+        Preprocess Billboard dataset.
+        Create features from self.DATA and its corresponding targets from self.CHORDS.
+
+        Parameters
+        ----------
+        window_size : int
+            how many spectrograms on left and on right we should take
+        flattened_window : bool
+            True if we want to flatten spectrograms to one array, otherwise False
+        hop_length : int
+            number of samples between successive spectrogram columns
+        to_skip : int
+            how many spectrogram we want to skip when creating new feature set
+        norm_to_C : bool
+            True if we want to transpose all songs to C key
+        spectrogram_generator : method from Spectrograms.py
+            function that generates spectrogram
+        skip_coef : int
+            coeficient that multiplies window shifts -> some spectrogram are skipped in the flattened window
+        Returns
+        -------
+        prep_data : np array
+            window (flettend or not) of logarithmized mel spectrograms arround specific time point
+        prep_targets : np array
+            integers of chord labels for specific time point
+        """
+        prep_data = []
+        prep_targets = []
+        k = 0
+        # Iterate over all audio files
+        for audio, chords, desc in zip(self.DATA, self.CHORDS, self.DESC):
+            print(k)
+            k = k+1
+            # Get log mel spectrogram
+            spectrogram = IsophonicsDataset.preprocess_audio(waveform=audio.WAVEFORM, sample_rate=audio.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, key=desc.TONIC)
+            spectrogram = np.array(spectrogram)
+            spec_length, num_samples = spectrogram.shape
+
+            # Collect data for each spectrogram sample
+            j = 0 # labels index
+            for i in [index for index in range(num_samples) if index%to_skip==0]:
+                # Get data window with zero margin
+                n_pre_zeros, window_indices, n_post_zeros = IsophonicsDataset.__get_flatten_indices(i, num_samples, skip_coef, window_size)
+                if flattened_window:
+                    prep_data.append(
+                        np.concatenate((
+                            np.zeros((n_pre_zeros, spec_length)),
+                            np.array(spectrogram[:, window_indices]).swapaxes(0,1),
+                            np.zeros((n_post_zeros, spec_length))
+                        ), axis = 0).flatten()
+                    )
+                else:
+                    prep_data.append(
+                        np.concatenate((
+                            np.zeros((n_pre_zeros, spec_length)),
+                            np.array(spectrogram[:, window_indices]).swapaxes(0,1),
+                            np.zeros((n_post_zeros, spec_length))
+                        ), axis = 0)
+                    )
+
+
+                # Get label
+                second = float(i)/(float(self.SAMPLE_RATE) / float(hop_length))
+                while j < len(chords.START) and second > chords.START[j] :
+                    j = j + 1
+                if j == len(chords.START):
+                    prep_targets.append(Dataset.get_integered_chord("N", norm_to_C, desc.TONIC))
+                else:
+                    prep_targets.append(Dataset.get_integered_chord(chords.CHORD[j], norm_to_C, desc.TONIC))
+
+        print("[INFO] The Billboard Dataset was successfully preprocessed.")
+        return np.array(prep_data), np.array(prep_targets)
+
+
 
     def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_BillboardDataset.ds", hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500):
         """
@@ -766,3 +842,4 @@ class BillboardDataset(Dataset):
         print("[INFO] The Billboard segmentation samples was loaded successfully.")
         return loaded_samples
 
+    
