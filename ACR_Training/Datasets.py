@@ -566,7 +566,7 @@ class BillboardDataset(Dataset):
     CHORDS contains a chord sequence.
     DESC contains a audio description like tonic, metre, ect...
     """
-    def __init__(self, audio_directory=None, annotations_directory=None):
+    def __init__(self, audio_directory=None, annotations_directory=None, audio=False):
 
         self.SAMPLE_RATE = None
         self.NFFT = None
@@ -576,8 +576,7 @@ class BillboardDataset(Dataset):
         self.DESC =  []
 
         if (not audio_directory == None) and (not annotations_directory == None):
-
-            audio_paths = sorted(glob(os.path.join(audio_directory, 'CHORDINO/*/')))
+            audio_paths = sorted(glob(os.path.join(audio_directory, 'CHORDINO/*/'))) if not audio else sorted(glob(os.path.join(audio_directory, 'WAV/*/')))
             chord_annotations_paths = sorted(glob(os.path.join(annotations_directory, 'LABs/*/')))
             desc_annotations_paths = sorted(glob(os.path.join(annotations_directory, 'DESCRIPTIONs/*/')))
 
@@ -585,7 +584,10 @@ class BillboardDataset(Dataset):
                 raise Exception("The number of WAV files doesn't equal the number of annotation files.")
 
             for audio_path, chord_lab_path, desc_path in zip(audio_paths, chord_annotations_paths, desc_annotations_paths):
-                self.DATA.append(BillboardFeatures(audio_path))
+                if audio:
+                    self.DATA.append(Audio(audio_path, self.SAMPLE_RATE))
+                else:
+                    self.DATA.append(BillboardFeatures(audio_path))
                 self.CHORDS.append(ChordSequence(chord_lab_path+"full.lab"))
                 self.DESC.append(SongDescription(desc_path+"salami_chords.txt"))
 
@@ -600,30 +602,42 @@ class BillboardDataset(Dataset):
 
 
 
-    def get_preprocessed_dataset(self, n_frames=500) -> tuple:
+    def get_preprocessed_dataset(self, hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500) -> tuple:
         """
         Preprocess Billboard dataset.
-        Divide chroma features from self.DATA to n_frames frames long sequences and do the same with targets from self.CHORDS.
+        Divide spectrogram features generated from self.DATA audio waveforms to n_frames frames long sequences and do the same with targets from self.CHORDS.
 
         Parameters
         ----------
+        hop_length : int
+            number of samples between successive spectrogram columns
+        norm_to_C : bool
+            True if we want to transpose all songs to C key
+        spectrogram_generator : method from Spectrograms.py
+            function that generates spectrogram
         n_frames : int
              how many frames should be included in a subsequence of a song
         Returns
         -------
         prep_data : np array
-            sequences of song's chroma vectors separated to n_frames frames
+            sequences of song's spectrogram vectors separated to n_frames frames
         prep_targets : np array
-            sequences of integers of chord labels for specific chroma vector sequences
+            sequences of integers of chord labels for specific spectrogram vector sequences
         """
         FEATURESs = []
         CHORDs = self.CHORDS
         TIME_BINSs = []
         KEYs = []
         norm_to_C = False
-        for chroma, desc in zip(self.DATA, self.DESC):
-            FEATURESs.append(chroma.CHROMA)
-            TIME_BINSs.append(chroma.TIME_BINS)
+        for data, desc in zip(self.DATA, self.DESC):
+            if isinstance(data, BillboardFeatures):
+                FEATURESs.append(data.CHROMA)
+                TIME_BINSs.append(data.TIME_BINS)
+            elif isinstance(data, Audio):
+                FEATURESs.append((IsophonicsDataset.preprocess_audio(waveform=data.WAVEFORM, sample_rate=data.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, key=desc.TONIC).swapaxes(0,1)))
+                num_samples, _ = FEATURESs[-1].shape
+                TIME_BINSs.append([float(i)/(float(self.SAMPLE_RATE) / float(hop_length)) for i in range(num_samples)])
+
             KEYs.append(desc.TONIC)
 
         return Dataset.songs_to_sequences(FEATURESs=FEATURESs, CHORDs=CHORDs, TIME_BINSs=TIME_BINSs, KEYs=KEYs, n_frames=n_frames, norm_to_C=norm_to_C)
@@ -631,18 +645,27 @@ class BillboardDataset(Dataset):
 
 
 
-    def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_BillboardDataset.ds", n_frames=1000):
+    def save_preprocessed_dataset(self, dest = "./Datasets/preprocessed_BillboardDataset.ds", hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500):
         """
         Save preprocessed data from this dataset to destination path 'dest' by default as a .ds file.
 
         Parameters
         ----------
+        dest : str
+            path to preprocessed data
+        hop_length : int
+            number of samples between successive spectrogram columns
+        norm_to_C : bool
+            True if we want to transpose all songs to C key
+        spectrogram_generator : method from Spectrograms.py
+            function that generates spectrogram
         n_frames : int
-            how many frames should be included in a subsequence of a song
+             how many frames should be included in a subsequence of a song
         """
+
         # Serialize the dataset.
         with lzma.open(dest, "wb") as dataset_file:
-            pickle.dump((self.get_preprocessed_dataset(n_frames)), dataset_file)
+            pickle.dump((self.get_preprocessed_dataset(hop_length=hop_length, norm_to_C=norm_to_C, spectrogram_generator=spectrogram_generator, n_frames=n_frames)), dataset_file)
 
         print("[INFO] The Preprocessed Billboard Dataset was saved successfully.")
 

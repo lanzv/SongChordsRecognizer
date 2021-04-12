@@ -36,18 +36,18 @@ def save_preprocessed_Billboard(args):
 
 parser = argparse.ArgumentParser()
 # Directories, destinations, folders, files
-parser.add_argument("--isophonics_audio_directory", default="./ACR_Training/Datasets/Isophonics/AUDIO", type=str, help="Path to ISOPHONICS directory with audio files.")
-parser.add_argument("--isophonics_annotations_directory", default="./ACR_Training/Datasets/Isophonics/ANNOTATIONS", type=str, help="Path to ISOPHONICS directory with chord annotations.")
+parser.add_argument("--isophonics_audio_directory", default="./ACR_Training2/Datasets/Isophonics/AUDIO", type=str, help="Path to ISOPHONICS directory with audio files.")
+parser.add_argument("--isophonics_annotations_directory", default="./ACR_Training2/Datasets/Isophonics/ANNOTATIONS", type=str, help="Path to ISOPHONICS directory with chord annotations.")
 parser.add_argument("--billboard_audio_directory", default="./ACR_Training/Datasets/Billboard/AUDIO", type=str, help="Path to BILLBOARD directory with audio files.")
 parser.add_argument("--billboard_annotations_directory", default="./ACR_Training/Datasets/Billboard/ANNOTATIONS", type=str, help="Path to BILLBOARD directory with chord annotations.")
-parser.add_argument("--isophonics_prep_dest", default="./ACR_Training/PreprocessedDatasets/isophonics_new_transposed.ds", type=str, help="Preprocessed ISOPHONICS dataset destination.")
+parser.add_argument("--isophonics_prep_dest", default="./ACR_Training/PreprocessedDatasets/isophonics_new.ds", type=str, help="Preprocessed ISOPHONICS dataset destination.")
 parser.add_argument("--billboard_prep_dest", default="./ACR_Training/PreprocessedDatasets/billboard_new.ds", type=str, help="Preprocessed BILLBOARD dataset destination.")
 
 # Dataset preprocessing args
 parser.add_argument("--dataset", default="isophonics", type=str, help="Dataset we want to preprocess, {isophonics, billboard}")
 #           Isophonics
-parser.add_argument("--sample_rate", default=44100, type=int, help="Sample rate for each song.")
-parser.add_argument("--hop_length", default=1024, type=int, help="10*(sample_rate/hop_length) is a number of miliseconds between two frames.")
+parser.add_argument("--sample_rate", default=22050, type=int, help="Sample rate for each song.")
+parser.add_argument("--hop_length", default=512, type=int, help="10*(sample_rate/hop_length) is a number of miliseconds between two frames.")
 parser.add_argument("--window_size", default=5, type=int, help="Spectrograms on left, and also spectrogram on right of the time bin -> window_size*2 + 1 spectrograms grouped together.")
 parser.add_argument("--flattened_window", default=True, type=bool, help="Whether the spectrogram window should be flatten to one array or it sould be array of spectrograms.")
 parser.add_argument("--to_skip", default=1, type=int, help="How many spectrogram we want to skip when creating spectrogram window.")
@@ -55,7 +55,7 @@ parser.add_argument("--norm_to_C", default=True, type=bool, help="Whether we wan
 parser.add_argument("--skip_coef", default=22, type=int, help="Spectrogram shifts in the window are multiplayed by this ceofs -> we have window with indices 0, 5, 10, 15, 20, .. instead of 8,9,10,11,12")
 parser.add_argument("--feature_type", default="log_mel_spec", type=str, help="Spectrogram types, {cqt_spec,log_mel_spec,cqt_chrom,stft_chrom}")
 #           Billboard
-parser.add_argument("--n_frames", default=50, type=int, help="Length of song subsequence we are consinder when predicting chords to keep some context.")
+parser.add_argument("--n_frames", default=1000, type=int, help="Length of song subsequence we are consinder when predicting chords to keep some context.")
 
 # Training args
 parser.add_argument("--test_size", default=0.3, type=lambda x:int(x) if x.isdigit() else float(x), help="Test set size.")
