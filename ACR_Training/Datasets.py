@@ -566,17 +566,17 @@ class BillboardDataset(Dataset):
     CHORDS contains a chord sequence.
     DESC contains a audio description like tonic, metre, ect...
     """
-    def __init__(self, audio_directory=None, annotations_directory=None, audio=False):
+    def __init__(self, audio_directory=None, annotations_directory=None, sample_rate=44100, nfft=2**14, audio=False):
 
-        self.SAMPLE_RATE = None
-        self.NFFT = None
+        self.SAMPLE_RATE = sample_rate
+        self.NFFT = nfft
 
         self.DATA = []
         self.CHORDS = []
         self.DESC =  []
 
         if (not audio_directory == None) and (not annotations_directory == None):
-            audio_paths = sorted(glob(os.path.join(audio_directory, 'CHORDINO/*/'))) if not audio else sorted(glob(os.path.join(audio_directory, 'WAV/*/')))
+            audio_paths = sorted(glob(os.path.join(audio_directory, 'CHORDINO/*/'))) if not audio else sorted(glob(os.path.join(audio_directory, 'WAV/*/*.wav')))
             chord_annotations_paths = sorted(glob(os.path.join(annotations_directory, 'LABs/*/')))
             desc_annotations_paths = sorted(glob(os.path.join(annotations_directory, 'DESCRIPTIONs/*/')))
 
@@ -629,7 +629,9 @@ class BillboardDataset(Dataset):
         TIME_BINSs = []
         KEYs = []
         norm_to_C = False
+        k = 0
         for data, desc in zip(self.DATA, self.DESC):
+            print(k)
             if isinstance(data, BillboardFeatures):
                 FEATURESs.append(data.CHROMA)
                 TIME_BINSs.append(data.TIME_BINS)
@@ -637,7 +639,7 @@ class BillboardDataset(Dataset):
                 FEATURESs.append((IsophonicsDataset.preprocess_audio(waveform=data.WAVEFORM, sample_rate=data.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, key=desc.TONIC).swapaxes(0,1)))
                 num_samples, _ = FEATURESs[-1].shape
                 TIME_BINSs.append([float(i)/(float(self.SAMPLE_RATE) / float(hop_length)) for i in range(num_samples)])
-
+            k = k + 1
             KEYs.append(desc.TONIC)
 
         return Dataset.songs_to_sequences(FEATURESs=FEATURESs, CHORDs=CHORDs, TIME_BINSs=TIME_BINSs, KEYs=KEYs, n_frames=n_frames, norm_to_C=norm_to_C)

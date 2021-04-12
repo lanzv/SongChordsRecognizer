@@ -28,23 +28,34 @@ def save_preprocessed_Isophonics(args):
     print("[INFO] The Dataset was saved successfully.")
 
 def save_preprocessed_Billboard(args):
+    # Get spectrogram type
+    if args.feature_type == "cqt_spec":
+        spectrogram = cqt_spectrogram
+    elif args.feature_type == "log_mel_spec":
+        spectrogram = log_mel_spectrogram
+    elif args.feature_type == "cqt_chrom":
+        spectrogram = cqt_chromagram
+    elif args.feature_type == "stft_chrom":
+        spectrogram = stft_chromagram
+
+
     # Prepare and Save Billboard dataset
-    data = BillboardDataset(audio_directory=args.billboard_audio_directory, annotations_directory=args.billboard_annotations_directory)
-    #data.save_preprocessed_dataset(dest=args.billboard_prep_dest, n_frames=args.n_frames)
-    data.save_segmentation_samples(dest="./ACR_Training/Segmentations/Billboard1000.seg", n_frames=500)
+    data = BillboardDataset(audio_directory=args.billboard_audio_directory, annotations_directory=args.billboard_annotations_directory, audio = args.billboard_audio)
+    data.save_preprocessed_dataset(dest=args.billboard_prep_dest, hop_length=args.hop_length, norm_to_C=args.norm_to_C, spectrogram_generator=spectrogram, n_frames=args.n_frames)
+    #data.save_segmentation_samples(dest="./ACR_Training/Segmentations/Billboard1000.seg", n_frames=500)
 
 
 parser = argparse.ArgumentParser()
 # Directories, destinations, folders, files
 parser.add_argument("--isophonics_audio_directory", default="./ACR_Training2/Datasets/Isophonics/AUDIO", type=str, help="Path to ISOPHONICS directory with audio files.")
 parser.add_argument("--isophonics_annotations_directory", default="./ACR_Training2/Datasets/Isophonics/ANNOTATIONS", type=str, help="Path to ISOPHONICS directory with chord annotations.")
-parser.add_argument("--billboard_audio_directory", default="./ACR_Training/Datasets/Billboard/AUDIO", type=str, help="Path to BILLBOARD directory with audio files.")
-parser.add_argument("--billboard_annotations_directory", default="./ACR_Training/Datasets/Billboard/ANNOTATIONS", type=str, help="Path to BILLBOARD directory with chord annotations.")
+parser.add_argument("--billboard_audio_directory", default="./ACR_Training/Datasets/Billboard_testset/AUDIO", type=str, help="Path to BILLBOARD directory with audio files.")
+parser.add_argument("--billboard_annotations_directory", default="./ACR_Training/Datasets/Billboard_testset/ANNOTATIONS", type=str, help="Path to BILLBOARD directory with chord annotations.")
 parser.add_argument("--isophonics_prep_dest", default="./ACR_Training/PreprocessedDatasets/isophonics_new.ds", type=str, help="Preprocessed ISOPHONICS dataset destination.")
 parser.add_argument("--billboard_prep_dest", default="./ACR_Training/PreprocessedDatasets/billboard_new.ds", type=str, help="Preprocessed BILLBOARD dataset destination.")
 
 # Dataset preprocessing args
-parser.add_argument("--dataset", default="isophonics", type=str, help="Dataset we want to preprocess, {isophonics, billboard}")
+parser.add_argument("--dataset", default="billboard", type=str, help="Dataset we want to preprocess, {isophonics, billboard}")
 #           Isophonics
 parser.add_argument("--sample_rate", default=22050, type=int, help="Sample rate for each song.")
 parser.add_argument("--hop_length", default=512, type=int, help="10*(sample_rate/hop_length) is a number of miliseconds between two frames.")
@@ -53,9 +64,10 @@ parser.add_argument("--flattened_window", default=True, type=bool, help="Whether
 parser.add_argument("--to_skip", default=1, type=int, help="How many spectrogram we want to skip when creating spectrogram window.")
 parser.add_argument("--norm_to_C", default=True, type=bool, help="Whether we want to transpose all songs to C key (or D dorian, .. A minor, ...)")
 parser.add_argument("--skip_coef", default=22, type=int, help="Spectrogram shifts in the window are multiplayed by this ceofs -> we have window with indices 0, 5, 10, 15, 20, .. instead of 8,9,10,11,12")
-parser.add_argument("--feature_type", default="log_mel_spec", type=str, help="Spectrogram types, {cqt_spec,log_mel_spec,cqt_chrom,stft_chrom}")
+parser.add_argument("--feature_type", default="cqt_spec", type=str, help="Spectrogram types, {cqt_spec,log_mel_spec,cqt_chrom,stft_chrom}")
 #           Billboard
 parser.add_argument("--n_frames", default=1000, type=int, help="Length of song subsequence we are consinder when predicting chords to keep some context.")
+parser.add_argument("--billboard_audio", default=True, type=bool, help="Whether wav audio files are part of the Billboard Dataset")
 
 # Training args
 parser.add_argument("--test_size", default=0.3, type=lambda x:int(x) if x.isdigit() else float(x), help="Test set size.")
