@@ -66,7 +66,7 @@ parser.add_argument("--flattened_window", default=True, type=bool, help="Whether
 parser.add_argument("--to_skip", default=1, type=int, help="How many spectrogram we want to skip when creating spectrogram window.")
 parser.add_argument("--norm_to_C", default=True, type=bool, help="Whether we want to transpose all songs to C key (or D dorian, .. A minor, ...)")
 parser.add_argument("--skip_coef", default=1, type=int, help="Spectrogram shifts in the window are multiplayed by this ceofs -> we have window with indices 0, 5, 10, 15, 20, .. instead of 8,9,10,11,12")
-parser.add_argument("--feature_type", default="cqt_spec", type=str, help="Spectrogram types, {cqt_spec,log_mel_spec,cqt_chrom,stft_chrom}")
+parser.add_argument("--feature_type", default="log_mel_spec", type=str, help="Spectrogram types, {cqt_spec,log_mel_spec,cqt_chrom,stft_chrom}")
 #           Billboard
 parser.add_argument("--n_frames", default=1000, type=int, help="Length of song subsequence we are consinder when predicting chords to keep some context.")
 parser.add_argument("--billboard_audio", default=True, type=bool, help="Whether wav audio files are part of the Billboard Dataset")

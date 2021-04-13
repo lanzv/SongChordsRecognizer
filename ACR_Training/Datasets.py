@@ -255,7 +255,7 @@ class IsophonicsDataset(Dataset):
             j = 0 # labels index
             for i in [index for index in range(num_samples) if index%to_skip==0]:
                 # Get data window with zero margin
-                n_pre_zeros, window_indices, n_post_zeros = IsophonicsDataset.__get_flatten_indices(i, num_samples, skip_coef, window_size)
+                n_pre_zeros, window_indices, n_post_zeros = IsophonicsDataset.get_flatten_indices(i, num_samples, skip_coef, window_size)
                 if flattened_window:
                     prep_data.append(
                         np.concatenate((
@@ -288,7 +288,7 @@ class IsophonicsDataset(Dataset):
 
 
     @staticmethod
-    def __get_flatten_indices(actual_index, num_samples, skip_coef=1, window_size=5):
+    def get_flatten_indices(actual_index, num_samples, skip_coef=1, window_size=5):
         """
         Find indices of spectrogram included in the window.
 
@@ -322,7 +322,7 @@ class IsophonicsDataset(Dataset):
             elif (actual_index - window_size*skip_coef) + i*skip_coef >= num_samples:
                 n_post_zeros = n_post_zeros + 1
             else:
-                raise Exception("Isophonics __get_flatten_indices faced to unexptected situation.")
+                raise Exception("Isophonics get_flatten_indices faced to unexptected situation.")
 
         return n_pre_zeros, window_indices, n_post_zeros
 
@@ -690,7 +690,7 @@ class BillboardDataset(Dataset):
             j = 0 # labels index
             for i in [index for index in range(num_samples) if index%to_skip==0]:
                 # Get data window with zero margin
-                n_pre_zeros, window_indices, n_post_zeros = IsophonicsDataset.__get_flatten_indices(i, num_samples, skip_coef, window_size)
+                n_pre_zeros, window_indices, n_post_zeros = IsophonicsDataset.get_flatten_indices(i, num_samples, skip_coef, window_size)
                 if flattened_window:
                     prep_data.append(
                         np.concatenate((
