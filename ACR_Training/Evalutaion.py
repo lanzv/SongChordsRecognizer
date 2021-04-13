@@ -14,10 +14,24 @@ from ACR_Pipeline.DataPreprocessor import DataPreprocessor
 
 class Evaluator():
     """
+    Evlauator class that provides static method to evaluate chords using mir eval library.
     """
+
     @staticmethod
     def mir_eval_score_from_labs(gold_lab, predicted_lab):
         """
+        The function will evaluate weighted accuracy score of two lab files, the gold one and the predicted one, using mir eval library.
+
+        Parameters
+        ----------
+        gold_lab : str
+            path of the .LAB file that contains correct chords of the song
+        predicted_lab : str
+            path of the .LAB file that contains predicted chords of the song
+        Returns
+        -------
+        score : float
+            mir_eval score, weighted accuracy
         """
         (ref_intervals, ref_labels) = mir_eval.io.load_labeled_intervals(gold_lab)
         (est_intervals, est_labels) = mir_eval.io.load_labeled_intervals(predicted_lab)
@@ -26,6 +40,22 @@ class Evaluator():
     @staticmethod
     def mir_eval_score_from_sequences(gold_lab, predicted_chords, sample_rate=22050, hop_length=512):
         """
+        The function will evaluate weighted accuracy score of the gold lab file and predicted chord sequence, using mir eval library.
+        
+        Parameters
+        ----------
+        gold_lab : str
+            path of the .LAB file that contains correct chords of the song
+        predicted_chords : int list
+            list of predicted chord indices
+        sample_rate : int
+            audio sample rate
+        hop_length : int
+            number of samples between successive spectrogram columns
+        Returns
+        -------
+        score : float
+            mir_eval score, weighted accuracy
         """
         ref_intervals, ref_labels = mir_eval.io.load_labeled_intervals(gold_lab)
         est_intervals, est_labels = Evaluator._get_label_intervals(chord_sequence=predicted_chords, sample_rate=sample_rate, hop_length=hop_length)
@@ -34,6 +64,22 @@ class Evaluator():
     @staticmethod
     def _get_label_intervals(chord_sequence, sample_rate=22050, hop_length=512):
         """
+        The function will parse the chord sequence and create intervals and labels corresponding to the mir_eval format.
+        
+        Parameters
+        ----------
+        chord_sequence : int list
+            list of chord indices
+        sample_rate : int
+            audio sample rate
+        hop_length : int
+            number of samples between successive spectrogram columns
+        Returns
+        -------
+        intervals : np array
+            array of time intervals of chords in the song
+        labels : str list
+            list of chords mapped to those intervals
         """
         times = librosa.frames_to_time([i for i in range(len(chord_sequence))],
             sr=sample_rate, hop_length=hop_length)
@@ -53,8 +99,24 @@ class Evaluator():
         return np.array(intervals), DataPreprocessor.chord_indices_to_notations(labels)
 
     @staticmethod
-    def __mir_eval_score(ref_intervals, ref_labels,est_intervals, est_labels):
+    def __mir_eval_score(ref_intervals, ref_labels, est_intervals, est_labels):
         """
+        The function will compute the score for already prepared gold and predicted intervals and labels.
+
+        Parameters
+        ----------
+        ref_intervals : np array
+            array of time intervals of gold in the song
+        ref_labels : str list
+            list of gold chords mapped to ref intervals
+        est_intervals : np array
+            array of time intervals of predicted chords in the song
+        est_labels : str list
+            list of predicted chords mapped to est intervals
+        Returns
+        -------
+        score : float
+            mir_eval score, weighted accuracy
         """
         est_intervals, est_labels = mir_eval.util.adjust_intervals(est_intervals, est_labels, ref_intervals.min(), ref_intervals.max(), mir_eval.chord.NO_CHORD, mir_eval.chord.NO_CHORD)
         (intervals, ref_labels, est_labels) = mir_eval.util.merge_labeled_intervals(ref_intervals, ref_labels, est_intervals, est_labels)
