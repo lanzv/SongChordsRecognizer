@@ -602,7 +602,7 @@ class BillboardDataset(Dataset):
 
 
 
-    def get_preprocessed_dataset(self, hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500) -> tuple:
+    def get_preprocessed_dataset(self, hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500, separately = True) -> tuple:
         """
         Preprocess Billboard dataset.
         Divide spectrogram features generated from self.DATA audio waveforms to n_frames frames long sequences and do the same with targets from self.CHORDS.
@@ -616,7 +616,9 @@ class BillboardDataset(Dataset):
         spectrogram_generator : method from Spectrograms.py
             function that generates spectrogram
         n_frames : int
-             how many frames should be included in a subsequence of a song
+            how many frames should be included in a subsequence of a song
+        separately : bool
+            True if we want to parse songs separately, False if songs should be grouped together
         Returns
         -------
         prep_data : np array
@@ -630,19 +632,33 @@ class BillboardDataset(Dataset):
         KEYs = []
         norm_to_C = False
         k = 0
-        for data, desc in zip(self.DATA, self.DESC):
+        separate_data, separate_targets = [], []
+        for data, desc, chords in zip(self.DATA, self.DESC, self.CHORDS):
             print(k)
-            if isinstance(data, BillboardFeatures):
-                FEATURESs.append(data.CHROMA)
-                TIME_BINSs.append(data.TIME_BINS)
-            elif isinstance(data, Audio):
-                FEATURESs.append((IsophonicsDataset.preprocess_audio(waveform=data.WAVEFORM, sample_rate=data.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, key=desc.TONIC).swapaxes(0,1)))
-                num_samples, _ = FEATURESs[-1].shape
-                TIME_BINSs.append([float(i)/(float(self.SAMPLE_RATE) / float(hop_length)) for i in range(num_samples)])
+            if separately:
+                if isinstance(data, BillboardFeatures):
+                    features, time_bins = data.CHROMA, data.TIME_BINS
+                elif isinstance(data, Audio):
+                    features = IsophonicsDataset.preprocess_audio(waveform=data.WAVEFORM, sample_rate=data.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, key=desc.TONIC).swapaxes(0,1)
+                    num_samples, _ = features.shape
+                    time_bins = [float(i)/(float(self.SAMPLE_RATE) / float(hop_length)) for i in range(num_samples)]
+                prep_data, prep_targets = Dataset.songs_to_sequences(FEATURESs=[features], CHORDs=[chords], TIME_BINSs=[time_bins], KEYs=[desc.TONIC], n_frames=n_frames, norm_to_C=norm_to_C)
+                separate_data.append(prep_data)
+                separate_targets.append(prep_targets)
+            else:
+                if isinstance(data, BillboardFeatures):
+                    FEATURESs.append(data.CHROMA)
+                    TIME_BINSs.append(data.TIME_BINS)
+                elif isinstance(data, Audio):
+                    FEATURESs.append((IsophonicsDataset.preprocess_audio(waveform=data.WAVEFORM, sample_rate=data.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, key=desc.TONIC).swapaxes(0,1)))
+                    num_samples, _ = FEATURESs[-1].shape
+                    TIME_BINSs.append([float(i)/(float(self.SAMPLE_RATE) / float(hop_length)) for i in range(num_samples)])
+                KEYs.append(desc.TONIC)
             k = k + 1
-            KEYs.append(desc.TONIC)
-
-        return Dataset.songs_to_sequences(FEATURESs=FEATURESs, CHORDs=CHORDs, TIME_BINSs=TIME_BINSs, KEYs=KEYs, n_frames=n_frames, norm_to_C=norm_to_C)
+        if separately:
+            return np.array(separate_data), np.array(separate_targets)
+        else:
+            return Dataset.songs_to_sequences(FEATURESs=FEATURESs, CHORDs=CHORDs, TIME_BINSs=TIME_BINSs, KEYs=KEYs, n_frames=n_frames, norm_to_C=norm_to_C)
 
 
 
@@ -784,8 +800,6 @@ class BillboardDataset(Dataset):
             path to preprocessed data
         song_indices : list of integers
             list of song indices as representing samples
-        norm_to_C : bool
-            True if we want to transpose all songs to C key
         n_frames : int
              how many frames should be included in a subsequence of a song
         """
