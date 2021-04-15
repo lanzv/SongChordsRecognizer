@@ -45,6 +45,8 @@ class Evaluator():
 
         # Collect durations and comparisons
         for lab, chord_sequence in zip(lab_files, predictions):
+            n_sequences,n_frames,n_features = chord_sequence.shape
+            chord_sequence = np.array(chord_sequence.reshape((n_sequences*n_frames,n_features))).argmax(axis=1)
             ref_intervals, ref_labels = mir_eval.io.load_labeled_intervals(lab+"full.lab")
             est_intervals, est_labels = Evaluator._get_label_intervals(chord_sequence=chord_sequence, sample_rate=sample_rate, hop_length=hop_length)
             est_intervals, est_labels = mir_eval.util.adjust_intervals(est_intervals, est_labels, ref_intervals.min(), ref_intervals.max(), mir_eval.chord.NO_CHORD, mir_eval.chord.NO_CHORD)
