@@ -175,7 +175,7 @@ class IsophonicsDataset(Dataset):
             print("[INFO] The Isophonics Dataset was successfully initialized without any data or annotations.")
     
 
-    def get_preprocessed_dataset(self, hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500) -> tuple:
+    def get_preprocessed_dataset(self, hop_length=512, norm_to_C=False, spectrogram_generator=log_mel_spectrogram, n_frames=500, from_song_ind = 0, to_song_ind = 225) -> tuple:
         """
         Preprocess Isophonics dataset.
         Divide spectrogram features geenrated from self.DATA audio waveforms to n_frames frames long sequences and do the same with targets from self.CHORDS.
@@ -201,11 +201,14 @@ class IsophonicsDataset(Dataset):
         CHORDs = self.CHORDS
         TIME_BINSs = []
         KEYs = []
+        i = 0
         for audio, keys in zip(self.DATA, self.KEYS):
-            FEATURESs.append((IsophonicsDataset.preprocess_audio(waveform=audio.WAVEFORM, sample_rate=audio.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, key=keys.get_first_key()).swapaxes(0,1)))
-            num_samples, _ = FEATURESs[-1].shape
-            TIME_BINSs.append([float(i)/(float(self.SAMPLE_RATE) / float(hop_length)) for i in range(num_samples)])
-            KEYs.append(keys.get_first_key())
+            if(i >= from_song_ind and i < to_song_ind):
+                FEATURESs.append((IsophonicsDataset.preprocess_audio(waveform=audio.WAVEFORM, sample_rate=audio.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, key=keys.get_first_key()).swapaxes(0,1)))
+                num_samples, _ = FEATURESs[-1].shape
+                TIME_BINSs.append([float(i)/(float(self.SAMPLE_RATE) / float(hop_length)) for i in range(num_samples)])
+                KEYs.append(keys.get_first_key())
+            i = i + 1
 
         return Dataset.songs_to_sequences(FEATURESs=FEATURESs, CHORDs=CHORDs, TIME_BINSs=TIME_BINSs, KEYs=KEYs, n_frames=n_frames, norm_to_C=norm_to_C)
 
