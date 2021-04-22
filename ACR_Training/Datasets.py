@@ -209,7 +209,7 @@ class IsophonicsDataset(Dataset):
             print(i)
             if(i >= from_song_ind and i < to_song_ind):
                 if separately:
-                    features = IsophonicsDataset.preprocess_audio(waveform=data.WAVEFORM, sample_rate=data.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, keys=keys.get_first_key()).swapaxes(0,1)
+                    features = IsophonicsDataset.preprocess_audio(waveform=data.WAVEFORM, sample_rate=data.SAMPLE_RATE, spectrogram_generator=spectrogram_generator, nfft=self.NFFT, hop_length=hop_length, norm_to_C=norm_to_C, key=keys.get_first_key()).swapaxes(0,1)
                     num_samples, _ = features.shape
                     time_bins = [float(i)/(float(self.SAMPLE_RATE) / float(hop_length)) for i in range(num_samples)]
                     prep_data, prep_targets = Dataset.songs_to_sequences(FEATURESs=[features], CHORDs=[chords], TIME_BINSs=[time_bins], KEYs=[keys.get_first_key()], n_frames=n_frames, norm_to_C=norm_to_C)
