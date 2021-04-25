@@ -214,7 +214,7 @@ class CRNN_basic(CRNN):
         #model.add(tensorflow.keras.layers.BatchNormalization())
 
         _, n_frames, _, _ = model.output_shape
-        
+
         # Classifier - RNN
         model.add(tensorflow.keras.layers.Reshape((n_frames, -1)))
 
@@ -240,6 +240,53 @@ class CRNN_basic(CRNN):
         print("[INFO] The CRNN model was successfully created.")
 
 
+
+class CRNN_CRF(CRNN):
+    """
+    CRNN model inspired by Junyan Jiang, Ke Chen, Wei li, Gus Xia, 2019.
+    """
+    def __init__(self, input_shape, output_classes):
+        # Create model
+        n_frames, _, _ = input_shape
+        input_layer = tensorflow.keras.Input(shape=input_shape)
+        x = tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=input_shape,padding='same')(input_layer)
+        x = tensorflow.keras.layers.BatchNormalization()(x)
+        x = tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu',padding='same')(x)
+        x = tensorflow.keras.layers.BatchNormalization()(x)
+        x = tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu',padding='same')(x)
+        x = tensorflow.keras.layers.BatchNormalization()(x)
+        x = tensorflow.keras.layers.MaxPooling2D((1,3),padding='same')(x)
+        x = tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same')(x)
+        x = tensorflow.keras.layers.BatchNormalization()(x)
+        x = tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same')(x)
+        x = tensorflow.keras.layers.BatchNormalization()(x)
+        x = tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same')(x)
+        x = tensorflow.keras.layers.BatchNormalization()(x)
+        x = tensorflow.keras.layers.Reshape((n_frames, -1))(x)
+        x = tensorflow.keras.layers.Bidirectional(tensorflow.keras.layers.GRU(128, return_sequences=True, dropout=0.5))(x)
+        x = tensorflow.keras.layers.Dense(512)(x)
+        crf = CRF(units=output_classes)
+        output = crf(x)
+        base_model = tensorflow.keras.models.Model(input_layer, output)
+        self.model = ModelWithCRFLoss(base_model, sparse_target=True)
+        self.model.compile(optimizer='adam')
+        base_model.summary()
+
+        print("[INFO] The CRNN model with CRF was successfully created.")
+
+    def fit(self, data, targets, dev_data, dev_targets, epochs=50):
+        if dev_data == [] or dev_targets == []:
+            validation_data = None
+        else:
+            validation_data = (dev_data, dev_targets)
+
+        # Train model
+        self.history = None
+        self.model.fit(
+            data, targets, epochs=epochs,
+            validation_data=validation_data
+        )
+        print("[INFO] The CRNN model was successfully trained.")
 
 class CRNN_2(CRNN):
     """
