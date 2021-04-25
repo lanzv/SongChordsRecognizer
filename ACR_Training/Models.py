@@ -116,7 +116,7 @@ class CRNN():
 
         self.model = model
 
-    def fit(self, data, targets, dev_data, dev_targets, epochs=50):
+    def fit(self, data, targets, dev_data=[], dev_targets=[], epochs=50):
         if dev_data == [] or dev_targets == []:
             validation_data = None
         else:
@@ -635,7 +635,7 @@ class SegmentationVoting():
     After the training single models, chord predictions of some predicted segments are taken and the most frequent chord is choosed for whole segment. 
     """
     def __init__(self, input_shape):
-        self.model = CRNN_1(input_shape=input_shape, output_classes=25)
+        self.model = CRNN_basic(input_shape=input_shape, output_classes=25)
         self.segmentation_model = SegmentationCRNN(input_shape=input_shape)
         print("[INFO] The SegmentationVoting model was successfully created.")
 
