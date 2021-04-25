@@ -179,15 +179,14 @@ class CRNN():
 
 
 
-class CRNN_1(CRNN):
+class CRNN_basic(CRNN):
     """
     CRNN model inspired by Junyan Jiang, Ke Chen, Wei li, Gus Xia, 2019.
     """
     def __init__(self, input_shape, output_classes):
-        n_frames, n_features, chanells = input_shape
+
         # Create model
         model = tensorflow.keras.models.Sequential()
-
         # Feature Extractor
         model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=input_shape,padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
@@ -202,26 +201,31 @@ class CRNN_1(CRNN):
         model.add(tensorflow.keras.layers.BatchNormalization())
         model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same'))
         model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.MaxPooling2D((1,3),padding='same'))
-        model.add(tensorflow.keras.layers.Conv2D(64, (3,3), activation='relu',padding='same'))
-        model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.Conv2D(64, (3,3), activation='relu',padding='same'))
-        model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.MaxPooling2D((1,4),padding='same'))
-        model.add(tensorflow.keras.layers.Conv2D(80, (3,3), activation='relu',padding='same'))
-        model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.Conv2D(80, (3,3), activation='relu',padding='same'))
-        model.add(tensorflow.keras.layers.BatchNormalization())
-        _, a1, a2, a3 = model.output_shape
+        # Doesn't improve the result
+        #model.add(tensorflow.keras.layers.MaxPooling2D((1,3),padding='same'))
+        #model.add(tensorflow.keras.layers.Conv2D(64, (3,3), activation='relu',padding='same'))
+        #model.add(tensorflow.keras.layers.BatchNormalization())
+        #model.add(tensorflow.keras.layers.Conv2D(64, (3,3), activation='relu',padding='same'))
+        #model.add(tensorflow.keras.layers.BatchNormalization())
+        #model.add(tensorflow.keras.layers.MaxPooling2D((1,4),padding='same'))
+        #model.add(tensorflow.keras.layers.Conv2D(80, (3,3), activation='relu',padding='same'))
+        #model.add(tensorflow.keras.layers.BatchNormalization())
+        #model.add(tensorflow.keras.layers.Conv2D(80, (3,3), activation='relu',padding='same'))
+        #model.add(tensorflow.keras.layers.BatchNormalization())
+
+        _, n_frames, _, _ = model.output_shape
         
         # Classifier - RNN
-        model.add(tensorflow.keras.layers.Reshape((a1, a2*a3), input_shape=(n_frames, a2, a3)))
+        model.add(tensorflow.keras.layers.Reshape((n_frames, -1)))
+
         model.add(tensorflow.keras.layers.Bidirectional(
-            tensorflow.keras.layers.LSTM(96, return_sequences=True))
+            tensorflow.keras.layers.GRU(128, return_sequences=True, dropout=0.5))
         )
-        model.add(
-            tensorflow.keras.layers.Dense(output_classes, activation='softmax')
+        model.add(tensorflow.keras.layers.Bidirectional(
+            tensorflow.keras.layers.GRU(16, return_sequences=True, dropout=0.5))
         )
+
+        model.add(tensorflow.keras.layers.Dense(output_classes, activation='softmax'))
 
         # Compile model
         model.compile(
