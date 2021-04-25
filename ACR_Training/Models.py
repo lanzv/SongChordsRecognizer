@@ -14,7 +14,7 @@ import lzma
 import os
 import pickle
 from sklearn.model_selection import cross_val_score
-
+from tf2crf import CRF, ModelWithCRFLoss
 
 class MLP():
     """
@@ -117,10 +117,15 @@ class CRNN():
         self.model = model
 
     def fit(self, data, targets, dev_data, dev_targets, epochs=50):
+        if dev_data == [] or dev_targets == []:
+            validation_data = None
+        else:
+            validation_data = (dev_data, dev_targets)
+
         # Train model
         self.history = self.model.fit(
             data, targets, epochs=epochs,
-            validation_data=(dev_data, dev_targets)
+            validation_data=validation_data
         )
         print("[INFO] The CRNN model was successfully trained.")
 

@@ -672,7 +672,7 @@ class BillboardDataset(Dataset):
                 KEYs.append(desc.TONIC)
             k = k + 1
         if separately:
-            return np.array(separate_data), np.array(separate_targets)
+            return separate_data, separate_targets
         else:
             return Dataset.songs_to_sequences(FEATURESs=FEATURESs, CHORDs=CHORDs, TIME_BINSs=TIME_BINSs, KEYs=KEYs, n_frames=n_frames, norm_to_C=norm_to_C)
 
