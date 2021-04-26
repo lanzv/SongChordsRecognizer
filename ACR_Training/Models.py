@@ -274,7 +274,7 @@ class CRNN_CRF(CRNN):
 
         print("[INFO] The CRNN model with CRF was successfully created.")
 
-    def fit(self, data, targets, dev_data, dev_targets, epochs=50):
+    def fit(self, data, targets, dev_data=[], dev_targets=[], epochs=50):
         if dev_data == [] or dev_targets == []:
             validation_data = None
         else:
@@ -287,6 +287,25 @@ class CRNN_CRF(CRNN):
             validation_data=validation_data
         )
         print("[INFO] The CRNN model was successfully trained.")
+
+    def display_confusion_matrix(self, data, targets):
+        # Define labels
+        display_labels = np.array(["N", "C", "C:min", "C#", "C#:min", "D", "D:min", "D#", "D#:min", "E", "E:min", "F", "F:min", "F#", "F#:min", "G", "G:min", "G#", "G#:min", "A", "A:min", "A#", "A#:min", "B", "B:min"])
+        labels = np.array([i for i in range(len(display_labels))])
+
+        # Generate predictions and targets
+        predictions = self.model.predict(data)
+        a1, a2 = predictions.shape
+        predictions = predictions.reshape((a1*a2))
+        a1, a2 = targets.shape
+        targets = targets.reshape((a1*a2))
+
+        # Set and display confusion matrix
+        disp = ConfusionMatrixDisplay(
+            confusion_matrix=confusion_matrix(targets, predictions, labels=labels, normalize='all'), 
+            display_labels=display_labels
+            )
+        disp.plot(xticks_rotation='vertical', include_values=False)
 
 class CRNN_2(CRNN):
     """
