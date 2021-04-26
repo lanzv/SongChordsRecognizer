@@ -49,7 +49,8 @@ class Evaluator():
         # Collect durations and comparisons
         for song_gold, chord_sequence in zip(gold_files, predictions):
             n_sequences,n_frames,n_features = chord_sequence.shape
-            chord_sequence = np.array(chord_sequence.reshape((n_sequences*n_frames,n_features))).argmax(axis=1)
+            chord_sequence = np.array(chord_sequence.reshape((-1,n_features))).argmax(axis=1)
+            song_gold = np.array(song_gold.reshape(-1))
             if isinstance(gold, str):
                 ref_intervals, ref_labels = mir_eval.io.load_labeled_intervals(song_gold)
             else:
@@ -66,6 +67,7 @@ class Evaluator():
         score = mir_eval.chord.weighted_accuracy(comparisons, durations)
 
         return score
+
 
 
     @staticmethod
