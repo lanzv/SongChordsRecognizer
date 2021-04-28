@@ -10,7 +10,7 @@ import numpy as np
 import sklearn.pipeline
 import sklearn.preprocessing
 from ACR_Training.SegmentationModels import SegmentationCRNN
-from ACR_Training.efficient_net import EfficientNetB7
+from ACR_Training.efficient_net import EfficientNetB0
 import lzma
 import os
 import pickle
@@ -189,7 +189,7 @@ class CRNN_efficient(CRNN):
         # Create model
         n_frames, n_features, chanells = input_shape
 
-        efficent_model=EfficientNetB7(
+        efficent_model=EfficientNetB0(
             include_top=False,
             input_shape=input_shape,
             weights=None,
