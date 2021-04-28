@@ -10,6 +10,7 @@ import numpy as np
 import sklearn.pipeline
 import sklearn.preprocessing
 from ACR_Training.SegmentationModels import SegmentationCRNN
+from ACR_Training.efficient_net import EfficientNetB7
 import lzma
 import os
 import pickle
@@ -176,6 +177,45 @@ class CRNN():
             display_labels=display_labels
             )
         disp.plot(xticks_rotation='vertical', include_values=False)
+
+
+class CRNN_efficient(CRNN):
+    """
+    Efficient net based CRNN
+    """
+    def __init__(self, input_shape, output_classes, random_seed=7):
+        # Set tensorflow random seed
+        np.random.seed(random_seed)
+        # Create model
+        n_frames, n_features, chanells = input_shape
+
+        efficent_model=EfficientNetB7(
+            include_top=False,
+            input_shape=input_shape,
+            weights=None,
+            classes=25
+        )
+
+        inputs = tensorflow.keras.layers.Input(shape=input_shape)
+        hidden = efficent_model(inputs)
+        x = tensorflow.keras.layers.Reshape((n_frames, -1))(hidden[-1])
+        x = tensorflow.keras.layers.Bidirectional(tensorflow.keras.layers.GRU(512, return_sequences=True, dropout=0.5))(x)
+        x = tensorflow.keras.layers.Bidirectional(tensorflow.keras.layers.GRU(32, return_sequences=True, dropout=0.5))(x)
+        outputs = tensorflow.keras.layers.Dense(output_classes, activation='softmax')(x)
+
+        model = tensorflow.keras.Model(inputs=inputs, outputs=outputs)
+
+        # Compile model
+        model.compile(
+            optimizer=tensorflow.keras.optimizers.Adam(),
+            loss=tensorflow.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=['accuracy']
+        )
+
+        model.summary()
+        self.model = model
+        print("[INFO] The CRNN model was successfully created.")
+
 
 
 
