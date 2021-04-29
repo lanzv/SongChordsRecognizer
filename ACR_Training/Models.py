@@ -16,6 +16,8 @@ import os
 import pickle
 from sklearn.model_selection import cross_val_score
 from tf2crf import CRF, ModelWithCRFLoss
+from ACR_Training.acrnn import HeidiTextRecogModel
+from keras_radam.training import RAdamOptimizer, catg_loss, catg_acc
 
 class MLP():
     """
@@ -385,6 +387,85 @@ class CRNN_2(CRNN):
 
 
 
+
+
+class ACRNN():
+    """
+    Efficient Net based Attention network based on
+    https://github.com/stimong/ocr_text_recognition_keras_tf2/blob/main/text_recognition_CRNN_ctc_or_Attention_sample_code.ipynb
+    """
+    def __init__(self,):
+        prediction_mode='attn'
+
+        max_text_len=1000
+
+
+        alpha=0.99
+        gamma=1
+
+
+        input_width, input_height = 1000, 252
+        input_shape=(input_width,input_height,1)
+
+
+        ocr_recog_model, ocr_recog_model_pred = HeidiTextRecogModel(input_shape,
+                                                                25,
+                                                                max_text_len,
+                                                                prediction_mode=prediction_mode,
+                                                                prediction_only=False, rnn_mode ='gru',
+                                                                hidden_size=256,
+                                                                leaky_alpha=0.2,lstm_drop_rate=0.5,
+                                                                focal_ctc_on=True, alpha=alpha, gamma=gamma)
+        ocr_recog_model.summary()
+        self.model = ocr_recog_model
+        print("[INFO] The ACRNN model was successfully created.")
+
+    def fit(self, data, targets, dev_data=[], dev_targets=[], prediction_mode='ctc', epochs=50):
+        if dev_data == [] or dev_targets == []:
+            validation_data = None
+        else:
+            validation_data = (dev_data, dev_targets)
+
+        # Train model
+        opt=RAdamOptimizer(learning_rate=1e-3)
+
+        if prediction_mode =='ctc':
+            self.model.compile(optimizer=opt)
+        else:#attention loss
+            self.model.compile(optimizer=opt,loss=catg_loss, metrics=[catg_acc])
+
+        
+        self.model.fit(data, targets, validation_data=validation_data,
+                                batch_size=32,epochs=100)
+        print("[INFO] The ACRNN model was successfully trained.")
+
+    def score(self, data, targets):
+        _, test_acc = self.model.evaluate(data, targets, verbose=2)
+        return test_acc
+
+    def predict(self, data):
+        return self.model.predict(data)
+
+
+    def display_confusion_matrix(self, data, targets):
+        # Define labels
+        display_labels = np.array(["N", "C", "C:min", "C#", "C#:min", "D", "D:min", "D#", "D#:min", "E", "E:min", "F", "F:min", "F#", "F#:min", "G", "G:min", "G#", "G#:min", "A", "A:min", "A#", "A#:min", "B", "B:min"])
+        labels = np.array([i for i in range(len(display_labels))])
+
+        # Generate predictions and targets
+        predictions = self.model.predict(data)
+        a1, a2, a3 = predictions.shape
+        predictions = predictions.reshape((a1*a2, a3))
+        predictions = tensorflow.argmax(predictions, axis=1)
+        a1, a2 = targets.shape
+        targets = targets.reshape((a1*a2))
+
+        # Set and display confusion matrix
+        disp = ConfusionMatrixDisplay(
+            confusion_matrix=confusion_matrix(targets, predictions, labels=labels, normalize='all'),
+            display_labels=display_labels
+            )
+        disp.plot(xticks_rotation='vertical', include_values=False)
 
 
 
