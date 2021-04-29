@@ -81,17 +81,6 @@ class RecogBaseModel():
         x = keras.layers.BatchNormalization(epsilon=1e-5, momentum=0.9, name=f'upconv{n}.conv.4')(x)
         x = keras.layers.Activation('relu', name=f'upconv{n}.conv.5')(x)
         return x
-    
-    def build_efficientnet_backbone(self, inputs, backbone_name, imagenet):
-        backbone = getattr(efficientnet, backbone_name)(include_top=False,
-                                                        input_tensor=inputs,
-                                                        weights=None)#'imagenet' if imagenet else None)
-        return [
-            backbone.get_layer(slice_name).output for slice_name in [
-                'block2a_expand_activation', 'block3a_expand_activation', 'block4a_expand_activation',
-                'block5a_expand_activation'
-            ]
-        ]
 
 
 
