@@ -16,8 +16,8 @@ import os
 import pickle
 from sklearn.model_selection import cross_val_score
 from tf2crf import CRF, ModelWithCRFLoss
-from ACR_Training.acrnn import HeidiTextRecogModel
-from keras_radam.training import RAdamOptimizer, catg_loss, catg_acc
+from ACR_Training.acrnn import HeidiTextRecogModel, catg_loss, catg_acc
+from keras_radam.training import RAdamOptimizer
 
 class MLP():
     """
