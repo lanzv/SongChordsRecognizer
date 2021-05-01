@@ -19,6 +19,19 @@ class Evaluator():
     @staticmethod
     def own_weighted_chord_symbol_recall(gold, predictions) -> float:
         """
+        The function is own implementation of WCSR that was described as a score in MIREX 2013.
+        How many segments of chords have correct label in respect to all segments.
+
+        Parameters
+        ----------
+        gold : int list list
+            list of gold songs and their song sequences
+        predictions : int list list
+            list of predicted songs and their song sequences
+        Returns
+        -------
+        wcsr : float
+            wcsr score, correct_segments/all_segments
         """
         sequences = 0
         correct_sequences = 0
@@ -33,12 +46,22 @@ class Evaluator():
                 sequences = sequences + 1
 
 
-        wcsr = float(sequences)/float(correct_sequences)
+        wcsr = float(correct_sequences)/float(sequences)
         return wcsr
 
     @staticmethod
     def get_segments(chord_sequences):
         """
+        The function will group chord segments together with a single label. It will forget the segment length duration.
+
+        Parameters
+        ----------
+        chord_sequences : int list
+            list of chord indices of song
+        Returns
+        -------
+        segments : int list
+            list of segments, same chords in a sequence are reduced to one
         """
         segments = []
         last_chord = -1
@@ -48,7 +71,8 @@ class Evaluator():
                 last_chord = chord
             else:
                 last_chord = chord
-
+        segments.append(last_chord)
+        return segments
 
     @staticmethod
     def eval_isophonics_testset(gold, predictions, sample_rate=22050, hop_length=512):
