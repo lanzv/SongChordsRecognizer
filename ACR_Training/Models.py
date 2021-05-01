@@ -16,8 +16,6 @@ import os
 import pickle
 from sklearn.model_selection import cross_val_score
 from tf2crf import CRF, ModelWithCRFLoss
-from ACR_Training.acrnn import HeidiTextRecogModel, catg_loss, catg_acc
-from keras_radam.training import RAdamOptimizer
 
 class MLP():
     """
@@ -349,125 +347,6 @@ class CRNN_CRF(CRNN):
             )
         disp.plot(xticks_rotation='vertical', include_values=False)
 
-class CRNN_2(CRNN):
-    """
-    CRNN model inspired by Brian McFee and Juan Pablo Bello, 2017.
-    """
-    def __init__(self, input_shape, output_classes):
-        n_frames, n_features, chanells = input_shape
-        # Create model
-        model = tensorflow.keras.models.Sequential()
-
-        # Feature Extractor
-        model.add(tensorflow.keras.layers.Conv2D(1, (5,5), activation='relu', input_shape=input_shape,padding='same'))
-        model.add(tensorflow.keras.layers.BatchNormalization())
-        model.add(tensorflow.keras.layers.Reshape((n_frames, n_features)))
-        model.add(tensorflow.keras.layers.Conv1D(36, kernel_size=1))
-
-
-        # Classifier - RNN
-        model.add(tensorflow.keras.layers.Bidirectional(
-            tensorflow.keras.layers.GRU(256, return_sequences=True))
-        )
-        model.add(
-            tensorflow.keras.layers.Dense(output_classes, activation='softmax')
-        )
-
-        # Compile model
-        model.compile(
-            optimizer=tensorflow.keras.optimizers.Adam(),
-            loss=tensorflow.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-            metrics=['accuracy']
-        )
-
-
-        model.summary()
-        self.model = model
-        print("[INFO] The CRNN model was successfully created.")
-
-
-
-
-
-class ACRNN():
-    """
-    Efficient Net based Attention network based on
-    https://github.com/stimong/ocr_text_recognition_keras_tf2/blob/main/text_recognition_CRNN_ctc_or_Attention_sample_code.ipynb
-    """
-    def __init__(self,):
-        prediction_mode='attn'
-
-        max_text_len=1000
-
-
-        alpha=0.99
-        gamma=1
-
-
-        input_width, input_height = 1000, 252
-        input_shape=(input_width,input_height,1)
-
-
-        ocr_recog_model, ocr_recog_model_pred = HeidiTextRecogModel(input_shape,
-                                                                25,
-                                                                max_text_len,
-                                                                prediction_mode=prediction_mode,
-                                                                prediction_only=False, rnn_mode ='gru',
-                                                                hidden_size=256,
-                                                                leaky_alpha=0.2,lstm_drop_rate=0.5,
-                                                                focal_ctc_on=True, alpha=alpha, gamma=gamma)
-        ocr_recog_model.summary()
-        self.model = ocr_recog_model
-        print("[INFO] The ACRNN model was successfully created.")
-
-    def fit(self, data, targets, dev_data=[], dev_targets=[], prediction_mode='ctc', epochs=50):
-        if dev_data == [] or dev_targets == []:
-            validation_data = None
-        else:
-            validation_data = (dev_data, dev_targets)
-
-        # Train model
-        opt=RAdamOptimizer(learning_rate=1e-3)
-
-        if prediction_mode =='ctc':
-            self.model.compile(optimizer=opt)
-        else:#attention loss
-            self.model.compile(optimizer=opt,loss=catg_loss, metrics=[catg_acc])
-
-        
-        self.model.fit(data, targets, validation_data=validation_data,
-                                batch_size=32,epochs=100)
-        print("[INFO] The ACRNN model was successfully trained.")
-
-    def score(self, data, targets):
-        _, test_acc = self.model.evaluate(data, targets, verbose=2)
-        return test_acc
-
-    def predict(self, data):
-        return self.model.predict(data)
-
-
-    def display_confusion_matrix(self, data, targets):
-        # Define labels
-        display_labels = np.array(["N", "C", "C:min", "C#", "C#:min", "D", "D:min", "D#", "D#:min", "E", "E:min", "F", "F:min", "F#", "F#:min", "G", "G:min", "G#", "G#:min", "A", "A:min", "A#", "A#:min", "B", "B:min"])
-        labels = np.array([i for i in range(len(display_labels))])
-
-        # Generate predictions and targets
-        predictions = self.model.predict(data)
-        a1, a2, a3 = predictions.shape
-        predictions = predictions.reshape((a1*a2, a3))
-        predictions = tensorflow.argmax(predictions, axis=1)
-        a1, a2 = targets.shape
-        targets = targets.reshape((a1*a2))
-
-        # Set and display confusion matrix
-        disp = ConfusionMatrixDisplay(
-            confusion_matrix=confusion_matrix(targets, predictions, labels=labels, normalize='all'),
-            display_labels=display_labels
-            )
-        disp.plot(xticks_rotation='vertical', include_values=False)
-
-
 
 class MLP2RNN():
     """
@@ -682,25 +561,104 @@ class BassVsThird():
     Two MLP models with StandartScaler Preprocesor,
     The first one is to recognize major/minor chord, another one is to recognize the bass of the chord. 
     """
-    def __init__(self, max_iter=500, random_state=1):
-        self._scaler = sklearn.preprocessing.StandardScaler(with_mean=True, with_std=True)
-        self._bass_model = MLPClassifier(max_iter=max_iter, random_state=random_state)
-        self._third_model = MLPClassifier(max_iter=max_iter, random_state=random_state)
-        print("[INFO] The MLP model was successfully created.")
+    def __init__(self, input_shape, output_classes):
+        # Create model
+        n_frames, _, _ = input_shape
+        # Create model
+        model = tensorflow.keras.models.Sequential()
+        # Feature Extractor
+        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=input_shape, padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu',padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Conv2D(16, (3,3), activation='relu',padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.MaxPooling2D((1,3),padding='same'))
+        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
+        model.add(tensorflow.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same'))
+        model.add(tensorflow.keras.layers.BatchNormalization())
 
-    def fit(self, data, targets):
-        self._scaler.fit(data)
-        data, bass_targets, third_targets = self.preprocess_datataset(data, targets)
+        _, n_frames, _, _ = model.output_shape
 
-        self._bass_model.fit(data, bass_targets)
-        self._third_model.fit(data, third_targets)
+        # Classifier - RNN
+        model.add(tensorflow.keras.layers.Reshape((n_frames, -1)))
+        model.add(tensorflow.keras.layers.Bidirectional(tensorflow.keras.layers.GRU(128, return_sequences=True, dropout=0.5)))
+        model.add(tensorflow.keras.layers.Bidirectional(tensorflow.keras.layers.GRU(16, return_sequences=True, dropout=0.5)))
+        model.add(tensorflow.keras.layers.Dense(output_classes, activation='softmax'))
+
+        model.summary()
+
+        self._bass_model = tensorflow.keras.models.clone_model(model)
+        self._third_model = tensorflow.keras.models.clone_model(model)
+        # Compile model
+        self._bass_model.compile(
+            optimizer=tensorflow.keras.optimizers.Adam(),
+            loss=tensorflow.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=['accuracy']
+        )
+        self._third_model.compile(
+            optimizer=tensorflow.keras.optimizers.Adam(),
+            loss=tensorflow.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=['accuracy']
+        )
+
+        print("[INFO] The CRNN bass-third model was successfully created.")
+
+    def fit(self, data, targets, dev_data=[], dev_targets=[], bass_epochs=50, third_epochs=50):
+        if dev_data == [] or dev_targets == []:
+            bass_validation_data, third_validation_data = None, None
+        else:
+            dev_x, val_bass_targets, val_third_targets = [], [], []
+            for x, y in zip(dev_data, dev_targets):
+                prep_x, prep_bass_targets, prep_third_targets = self.preprocess_datataset(x, y)
+                dev_x.append(prep_x)
+                val_bass_targets.append(prep_bass_targets)
+                val_third_targets.append(prep_third_targets)
+            bass_validation_data, third_validation_data = (np.array(dev_x), np.array(val_bass_targets)), (np.array(dev_x), np.array(val_third_targets))
+
+        # Prepare training data
+        train_x, bass_targets, third_targets = [], [], []
+        for x, y in zip(data, targets):
+            prep_x, prep_bass_targets, prep_third_targets = self.preprocess_datataset(x, y)
+            train_x.append(prep_x)
+            bass_targets.append(prep_bass_targets)
+            third_targets.append(prep_third_targets)
+
+
+        self._bass_history = self._bass_model.fit(np.array(train_x), np.array(bass_targets), epochs=bass_epochs, validation_data=bass_validation_data)
+        self._third_history = self._third_model.fit(np.array(train_x), np.array(third_targets), epochs=third_epochs, validation_data=third_validation_data)
         print("[INFO] The MLP model was successfully trained.")
 
+
+    def display_training_progress(self):
+        plt.plot(self._bass_history.history['accuracy'], label='accuracy')
+        plt.plot(self._bass_history.history['val_accuracy'], label = 'val_accuracy')
+        plt.xlabel('Epoch')
+        plt.ylabel('Accuracy')
+        plt.ylim([0.0, 1])
+        plt.legend(loc='lower right')
+        plt.show()
+
+        plt.plot(self._third_history.history['accuracy'], label='accuracy')
+        plt.plot(self._third_history.history['val_accuracy'], label = 'val_accuracy')
+        plt.xlabel('Epoch')
+        plt.ylabel('Accuracy')
+        plt.ylim([0.0, 1])
+        plt.legend(loc='lower right')
+        plt.show()
 
 
     def predict(self, data, targets):
         # Preprocess data
-        data, bass_targets, third_targets = self.preprocess_datataset(data, targets)
+        test_x, bass_targets, third_targets = [], [], []
+        for x, y in zip(data, targets):
+            prep_x, prep_bass_targets, prep_third_targets = self.preprocess_datataset(x, y)
+            test_x.append(prep_x)
+            bass_targets.append(prep_bass_targets)
+            third_targets.append(prep_third_targets)
 
         # Predict thirds and basses
         basses = self._bass_model.predict(data)
@@ -709,7 +667,9 @@ class BassVsThird():
         print("[INFO] The accuracy of the third model is ", "{:.2f}".format(100*sklearn.metrics.accuracy_score(third_targets, thirds)), "%")
 
         # Collect thirds and basses to chords
-        predictions = self.postprocess_targets(basses, thirds)
+        predictions = []
+        for x, y in zip(basses, thirds):
+            predictions.append(self.postprocess_targets(x, y))
 
         return np.array(predictions)
 
@@ -718,7 +678,10 @@ class BassVsThird():
         # Predict targets
         predictions = self.predict(data, targets)
 
-        return sklearn.metrics.accuracy_score(np.array(targets), np.array(predictions))
+        flatten_predictions = predictions.reshape(-1)
+        flatten_targets = (np.array(targets)).reshape(-1)
+
+        return sklearn.metrics.accuracy_score(np.array(flatten_predictions), np.array(flatten_targets))
 
 
 
@@ -757,6 +720,8 @@ class BassVsThird():
 
         # Generate predictions
         predictions = self.predict(data, targets)
+        predictions = predictions.reshape((-1))
+        targets = (np.array(targets)).reshape((-1))
 
         # Set and display confusion matrix
         disp = ConfusionMatrixDisplay(
