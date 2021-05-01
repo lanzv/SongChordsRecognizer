@@ -16,6 +16,39 @@ class Evaluator():
     """
     Evlauator class that provides static method to evaluate chords using mir eval library.
     """
+    @staticmethod
+    def own_weighted_chord_symbol_recall(gold, predictions) -> float:
+        """
+        """
+        sequences = 0
+        correct_sequences = 0
+
+        for gold_song, prediction_song in zip(gold, predictions):
+            prediction_segments = Evaluator.get_segments(np.array(prediction_song).argmax(axis=2).reshape(-1))
+            gold_segments = Evaluator.get_segments(np.array(gold_song).reshape(-1))
+            for i, _ in enumerate(gold_segments):
+                if len(prediction_segments) > i:
+                    if prediction_segments[i] == gold_segments[i]:
+                        correct_sequences = correct_sequences + 1
+                sequences = sequences + 1
+
+
+        wcsr = float(sequences)/float(correct_sequences)
+        return wcsr
+
+    @staticmethod
+    def get_segments(chord_sequences):
+        """
+        """
+        segments = []
+        last_chord = -1
+        for chord in chord_sequences:
+            if not last_chord == chord and not last_chord == -1:
+                segments.append(last_chord)
+                last_chord = chord
+            else:
+                last_chord = chord
+
 
     @staticmethod
     def eval_isophonics_testset(gold, predictions, sample_rate=22050, hop_length=512):
