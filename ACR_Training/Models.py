@@ -555,10 +555,9 @@ class MLP2RNN():
 
 
 
-
-class BassVsThird():
+class BassVsThird1():
     """
-    Two MLP models with StandartScaler Preprocesor,
+    Two CRNN models.
     The first one is to recognize major/minor chord, another one is to recognize the bass of the chord. 
     """
     def __init__(self, input_shape, output_classes):
@@ -662,9 +661,7 @@ class BassVsThird():
 
         # Predict thirds and basses
         basses = self._bass_model.predict(data)
-        print("[INFO] The accuracy of the bass model is ", "{:.2f}".format(100*sklearn.metrics.accuracy_score(bass_targets, basses)), "%")
         thirds = self._third_model.predict(data)
-        print("[INFO] The accuracy of the third model is ", "{:.2f}".format(100*sklearn.metrics.accuracy_score(third_targets, thirds)), "%")
 
         # Collect thirds and basses to chords
         predictions = []
@@ -698,18 +695,39 @@ class BassVsThird():
                 bass_targets.append((int)((chord+1)/2))
                 third_targets.append((int)((chord+1)%2)+1)
 
-        return np.array(self._scaler.transform(data)), np.array(bass_targets), np.array(third_targets)
+        return np.array(data), np.array(bass_targets), np.array(third_targets)
 
 
     def postprocess_targets(self, bass_targets, third_targets):
         targets = []
         for bass, third in zip(bass_targets, third_targets):
+            bass = np.argmax(bass)
+            third = np.argmax(third)
             if bass == 0 or third == 0:
                 targets.append(0)
             else:
                 targets.append((bass-1)*2 + third)
 
         return np.array(targets)
+
+
+    def save_bass(self, model_path="./bass.h5"):
+        # Save this model.
+        self._bass_model.save(model_path)
+        print("[INFO] The BASS CRNN model was saved successfully")
+
+    def load_bass(self, model_path="./bass.h5"):
+        # Load tensorflow model
+        self._bass_model = tensorflow.keras.models.load_model(model_path)
+
+    def save_third(self, model_path="./third.h5"):
+        # Save this model.
+        self._third_model.save(model_path)
+        print("[INFO] The THIRD CRNN model was saved successfully")
+
+    def load_third(self, model_path="./third.h5"):
+        # Load tensorflow model
+        self._third_model = tensorflow.keras.models.load_model(model_path)
 
 
 
