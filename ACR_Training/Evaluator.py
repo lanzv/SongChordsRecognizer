@@ -14,8 +14,78 @@ from ACR_Pipeline.DataPreprocessor import DataPreprocessor
 
 class Evaluator():
     """
-    Evlauator class that provides static method to evaluate chords using mir eval library.
+    Evlauator class that provides static method to evaluate chords, some functions uses mir_eval library.
     """
+
+    @staticmethod
+    def mir_eval_all(gold, predictions, sample_rate=22050, hop_length=512):
+        """
+        The function will evaluate weighted accuracy score of lab files and predictions of billboard test dataset, using mir eval library.
+
+        Parameters
+        ----------
+        gold : str or int list list
+            list of songs and their song sequences or path of the annotations directory containing .lab files
+        predictions : int list list
+            list of songs and their song sequences
+        sample_rate : int
+            audio sample rate
+        hop_length : int
+            number of samples between successive spectrogram columns
+        Returns
+        -------
+        avg_scores : dictionary
+            dictionary of averaged scores over all test songs includingtriads, mirex, underseg, overseg and seg mir_eval scores
+        """
+        durations = np.empty(1)
+        comparisons = np.empty(1)
+
+        # Get list of lab files if gold is path
+        if isinstance(gold, str):
+            gold_files = sorted(glob(os.path.join(gold+'/CHORDS', '*.lab')))
+        else:
+            gold_files = gold
+            
+        scores = {
+            'triads': [],
+            'mirex': [],
+            'underseg': [],
+            'overseg': [],
+            'seg': []
+        }
+        counter = 0
+        # Collect durations and comparisons
+        for song_gold, chord_sequence in zip(gold_files, predictions):
+            n_sequences,n_frames,n_features = chord_sequence.shape
+            chord_sequence = np.array(chord_sequence.reshape((-1,n_features))).argmax(axis=1)
+            song_gold = np.array(song_gold.reshape(-1))
+            if isinstance(gold, str):
+                ref_intervals, ref_labels = mir_eval.io.load_labeled_intervals(song_gold)
+            else:
+                ref_intervals, ref_labels = Evaluator._get_label_intervals(chord_sequence=song_gold, sample_rate=sample_rate, hop_length=hop_length)
+            est_intervals, est_labels = Evaluator._get_label_intervals(chord_sequence=chord_sequence, sample_rate=sample_rate, hop_length=hop_length)
+            score = mir_eval.chord.evaluate(ref_intervals, ref_labels, est_intervals, est_labels)
+            # Store all related scores
+            scores['triads'].append(score['triads'])
+            scores['mirex'].append(score['mirex'])
+            scores['underseg'].append(score['underseg'])
+            scores['overseg'].append(score['overseg'])
+            scores['seg'].append(score['seg'])
+            counter = counter + 1
+        
+        # Average all scores
+        avg_scores = {}
+        avg_scores['triads'] = sum(scores['triads'])/counter
+        avg_scores['mirex'] = sum(scores['mirex'])/counter
+        avg_scores['underseg'] = sum(scores['underseg'])/counter
+        avg_scores['overseg'] = sum(scores['overseg'])/counter
+        avg_scores['seg'] = sum(scores['seg'])/counter
+        
+        return avg_scores
+        
+        
+    
+    
     @staticmethod
     def own_weighted_chord_symbol_recall(gold, predictions) -> float:
         """
