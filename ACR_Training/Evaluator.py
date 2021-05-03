@@ -141,7 +141,8 @@ class Evaluator():
                 last_chord = chord
             else:
                 last_chord = chord
-        segments.append(last_chord)
+        if not last_chord == -1:
+            segments.append(last_chord)
         return segments
 
     @staticmethod
@@ -313,12 +314,15 @@ class Evaluator():
         for time, chord in zip(times, chord_sequence):
             if last_chord != chord and not last_chord == -1:
                 intervals.append([left_border,time])
-                labels.append(chord)
+                labels.append(last_chord)
                 last_chord = chord
                 left_border = time
             elif last_chord == -1:
                 left_border = 0
                 last_chord = chord
+        if not last_chord == -1:
+            intervals.append([left_border, times[-1]])
+            labels.append(last_chord)
 
         return np.array(intervals), DataPreprocessor.chord_indices_to_notations(labels)
 
