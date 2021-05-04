@@ -2,8 +2,6 @@
 import argparse
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), "..\\"))
-from ACR_Training.Datasets import BillboardDataset, IsophonicsDataset
-from ACR_Training.Spectrograms import cqt_spectrogram, log_mel_spectrogram, cqt_chromagram, stft_chromagram
 
 from glob import glob
 import mir_eval
@@ -56,8 +54,8 @@ class Evaluator():
         counter = 0
         # Collect durations and comparisons
         for song_gold, chord_sequence in zip(gold_files, predictions):
-            n_sequences,n_frames,n_features = chord_sequence.shape
-            chord_sequence = np.array(chord_sequence.reshape((-1,n_features))).argmax(axis=1)
+            n_sequences,n_frames,n_classes = chord_sequence.shape
+            chord_sequence = np.array(chord_sequence.reshape((-1,n_classes))).argmax(axis=1)
             song_gold = np.array(song_gold.reshape(-1))
             if isinstance(gold, str):
                 ref_intervals, ref_labels = mir_eval.io.load_labeled_intervals(song_gold)
@@ -176,8 +174,8 @@ class Evaluator():
 
         # Collect durations and comparisons
         for song_gold, chord_sequence in zip(gold_files, predictions):
-            n_sequences,n_frames,n_features = chord_sequence.shape
-            chord_sequence = np.array(chord_sequence.reshape((-1,n_features))).argmax(axis=1)
+            n_sequences,n_frames,n_classes = chord_sequence.shape
+            chord_sequence = np.array(chord_sequence.reshape((-1,n_classes))).argmax(axis=1)
             song_gold = np.array(song_gold.reshape(-1))
             if isinstance(gold, str):
                 ref_intervals, ref_labels = mir_eval.io.load_labeled_intervals(song_gold)
@@ -226,8 +224,8 @@ class Evaluator():
 
         # Collect durations and comparisons
         for lab, chord_sequence in zip(lab_files, predictions):
-            n_sequences,n_frames,n_features = chord_sequence.shape
-            chord_sequence = np.array(chord_sequence.reshape((n_sequences*n_frames,n_features))).argmax(axis=1)
+            n_sequences,n_frames,n_classes = chord_sequence.shape
+            chord_sequence = np.array(chord_sequence.reshape((n_sequences*n_frames,n_classes))).argmax(axis=1)
             ref_intervals, ref_labels = mir_eval.io.load_labeled_intervals(lab+"full.lab")
             est_intervals, est_labels = Evaluator._get_label_intervals(chord_sequence=chord_sequence, sample_rate=sample_rate, hop_length=hop_length)
             est_intervals, est_labels = mir_eval.util.adjust_intervals(est_intervals, est_labels, ref_intervals.min(), ref_intervals.max(), mir_eval.chord.NO_CHORD, mir_eval.chord.NO_CHORD)
