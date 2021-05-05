@@ -13,7 +13,9 @@ Automatic Chord Recognition research folder that generates, parses and stores **
 
 ## ACR - Results
 
-The ACR training on the Isophonics and Billboard dataset were generated in a Jupyter Notebook. You can see the outcome [HERE!](./Bachelor%20Research%20-%20ACR.ipynb)
+The Proof of concept of ACR training on the Isophonics and Billboard dataset were performed in a Jupyter Notebook. All trainings were evaluated on the validation, NOT TEST, dataset. You can see the outcome [HERE!](./Bachelor%20Research%20-%20ACR.ipynb)
+
+The actual ACR research inspired of the POC was evaluated only on the Beatles Dataset. Mir eval scores and Accuracy are used and printed [HERE!](./Beatles%20Results.ipynb) 
 
 Model descriptions are listed [BELOW.](#acr-models---structures)
 
@@ -63,22 +65,22 @@ The function will generate the sequence of spectrograms as a one feature set.Opt
 
 ## ACR Models - structures
 
-### MLP with Scaler
-![MLP with Scaler architecture](./docs/imgs/MLP_scalered.png)
-### CRNN
-![MLP with Scaler architecture](./docs/imgs/CRNN.png)
-### MLP -> RNN
-![MLP with Scaler architecture](./docs/imgs/MLP2RNN.png)
-### Bass Vs Third
-![MLP with Scaler architecture](./docs/imgs/BassVsThird.png)
-### Segmentation Voting
-![MLP with Scaler architecture](./docs/imgs/SegmentationVoting.png)
+### MLP
+![MLP architecture](./docs/imgs/MLPClassifier.png)
+### CRNN Basic
+![CRNN Basic architecture](./docs/imgs/CRNN_basic.png)
+### CRNN with EfficientNet
+![CRNN with efficientnet architecture](./docs/imgs/CRNN_efficientnet.png)
+### CRNN with CRF
+![CRNN with CRF architecture](./docs/imgs/CRNN_crf.png)
+### CRNN Bass-Third
+![CRNN bass third architecture](./docs/imgs/CRNN_bass-third.png)
 
 
 ## Segmentation Models - structures
 
 ### Segmentation CRNN
-![MLP with Scaler architecture](./docs/imgs/CRNN.png)
+![Segmentation CRNN architecture](./docs/imgs/CRNN_Segmentation.png)
 
 ### Encoder-Decoder Segmentation
-![MLP with Scaler architecture](./docs/imgs/EncoderDecoderSegmentation.png)
+![Encoder-Decoder architecture](./docs/imgs/ENcoderDecoderSegmentation.png)
