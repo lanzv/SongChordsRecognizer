@@ -83,4 +83,4 @@ The function will generate the sequence of spectrograms as a one feature set.Opt
 ![Segmentation CRNN architecture](./docs/imgs/CRNN_Segmentation.png)
 
 ### Encoder-Decoder Segmentation
-![Encoder-Decoder architecture](./docs/imgs/ENcoderDecoderSegmentation.png)
+![Encoder-Decoder architecture](./docs/imgs/EncoderDecoderSegmentation.png)
