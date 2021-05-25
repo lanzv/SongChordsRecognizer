@@ -3,7 +3,7 @@
 ## Configuration
 Edit ```appsettings.json``` config file.
 
-!! Fill the ```StatisticalModel.PythonPath``` parameter by the path to your python.exe !!
+!! Fill the ```Predictors.PythonPath``` parameter by the path to your python.exe !!
 
 Other parameters are optional.
 
@@ -17,16 +17,18 @@ Default index page where you can upload and process an audio file with any of pr
 - Method: GET
 - Arguments: None
 
-![index prtsc](./docs/imgs/index.png)
+![index_p prtsc](./docs/imgs/index_p.png)
+
+![index_tv prtsc](./docs/imgs/index_tv.png)
 
 
-#### ***/VisualizeStatisticalModel***
+#### ***/VisualizePredictors***
 Outcome of [Song Chords Recognizer](../ACR_Pipeline/ReadMe.md) model based on Deep Learning with its key and bpm.
 
 - Method: POST
 - Arguments: IFormFile audio
 
-![VisualizeStatisticalModel prtsc](./docs/imgs/VisualizeStatisticalModel.png)
+![VisualizeStatisticalModel prtsc](./docs/imgs/VisualizePredictors.png)
 
 
 #### ***/VisualizeTemplateVoter***
