@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebSongChordsRecognizer.Models
 {
-    public class StatisticalModelResponse
+    public class PredictorsResponse
     {
         #region Properties
 

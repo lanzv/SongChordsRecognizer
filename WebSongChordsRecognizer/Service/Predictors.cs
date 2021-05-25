@@ -16,7 +16,7 @@ using WebSongChordsRecognizer.Models;
 
 namespace WebSongChordsRecognizer.Service
 {
-    public class StatisticalModel
+    public class Predictors
     {
         #region Fields
 
@@ -46,9 +46,9 @@ namespace WebSongChordsRecognizer.Service
         private static readonly IConfiguration configuration = ApplicationConfiguring.CreateConfiguration();
 
         /// <summary>
-        /// Logger of the StatisticalModel class.
+        /// Logger of the Predictors class.
         /// </summary>
-        private readonly ILogger _logger = ApplicationLogging.CreateLogger<StatisticalModel>();
+        private readonly ILogger _logger = ApplicationLogging.CreateLogger<Predictors>();
 
 
 
@@ -58,15 +58,15 @@ namespace WebSongChordsRecognizer.Service
         #region Initialization
 
         /// <summary>
-        /// StatisticalModel constructor that loads path to the script of StatisticalModel SongChordsRecognizer python pipeline
+        /// Predictors constructor that loads path to the script of Predictors SongChordsRecognizer python pipeline
         /// and path to the python.exe file from appsettings.json config file.
         /// </summary>
-        public StatisticalModel()
+        public Predictors()
         {
-            script_path = Path.GetFullPath(configuration["StatisticalModel:ACRScriptPath"]);
-            python_path = Path.GetFullPath(configuration["StatisticalModel:PythonPath"]);
-            original_model_path = Path.GetFullPath(configuration["StatisticalModel:OriginalModelPath"]);
-            transposed_model_path = Path.GetFullPath(configuration["StatisticalModel:TransposedModelPath"]);
+            script_path = Path.GetFullPath(configuration["Predictors:ACRScriptPath"]);
+            python_path = Path.GetFullPath(configuration["Predictors:PythonPath"]);
+            original_model_path = Path.GetFullPath(configuration["Predictors:OriginalModelPath"]);
+            transposed_model_path = Path.GetFullPath(configuration["Predictors:TransposedModelPath"]);
         }
 
 
@@ -81,10 +81,10 @@ namespace WebSongChordsRecognizer.Service
         /// audio file -> Spectrogram sequences -> key -> Chord sequence prediction -> Beat voting -> Chord Classification
         /// </summary>
         /// <param name="audio">IFormFile of an audio we want to process.</param>
-        /// <returns>StatisticalModelResponse response, result of the process.</returns>
-        public StatisticalModelResponse GetChords(IFormFile audio)
+        /// <returns>PredictorsResponse response, result of the process.</returns>
+        public PredictorsResponse GetChords(IFormFile audio)
         {
-            StatisticalModelResponse response = new StatisticalModelResponse();
+            PredictorsResponse response = new PredictorsResponse();
 
             // Generate chords
             using (var ms = new MemoryStream())
@@ -132,7 +132,7 @@ namespace WebSongChordsRecognizer.Service
                 {
                     // ToDo Better python executing error handling.
                     _logger.LogError(errors);
-                    throw new Exception(ErrorMessages.StatisticalModel_ExecutingError);
+                    throw new Exception(ErrorMessages.Predictors_ExecutingError);
                 }
 
 

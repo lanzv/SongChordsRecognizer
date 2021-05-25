@@ -21,9 +21,9 @@ namespace WebSongChordsRecognizer.Controllers
         #region Fields
 
         /// <summary>
-        /// StatisticalModel service class that will process the audio with the Statistical Model.
+        /// Predictors service class that will process the audio with the Predictors Model.
         /// </summary>
-        private readonly StatisticalModel statisticalModel;
+        private readonly Predictors predictors;
 
         /// <summary>
         /// TemplateVoter service class that will process the audio with the Template Voter Model.
@@ -44,7 +44,7 @@ namespace WebSongChordsRecognizer.Controllers
 
         public RecognizerController()
         {
-            statisticalModel = new StatisticalModel();
+            predictors = new Predictors();
             templateVoter = new TemplateVoter();
         }
 
@@ -75,9 +75,9 @@ namespace WebSongChordsRecognizer.Controllers
         /// <param name="audio">IFormFile audio file in WAV format.</param>
         /// <returns>IActionResult, HTML View of a chord sequence, or error page.</returns>
         [HttpPost]
-        public IActionResult VisualizeStatisticalModel(IFormFile audio)
+        public IActionResult VisualizePredictors(IFormFile audio)
         {
-            StatisticalModelResponse response;
+            PredictorsResponse response;
             // Handle exceptions on input
             if (audio == null) { return RedirectToAction("IncorrectInputFormat", new { message = ErrorMessages.RecognizerController_MissingAudio }); }
             else
@@ -85,7 +85,7 @@ namespace WebSongChordsRecognizer.Controllers
                 try
                 {
                     // process audio, generate chord sequence
-                    response = statisticalModel.GetChords(audio);
+                    response = predictors.GetChords(audio);
                 }
                 catch (Exception e)
                 {

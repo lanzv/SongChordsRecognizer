@@ -1,7 +1,7 @@
 ﻿
 /*change form buttons styles*/
 
-button#statistical_model {
+button#predictors {
     margin-right: 1.5px;
     background: #010056;
     color: #d0d0d0;
@@ -21,7 +21,7 @@ button#template_voter {
     width: 100%;
 }
 
-div#statistical_model-form {
+div#predictors-form {
     display: block;
 }
 

@@ -20,14 +20,14 @@
 
     <!-- change model type buttons -->
     <div class="change-forms">
-        <button id="statistical_model" onclick="toStatisticalModel(event)">STATISTICAL MODEL - recommended</button>
+        <button id="predictors" onclick="toPredictors(event)">PREDICTORS MODEL - recommended</button>
         <button id="template_voter" onclick="toTemplateVoter(event)">SIMPLE TEMPLATE VOTER</button>
     </div>
 
 
-    <!-- form for statistical model, deep learning based -->
-    <div id="statistical_model-form" class="upload-form">
-        <form asp-controller="Recognizer" asp-action="VisualizeStatisticalModel"
+    <!-- form for predictors model, deep learning based -->
+    <div id="predictors-form" class="upload-form">
+        <form asp-controller="Recognizer" asp-action="VisualizePredictors"
               enctype="multipart/form-data" method="post">
 
             <h4>Upload Audio File - WAV format</h4>
