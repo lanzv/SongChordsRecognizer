@@ -13,14 +13,14 @@ that you would like to **play on guitar and sing** with your friends?
 
 ## ASP.NET Application
 
-Song Chords Recognizer is a [Web Application coded in .NET](./WebSongChordsRecognizer/ReadMe.md), where you have two models you can pick to process the audio that will return the chord sequence of the song.
+Song Chords Recognizer is a [Web Application coded in C#](./WebSongChordsRecognizer/ReadMe.md), where you have two models you can pick to process the audio that will return the chord sequence of the song.
 
- 1. [Statistical Model](./ACR_Pipeline/ReadMe.md) based on Deep Learning coded in Python.
- 1. [Template Voter](./WebSongChordsRecognizer/SongChordsRecognizer/ReadMe.md) based on the simple chord template voting coded in .NET .
+ 1. [Predictors](./ACR_Pipeline/ReadMe.md) based on Deep Learning coded in Python.
+ 2. [Template Voter](./WebSongChordsRecognizer/SongChordsRecognizer/ReadMe.md) based on the simple chord template voting coded in .NET .
 
 
 
-## ACR Training
+## ACR Research
 
 Part of the project is also the [Automatic Chord Recognition task RESEARCH](./ACR_Training/ReadMe.md).
 The approach is to use CRNN models with transpose preprocessing and also vote the most frequent chord for each beat duration.
