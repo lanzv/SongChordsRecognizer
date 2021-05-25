@@ -16,6 +16,7 @@ import os
 import pickle
 from sklearn.model_selection import cross_val_score
 from tf2crf import CRF, ModelWithCRFLoss
+from joblib import dump, load
 
 class MLP():
     """
@@ -279,6 +280,49 @@ class CRNN_basic(CRNN):
         self.model = model
         print("[INFO] The CRNN model was successfully created.")
 
+
+class CRNN_basic_WithStandardScaler():
+    """
+    CRNN basic that stores also the StandardScaler
+    """
+    def __init__(self, input_shape, output_classes):
+        self.model = CRNN_basic(input_shape, output_classes)
+        self.preprocessor = sklearn.preprocessing.StandardScaler()
+        print("[INFO] The Baisc CRNN with Standar Scaler was successfully initialized")
+
+    def fit(self, train_x, train_y, dev_data=[], dev_targets=[], epochs=50):
+        _, n_frames, n_chromas, _ = train_x.shape
+        self.preprocessor.fit(train_x.reshape((-1, 252)))
+        print("[INFO] The preprocessor was successfully trained")
+
+        train_x = self.preprocessor.transform(train_x.reshape((-1, 252))).reshape((-1, n_frames, n_chromas, 1))
+        self.model.fit(train_x, train_y, dev_data, dev_targets, epochs=epochs)
+        print("[INFO] The CRNN model was successfully trained.")
+
+    def score(self, data, targets):
+        _, n_frames, n_chromas, _ = data.shape
+        transformed_data = self.preprocessor.transform(data.reshape((-1, 252))).reshape((-1, n_frames, n_chromas, 1))
+        _, test_acc = self.model.evaluate(transformed_data, targets, verbose=2)
+        return test_acc
+
+    def predict(self, data):
+        _, n_frames, n_chromas, _ = data.shape
+        transformed_data = self.preprocessor.transform(data.reshape((-1, 252))).reshape((-1, n_frames, n_chromas, 1))
+        return self.model.predict(transformed_data)
+
+
+    def save(self, model_path="./model.h5", preprocessor_path="./preprocessor.bin"):
+        # Save this model with its scaler.
+        self.model.save(model_path)
+        print("[INFO] The CRNN model was saved successfully")
+        dump(self.preprocessor, preprocessor_path, compress=True)
+        print("[INFO] The Preprocessor was saved successfully")
+
+
+    def load(self, model_path="./model.h5", preprocessor_path="./preprocessor.bin"):
+        # Load tensorflow model and scaler
+        self.model = tensorflow.keras.models.load_model(model_path)
+        self.preprocessor = load(preprocessor_path)
 
 
 class CRNN_CRF(CRNN):
