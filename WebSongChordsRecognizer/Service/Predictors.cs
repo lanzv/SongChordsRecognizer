@@ -113,11 +113,11 @@ namespace WebSongChordsRecognizer.Service
 
 
                 // Prepare command with arguments
-                python_SongChordRecognizer.Arguments = script_path +
-                    " --original_model_path=" + original_model_path +
-                    " --transposed_model_path=" + transposed_model_path +
-                    " --original_preprocessor_path=" + original_preprocessor_path +
-                    " --transposed_preprocessor_path=" + transposed_preprocessor_path;
+                python_SongChordRecognizer.Arguments = "\"" + script_path + "\"" +
+                    " --original_model_path=" + "\"" + original_model_path + "\"" +
+                    " --transposed_model_path=" + "\"" + transposed_model_path + "\"" +
+                    " --original_preprocessor_path=" + "\"" + original_preprocessor_path + "\"" +
+                    " --transposed_preprocessor_path=" + "\"" + transposed_preprocessor_path + "\"";
 
 
                 // Python process configuration
