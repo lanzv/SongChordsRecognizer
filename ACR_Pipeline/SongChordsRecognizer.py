@@ -6,7 +6,7 @@ import sys, os
 import json
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 sys.path.append(os.path.join(os.path.dirname(__file__), "..\\"))
-from ACR_Training.Models import MLP_scalered, CRNN
+from ACR_Training.Models import MLP_scalered, CRNN, CRNN_basic_WithStandardScaler
 from ACR_Training.Spectrograms import log_mel_spectrogram, cqt_spectrogram
 from ACR_Pipeline.KeyRecognizer import KeyRecognizer
 from ACR_Pipeline.DataPreprocessor import DataPreprocessor
@@ -29,6 +29,8 @@ parser.add_argument("--n_frames", default=1000, type=int, help="In case that the
 parser.add_argument("--skip_coef", default=22, type=int, help="In case that the MLP model is used, the coeficient that next spectrogram index is multiplied by when creating the window.")
 parser.add_argument("--original_model_path", default="./ACR_Pipeline/models/original_crnn.h5", type=str, help="Path to the model predicting original songs.")
 parser.add_argument("--transposed_model_path", default="./ACR_Pipeline/models/transposed_crnn.h5", type=str, help="Path to the model predicting songs transposed to C.")
+parser.add_argument("--original_preprocessor_path", default="C:/Users/vojte/source/repos/SongChordsRecognizer/ACR_Pipeline/models/original_preprocessor.bin", type=str, help="Path to the model predicting original songs.")
+parser.add_argument("--transposed_preprocessor_path", default="C:/Users/vojte/source/repos/SongChordsRecognizer/ACR_Pipeline/models/transposed_preprocessor.bin", type=str, help="Path to the model predicting songs transposed to C.")
 
 # Training args
 parser.add_argument("--seed", default=42, type=int, help="Random seed.")
@@ -45,10 +47,10 @@ def main(args, waveform, sample_rate):
     """ MLP Part, not accurate
     basic_mlp = MLP_scalered.load('C:\\Users\\vojte\\source\\repos\\SongChordsRecognizer\\ACR_Pipeline\\models\\original_mlp.model')
     """
-    basic_crnn = CRNN()
-    basic_crnn.load(args.original_model_path)
-    C_transposed_crnn = CRNN()
-    C_transposed_crnn.load(args.transposed_model_path)
+    basic_crnn = CRNN_basic_WithStandardScaler()
+    basic_crnn.load(args.original_model_path, args.original_preprocessor_path)
+    C_transposed_crnn = CRNN_basic_WithStandardScaler()
+    C_transposed_crnn.load(args.transposed_model_path, args.transposed_preprocessor_path)
 
 
 

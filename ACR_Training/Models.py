@@ -285,10 +285,11 @@ class CRNN_basic_WithStandardScaler():
     """
     CRNN basic that stores also the StandardScaler
     """
-    def __init__(self, input_shape, output_classes):
-        self.model = CRNN_basic(input_shape, output_classes)
-        self.preprocessor = sklearn.preprocessing.StandardScaler()
-        print("[INFO] The Baisc CRNN with Standar Scaler was successfully initialized")
+    def __init__(self, input_shape=(1000, 252, 1), output_classes=25, init=False):
+        if init:
+            self.model = CRNN_basic(input_shape, output_classes)
+            self.preprocessor = sklearn.preprocessing.StandardScaler()
+            print("[INFO] The Baisc CRNN with Standar Scaler was successfully initialized")
 
     def fit(self, train_x, train_y, dev_data=[], dev_targets=[], epochs=50):
         _, n_frames, n_chromas, _ = train_x.shape
