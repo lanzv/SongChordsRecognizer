@@ -29,8 +29,8 @@ parser.add_argument("--n_frames", default=1000, type=int, help="In case that the
 parser.add_argument("--skip_coef", default=22, type=int, help="In case that the MLP model is used, the coeficient that next spectrogram index is multiplied by when creating the window.")
 parser.add_argument("--original_model_path", default="./ACR_Pipeline/models/original_crnn.h5", type=str, help="Path to the model predicting original songs.")
 parser.add_argument("--transposed_model_path", default="./ACR_Pipeline/models/transposed_crnn.h5", type=str, help="Path to the model predicting songs transposed to C.")
-parser.add_argument("--original_preprocessor_path", default="C:/Users/vojte/source/repos/SongChordsRecognizer/ACR_Pipeline/models/original_preprocessor.bin", type=str, help="Path to the model predicting original songs.")
-parser.add_argument("--transposed_preprocessor_path", default="C:/Users/vojte/source/repos/SongChordsRecognizer/ACR_Pipeline/models/transposed_preprocessor.bin", type=str, help="Path to the model predicting songs transposed to C.")
+parser.add_argument("--original_preprocessor_path", default="./ACR_Pipeline/models/original_preprocessor.bin", type=str, help="Path to the preprocessor that preprocesses original songs.")
+parser.add_argument("--transposed_preprocessor_path", default="./ACR_Pipeline/models/transposed_preprocessor.bin", type=str, help="Path to the preprocessor that preprocesses songs transposed to C.")
 
 # Training args
 parser.add_argument("--seed", default=42, type=int, help="Random seed.")

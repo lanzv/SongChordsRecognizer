@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using WebSongChordsRecognizer.Models;
 
 namespace WebSongChordsRecognizer.Service
@@ -26,19 +25,29 @@ namespace WebSongChordsRecognizer.Service
         private static string script_path;
 
         /// <summary>
-        /// Destionation of the python.exe file.
+        /// Destination of the python.exe file.
         /// </summary>
         private static string python_path;
 
         /// <summary>
-        /// Destionation of the model predicting original songs.
+        /// Destination of the model predicting original songs.
         /// </summary>
         private static string original_model_path;
 
         /// <summary>
-        /// Destionation of the model predicting transposed songs.
+        /// Destination of the model predicting transposed songs.
         /// </summary>
         private static string transposed_model_path;
+
+        /// <summary>
+        /// Destination of the preprocessor that preprocesses original songs.
+        /// </summary>
+        private static string original_preprocessor_path;
+
+        /// <summary>
+        /// Destination of the preprocessor that preprocesses transposed songs.
+        /// </summary>
+        private static string transposed_preprocessor_path;
 
         /// <summary>
         /// Configuration file that contains data from appsettings.json config file.
@@ -67,6 +76,8 @@ namespace WebSongChordsRecognizer.Service
             python_path = Path.GetFullPath(configuration["Predictors:PythonPath"]);
             original_model_path = Path.GetFullPath(configuration["Predictors:OriginalModelPath"]);
             transposed_model_path = Path.GetFullPath(configuration["Predictors:TransposedModelPath"]);
+            original_preprocessor_path = Path.GetFullPath(configuration["Predictors:OriginalPreprocessorPath"]);
+            transposed_preprocessor_path = Path.GetFullPath(configuration["Predictors:TransposedPreprocessorPath"]);
         }
 
 
@@ -104,7 +115,9 @@ namespace WebSongChordsRecognizer.Service
                 // Prepare command with arguments
                 python_SongChordRecognizer.Arguments = script_path +
                     " --original_model_path=" + original_model_path +
-                    " --transposed_model_path=" + transposed_model_path;
+                    " --transposed_model_path=" + transposed_model_path +
+                    " --original_preprocessor_path=" + original_preprocessor_path +
+                    " --transposed_preprocessor_path=" + transposed_preprocessor_path;
 
 
                 // Python process configuration
